@@ -44,15 +44,19 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 
 ## Understanding the Play With Docker Interface
 
-![](./images/pwd_screen.png) <!--- TODO: update images -->
+![](./images/pwd_screen.png) <!--- TODO: update images, has to wait for example workspace to finalize -->
 
-There are three main components to the Play With Docker (PWD) interface
+This workshop is only available to people in a pre-arranged workshop. That may happen through a [Docker Meetup](https://events.docker.com/chapters/), a conference workshop that is being led by someone who has made these arrangements, or special arrangements between Docker and your company. The workshop leader will provide you with the URL to a workshop environment that includes [Docker Enterprise Edition](https://www.docker.com/enterprise-edition). The environment will be based on [Play with Docker](https://labs.play-with-docker.com/).
+
+If none of these apply to you, contact your local [Docker Meetup Chapter](https://events.docker.com/chapters/) and ask if there are any scheduled workshops. In the meantime, you may be interested in the labs available through the [Play with Docker Classroom](training.play-with-docker.com).
+
+There are three main components to the Play With Docker (PWD) interface. 
 
 ### 1. Console Access
 Play with Docker provides access to the 3 Docker EE hosts in your Cluster. These machines are:
 
 * A Linux-based Docker EE 18.01 Manager node
-* A Linux-based Docker EE 18.01 Worker node
+* Two Linux-based Docker EE 18.01 Worker nodes
 * A Windows Server 2016-based Docker EE 17.06 Worker Node
 
 > **Important Note: beta** Please note, as of now this is a beta Docker EE 2.0 environment. Docker EE 2.0 shows off the new Kubernetes functionality which is described below.
@@ -88,26 +92,25 @@ Throughout the lab you will be asked to provide either hostnames or login creden
 <!--- TODO: Add introduction to orchestration, basic principles of Swarm and Kubernetes -->
 #### <a name="intro2.1"></a>Overview of Docker Swarm mode
 #### <a name="intro2.2"></a>Overview of Kubernetes
+
 ## <a name="task1"></a>Task 1: Configure the Docker EE Cluster
 
 The Play with Docker (PWD) environment is almost completely set up, but before we can begin the labs, we need to do two more steps. First we'll add a Windows node to the cluster, and then we'll create two repositories on the DTR server.
-(The Linux worker node is already added to the cluster)
+(The Linux worker nodes are already added to the cluster)
 
 ### <a name="task 1.1"></a>Task 1.1: Accessing PWD
 
-1. Navigate in your web browser to [the PWD environment sign-in page](https://goto.docker.com/2017PWDonMicrosoftAzure_MTALP.html) <!--- TODO: Update to new URL -->
-
-	> **Note**: You might want to right click the above link and open it in a new tab or window
+1. Navigate in your web browser to the URL the workshop organizer provided to you.
 
 2. Fill out the form, and click `submit`. You will then be redirected to the PWD environment.
 
 3. Click `Access`
 
-	It will take a few minutes to provision out your PWD environment. After this step completes, you'll be ready to move on to step 1.2: Install a Windows worker node
+	It may take a few minutes to provision out your PWD environment. After this step completes, you'll be ready to move on to task 1.2: Install a Windows worker node
 
 ### <a name="task1.2"></a>Task 1.2: Install a Windows worker node
 
-Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker node.
+Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker node. This is done using Docker Swarm.
 
 1. From the main PWD screen click the `UCP` button on the left side of the screen
 
@@ -127,7 +130,7 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 
 	![](./images/add_a_node.png)
 
-4. Select node type "Windows", check the box, that you followed the instructions and copy the text from the dark box shown on the `Add Node` screen.
+4. Select node type "Windows", check the box, that you followed the instructions and copy the text from the dark box shown on the `Add Node` screen. Don't select a custom listen or advertise address.
 
 	> **Note** There is an icon in the upper right corner of the box that you can click to copy the text to your clipboard
 	> ![](./images/join_text.png)
@@ -147,11 +150,15 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 
 5. Switch back to the UCP server in your web browser and click the `x` in the upper right corner to close the `Add Node` window
 
-6. You should be taken to the `Nodes` screen and will see 3 nodes listed at the bottom of your screen.
+6. You will be taken back to the UCP Dashboard. In the left menu bar, click Shared Resources, and select Nodes.
+
+![](/images/select_nodes.png)
+
+You should be taken to the `Nodes` screen and will see 4 worker nodes listed at the bottom of your screen.
 
 	Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
 
-	![](./images/node_listing.png)
+	![](./images/node_listing.png) <!--- TODO: Update with new nodes page screenshot -->
 
 Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
 
