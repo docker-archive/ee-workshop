@@ -742,13 +742,13 @@ In this section we're going to simulate a node failure and see how Docker EE han
 
 	Notice that the two containers that were running on `worker1` have been stopped, and they have been restarted on `manager1`
 
-## <a name="task 6"></a>Task 6: Deploy to Kubernetes
+## <a name="task6"></a>Task 6: Deploy to Kubernetes
 
 Now that we have built, deployed and scaled a multi OS application to Docker EE using Swarm mode for orchestration, let's learn how to use Docker EE with Kubernetes.
 
 Docker EE lets you choose the orchestrator to use to deploy and manage your application, between Swarm and Kubernetes. In the previous tasks we have used Swarm for orchestration. In this section we will deploy the application to Kubernetes and see how Docker EE exposes Kubernetes concepts.
 
-### <a name="task 6.1"></a>Task 6.1: Build .NET Core app instead of .NET
+### <a name="task6.1"></a>Task 6.1: Build .NET Core app instead of .NET
 
 For now Kubernetes does not support Windows workloads in production, so we will start by porting the .NET part of our application to a Linux container using .NET Core.
 
@@ -756,7 +756,7 @@ For now Kubernetes does not support Windows workloads in production, so we will 
 TODO
 ```
 
-### <a name="task 6.2"></a>Task 6.2: Examine the Docker Compose File
+### <a name="task6.2"></a>Task 6.2: Examine the Docker Compose File
 
 Docker EE lets you deploy native Kubernetes applications using Kubernetes deployment descriptors, by pasting the yaml files in the UI, or using the `kubectl` CLI tool.
 
@@ -772,11 +772,11 @@ Let's look at the Docker Compose file:
 TODO
 ```
 
-### <a name="task 6.3"></a>Task 6.3: Deploy to Kubernetes using the Docker Compose file
+### <a name="task6.3"></a>Task 6.3: Deploy to Kubernetes using the Docker Compose file
 
 TODO
 
-### <a name="task 6.4"></a>Task 6.4: Verify the app
+### <a name="task6.4"></a>Task 6.4: Verify the app
 
 TODO
 
