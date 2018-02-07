@@ -37,10 +37,10 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 5.2: Scaling the Web Front-end](#task5.2)
 >   * [Task 5.3: Dealing with an Application Failure](#task5.3)
 > * [Task 6: Deploy to Kubernetes](#task6)
->   * [Task 6.1: Build .NET Core app instead of .NET]
->   * [Task 6.2: Examine the Docker Compose File]
->   * [Task 6.3: Deploy to Kubernetes using the Docker Compose file]
->   * [Task 6.4: Verify the app]
+>   * [Task 6.1: Build .NET Core app instead of .NET](#task6.1)
+>   * [Task 6.2: Examine the Docker Compose File](#task6.2)
+>   * [Task 6.3: Deploy to Kubernetes using the Docker Compose file](#task6.3)
+>   * [Task 6.4: Verify the app](#task6.4)
 
 ## Understanding the Play With Docker Interface
 
