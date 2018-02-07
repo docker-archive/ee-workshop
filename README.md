@@ -125,7 +125,7 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 
 	![](./images/add_a_node.png)
 
-4. Select node type "Windows", check the box, that you followed the instructions and copy the text from the dark box shown on the `Add Node` screen.
+4. Select node type "Windows", check the box, that you followed the instructions and copy the text from the dark box shown on the `Add Node` screen. Don't select a custom listen or advertise address.
 
 	> **Note** There is an icon in the upper right corner of the box that you can click to copy the text to your clipboard
 	> ![](./images/join_text.png)
@@ -145,11 +145,15 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 
 5. Switch back to the UCP server in your web browser and click the `x` in the upper right corner to close the `Add Node` window
 
-6. You should be taken to the `Nodes` screen and will see 3 nodes listed at the bottom of your screen.
+6. You will be taken back to the UCP Dashboard. In the left menu bar, click Shared Resources, and select Nodes.
+
+![](/images/select_nodes.png)
+
+You should be taken to the `Nodes` screen and will see 4 worker nodes listed at the bottom of your screen.
 
 	Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
 
-	![](./images/node_listing.png)
+	![](./images/node_listing.png) <!--- TODO: Update with new nodes page screenshot -->
 
 Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
 
