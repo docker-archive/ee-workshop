@@ -36,6 +36,11 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 5.1: Upgrading the Web Front-end](#task5.1)
 >   * [Task 5.2: Scaling the Web Front-end](#task5.2)
 >   * [Task 5.3: Dealing with an Application Failure](#task5.3)
+> * [Task 6: Deploy to Kubernetes](#task6)
+>   * [Task 6.1: Build .NET Core app instead of .NET]
+>   * [Task 6.2: Examine the Docker Compose File]
+>   * [Task 6.3: Deploy to Kubernetes using the Docker Compose file]
+>   * [Task 6.4: Verify the app]
 
 ## Understanding the Play With Docker Interface
 
@@ -737,9 +742,46 @@ In this section we're going to simulate a node failure and see how Docker EE han
 
 	Notice that the two containers that were running on `worker1` have been stopped, and they have been restarted on `manager1`
 
+## <a name="task 6"></a>Task 6: Deploy to Kubernetes
+
+Now that we have built, deployed and scaled a multi OS application to Docker EE using Swarm mode for orchestration, let's learn how to use Docker EE with Kubernetes.
+
+Docker EE lets you choose the orchestrator to use to deploy and manage your application, between Swarm and Kubernetes. In the previous tasks we have used Swarm for orchestration. In this section we will deploy the application to Kubernetes and see how Docker EE exposes Kubernetes concepts.
+
+### <a name="task 6.1"></a>Task 6.1: Build .NET Core app instead of .NET
+
+For now Kubernetes does not support Windows workloads in production, so we will start by porting the .NET part of our application to a Linux container using .NET Core.
+
+```
+TODO
+```
+
+### <a name="task 6.2"></a>Task 6.2: Examine the Docker Compose File
+
+Docker EE lets you deploy native Kubernetes applications using Kubernetes deployment descriptors, by pasting the yaml files in the UI, or using the `kubectl` CLI tool.
+
+However many developers use `docker-compose` to build and test their application, and having to create Kubernetes deployment descriptors as well as maintaining them in sync with the Docker Compose file is tedious and error prone.
+
+In order to make life easier for developers and operations, Docker EE lets you deploy an application defined with a Docker Compose file as a Kubernetes workloads. Internally Docker EE uses the official Kubernetes extension mecanism by defining a [Custom Resource Definition](https://kubernetes.io/docs/tasks/access-kubernetes-api/extend-api-custom-resource-definitions/) (CRD) defining a stack object. When you post a Docker Compose stack definition to Kubernetes in Docker EE, the CRD controller takes the stack definition and translates it to Kubernetes native resources like pods, controllers and services.
+
+We'll use a Docker Compose file to instantiate our application, and it's the same file as before, except that we will switch the .NET Docker Windows image with the .NET Core Docker Linux image we just built.
+
+Let's look at the Docker Compose file:
+
+```
+TODO
+```
+
+### <a name="task 6.3"></a>Task 6.3: Deploy to Kubernetes using the Docker Compose file
+
+TODO
+
+### <a name="task 6.4"></a>Task 6.4: Verify the app
+
+TODO
 
 ## Conclusion
 
-In this lab we've looked how Docker EE can help you manage both Linux and Windows workloads whether they be traditional apps you've modernized or newer cloud-native apps. We also looked at how to deal with upgrades, scaling, and system failures.
+In this lab we've looked how Docker EE can help you manage both Linux and Windows workloads whether they be traditional apps you've modernized or newer cloud-native apps, leveraging Swarm or Kubernetes for orchestration. We also looked at how to deal with upgrades, scaling, and system failures.
 
 You can find more information on Docker EE at [http://www.docker.com](http://www.docker.com/enterprise-edition) as well as continue exploring using our hosted trial at [https://dockertrial.com](https://dockertrial.com)
