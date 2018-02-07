@@ -20,6 +20,7 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 1.1: Accessing PWD](#task1.1)
 >   * [Task 1.2: Install a Windows worker node](#task1.2)
 >   * [Task 1.3: Create Two Repositories](#task1.3)
+>   * [Task 1.3.1: Restrict access to a repository](#task1.3.1)
 > * [Task 2: Deploy a Linux Web App](#task2)
 >   * [Task 2.1: Clone the Demo Repo](#task2.1)
 >   * [Task 2.2: Build and Push the Linux Web App Image](#task2.2)
@@ -164,29 +165,45 @@ Congratulations on adding a Windows node to your UCP cluster. Now you are ready 
 
 ### <a name="task1.3"></a>Task 1.3: Create Two DTR Repositories
 <!--- TODO: Update names of applications, number of repositories -->
-Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create a couple of different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside.
+Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create a couple of different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside. Often that would be enough.
+
+However, before we create the repositories, we do want to restrict access to them. Since we have two distinct app components, a Java web app, and a .NET API, we want to restrict access to them to the team that develops them, as well as the administrators. To do that, we need to create two users and then two organizations.
 
 1. In the PWD web interface click the `DTR` button on the left side of the screen.
 
 	> **Note**: As with UCP before, DTR is also using self-signed certs. It's safe to click through any browser warning you might encounter.
 
-2. From the main DTR page click `New Repository`. This brings up the new repository dialog
+2. From the main DTR page, click users and then the New User button.
+![](./images/user_screen.png)
+
+3. Create a new user, `java_user` and give it a password you'll remember. I used `user1234`. Be sure to save the user.
+![](/images/create_java_user.png)
+Then do the same for a `dotnet_user`.
+
+4. Select the Organization button.
+![](./images/organization_screen.png)
+
+5. Press New organization button, name it java, and click save.
+![](./images/java_organization_new.png)
+Then do the same with dotnet and you'll have two organizations.
+![](./images/two_organizations.png)
+
+6. Select the java organization and the members will show up. Press Add user and start typing in java. Select the `java_user` when it comes up.
+![](./images/add_java_user_to_organization.png)
+
+7. Now you get to add a repository! Still on the java organization, select repositories and then Add repository
+![](./images/add_repository_java.png)
+
+8. Name the repository `java_web`. 
 
 	![](./images/create_repository.png)
+> Note the repository is listed as "Public" but that means it is publicly viewable by users of DTR. It is not available to the general public.
 
-3. Under `REPOSITORY NAME` type `linux_tweet_app`. Leave the rest of the values the same, and click `Save`
+9. Repeat 5-8 above to create a `dotnet` organization with the `dotnet_user` and a repository called `dotnet_api`.
+You'll now see both repositories listed.
+	![](./images/two_repositories.png)
 
-	Let's repeat this process to create a repository for our Windows tweet app.
-
-4. Once again, click the green `New repository` button.
-
-5. Under `REPOSITORY NAME` type `windows_tweet_app`. Leave the rest of the values the same, and click `Save`
-
-6. Create two user names in DTR <!--- TODO flesh this out -->
-
-	![](./images/two_repos.png)
-
-Congratulations, you have created two new repositories.
+Congratulations, you have created two new repositories in two new organizations, each with one user.
 
 ## <a name="task2"></a>Task 2: Deploy a Linux Web App
 <!--- TODO: updates with link to Java sample app instead of tweet app -->
