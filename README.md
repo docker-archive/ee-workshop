@@ -389,48 +389,11 @@ You may also click on the service to open the right sidebar to inspect the servi
 
 Now we'll deploy the Windows version of the tweet app.
 
-### <a name="task3.1"></a> Task 3.1: Create the dockerfile with Image2Docker
-
-There is a Windows Server 2016 VHD that contains our Windows Tweet App stored in `c:\` on Windows host. We're going to use Image2Docker to scan the VHD, and create a Dockerfile. We'll build the Dockerfile as we did in the previous step, push it to DTR, and then deploy our Windows tweet app.
-
-![](./images/windows75.png)
-
-1. Click the name of your Windows host in PWD to switch your web console.
-
-2. Set up the Image2Docker PowerShell module - you need to install the module, and then import it to make it available in the session. Copy and paste these commands into the Windows console:
-
-```
-Install-Module -Force Image2Docker
-```
-
-```
-Import-Module Image2Docker
-```
-
-
-3. Use Image2Docker's `ConvertTo-Dockerfile` command to create a dockerfile from the VHD.
-
-	Copy and paste the command below into your Windows console window.
-
-	```
-	ConvertTo-Dockerfile -ImagePath c:\ws2016.vhd -Artifact IIS -OutputPath C:\windowstweetapp -Verbose
-	```
-
-	As mentioned before Image2Docker will scan the VHD, and extract out a Dockerfile based on the contents of the VHD. The list below explains the command line arguments.
-
-	* `ImagePath` specifies where the VHD can be found
-
-	* `Artifact` specifies what feature or code to look for
-
-	* `OutputPath` specifies where to write the dockerfile and other items
-
-	* `Verbose` instructs the script to provide extra output.
-
-When the process completes you'll find a Dockerfile in `c:\windowstweetapp`
-
+### <a name="task3.1"></a> Task 3.1: Create the dockerfile
+<!--- TODO: write 3.1 based on app created -->
 
 ### <a name="task3.2"></a> Task 3.2: Build and Push Your Image to Docker Trusted Registry
-
+<!--- TODO: rewrite 3.1 based on app created -->
 ![](./images/windows75.png)
 
 1. CD into the `c:\windowstweetapp` directory (this is where your Image2Docker files have been placed).
@@ -522,89 +485,9 @@ Now that we have our Windows Tweet App up on the DTR server, let's deploy it. It
 
 After a few seconds you should see a green dot next to your service name. Once you see the green dot you can point your web browser to `http://<windows host>:8082` to see your running website.
 
-## <a name="task4"></a> Task4: Deploying a Multi-OS Application
+## <a name="task4"></a> Task 4: Deploying a Multi-OS Application
 
-For our last exercise we'll use a docker compose file to deploy an application that uses a Java front end designed to be deployed on Linux, with a Microsoft SQL Server back end running on windows.
-
-### <a name="task4.1"></a> Task 4.1: Examine the Docker Compose file
-
-We'll use a Docker Compose file to instantiate our application. With this file we can define all our services and their parameters, as well as other Docker primitives such as networks.
-
-Let's look at the Docker Compose file:
-
-```
-version: "3.2"
-
-services:
-
-  database:
-    image: sixeyed/atsea-db:mssql
-    ports:
-      - mode: host
-        target: 1433
-    networks:
-     - atsea
-    deploy:
-      endpoint_mode: dnsrr
-
-  appserver:
-    image: mikegcoleman/atsea_appserver:1.0
-    ports:
-      - target: 8080
-        published: 8080
-    networks:
-      - atsea
-
-networks:
-  atsea:
-```
-
-There are two services. `appserver` is our web frontend written in Java, and `database` is our Microsoft SQL Server database. The rest of the commands should look familiar as they are very close to what we used when we deployed our tweet services manually.
-
-One thing that is new is the creation of an overlay network (`atsea`). Overlay networks allow containers running on different hosts to communicate over a private software-defined network. In this case, the web frontend on our Linux host will use the `atsea` network to communicate with the database.
-
-### <a name="task4.2"></a> Taks 4.2 Deploy the Application Stack
-
-A `stack` is a group of related services that make up an application. Stacks are a newer Docker primitive, and can be deployed with a Docker Compose file.
-
-Let's Deploy an application stack using the Docker Compose file above.
-
-1. Move to the UCP console in your web browser
-
-2. In the left hand menu click `Stacks`
-
-3. In the upper right click `Create Stack`
-
-4. Enter `atsea` under `NAME`
-
-5. Select `Services` under `MODE`
-
-6. Select `SHOW VERBOSE COMPOSE OUTPUT`
-
-7. Paste the compose file from above into the `COMPOSE.YML` box
-
-8.  Click `Create`
-
-	You will see some output to show the progress of your deployment, and then a banner will pop up at the bottom indicating your deployment was successful.
-
-9. Click `Done`
-
-You should now be back on the Stacks screen.
-
-1. Click on the `atsea` stack in the list
-
-2. From the right side of the screen choose `Services` under `Inspect Resource`
-
-	![](./images/inspect_resoource.png)
-
-	Here you can see your two services running. It may take a few minutes for the database service to come up (the dot to turn green). Once it does, move on to the next section.
-
-
-### <a name="task4.3"></a> Task 4.3: Verify the Running Application
-
-1. To see our running web site (an art store) visit `http://<UCP hostname>:8080>` or click on the published endpoint link under "Configuration" in the sidebar
-
-	The thumbnails you see displayed are actually pulled from the SQL database. This is how you know that the connection is working between the database and web front end.
+<!--- TODO: write task 4 based on app created. Same app, single compose file -->
 
 ## <a name="task5"></a> Task 5: Application Lifecycle Management
 
