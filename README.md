@@ -25,10 +25,10 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 2.1: Clone the Demo Repo](#task2.1)
 >   * [Task 2.2: Build and Push the Linux Web App Image](#task2.2)
 >   * [Task 2.3: Deploy the Web App using UCP](#task2.3)
-> * [Task 3: Deploy a Windows Web App](#task3)
->   * [Task 3.1: Create the Dockerfile with Image2Docker](#task3.1)
+> * [Task 3: Deploy a Windows .NET App](#task3)
+>   * [Task 3.1: Clone the repository](#task3.1)
 >   * [Task 3.2: Build and Push Your Image to Docker Trusted Registry](#task3.2)
->   * [Task 3.3: Deploy the Windows Web App](#task3.3)
+>   * [Task 3.3: Deploy the Windows .NET App](#task3.3)
 > * [Task 4: Deploy a Multi-OS Application](#task4)
 >   * [Task 4.1: Examine the Docker Compose File](#task4.1)
 >   * [Task 4.2: Deploy the Application Stack](#task4.2)
@@ -45,7 +45,8 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 
 ## Understanding the Play With Docker Interface
 
-![](./images/pwd_screen.png) <!--- TODO: update images, has to wait for example workspace to finalize -->
+![](./images/pwd_screen.png)
+> TODO: update images, has to wait for example workspace to finalize 
 
 This workshop is only available to people in a pre-arranged workshop. That may happen through a [Docker Meetup](https://events.docker.com/chapters/), a conference workshop that is being led by someone who has made these arrangements, or special arrangements between Docker and your company. The workshop leader will provide you with the URL to a workshop environment that includes [Docker Enterprise Edition](https://www.docker.com/enterprise-edition). The environment will be based on [Play with Docker](https://labs.play-with-docker.com/).
 
@@ -77,7 +78,8 @@ Throughout the lab you will be asked to provide either hostnames or login creden
 
 - When you encounter a phrase in between `<` and `>`  you are meant to substitute in a different value.
 
-	For instance if you see `<dtr domain>` you would actually type something like `ip172-18-0-7-b70lttfic4qg008cvm90.direct.microsoft.play-with-docker.com` <!--- TODO: update -->
+	For instance if you see `<dtr domain>` you would actually type something like `ip172-18-0-7-b70lttfic4qg008cvm90.direct.microsoft.play-with-docker.com`
+	> TODO: update 
 
 - When you see the Linux penguin all the following instructions should be completed in your Linux console
 
@@ -88,9 +90,9 @@ Throughout the lab you will be asked to provide either hostnames or login creden
     ![](./images/windows75.png)
 
 ## <a name="intro1"></a>Introduction
-<!--- TODO: add exposition on introduction to Docker Platform and its benefits -->
+> TODO: add exposition on introduction to Docker Platform and its benefits 
 ### <a name="intro2"></a>Overview of Orchestration
-<!--- TODO: Add introduction to orchestration, basic principles of Swarm and Kubernetes -->
+> TODO: Add introduction to orchestration, basic principles of Swarm and Kubernetes 
 #### <a name="intro2.1"></a>Overview of Docker Swarm mode
 #### <a name="intro2.2"></a>Overview of Kubernetes
 
@@ -139,8 +141,6 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 
 	> **Note**: You may notice that there is a UI component to select `Linux` or `Windows`on the `Add Node` screen. In a production environment where you are starting from scratch there are [a few prerequisite steps] to adding a Windows node. However, we've already done these steps in the PWD environment. So for this lab, just leave the selection on `Linux` and move on to step 2
 
-
-
 ![](./images/windows75.png)
 
 6. Switch back to the PWD interface, and click the name of your Windows node. This will connect the web-based console to your Windows Server 2016 Docker EE host.
@@ -159,12 +159,13 @@ You should be taken to the `Nodes` screen and will see 4 worker nodes listed at 
 
 	Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
 
-	![](./images/node_listing.png) <!--- TODO: Update with new nodes page screenshot -->
+	![](./images/node_listing.png)
+	> TODO: Update with new nodes page screenshot 
 
 Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
 
 ### <a name="task1.3"></a>Task 1.3: Create Two DTR Repositories
-<!--- TODO: Update names of applications, number of repositories -->
+> TODO: Update names of applications, number of repositories 
 Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create a couple of different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside. Often that would be enough.
 
 However, before we create the repositories, we do want to restrict access to them. Since we have two distinct app components, a Java web app, and a .NET API, we want to restrict access to them to the team that develops them, as well as the administrators. To do that, we need to create two users and then two organizations.
@@ -206,7 +207,7 @@ You'll now see both repositories listed.
 Congratulations, you have created two new repositories in two new organizations, each with one user.
 
 ## <a name="task2"></a>Task 2: Deploy a Linux Web App
-<!--- TODO: updates with link to Java sample app instead of tweet app -->
+> TODO: updates with link to Java sample app instead of tweet app 
 Now that we've completely configured our cluster, let's deploy a couple of web apps. These are simple web pages that allow you to send a tweet. One is built on Linux using NGINX and the other is build on Windows Server 2016 using IIS.  
 
 Let's start with the Linux version.
@@ -255,7 +256,7 @@ Let's start with the Linux version.
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
 
 	Your output should be similar to what is shown below
-<!-- TODO add output from java app build-->
+> TODO:  add output from java app build
 		Sending build context to Docker daemon  4.096kB
 		Step 1/4 : FROM nginx:latest
 		latest: Pulling from library/nginx
@@ -293,7 +294,7 @@ first use the dotnet_user, which isn't part of the java organization
 	```
 	$ docker push <dtr hostname>/java/java-web
 	```
-	<!--- TODO: add output of failure to push-->
+	> TODO: add output of failure to push
 
 
 	The access control that you established in the [Task 1.3](#task1.3) prevented you from pushing to this repository.	
@@ -305,7 +306,7 @@ first use the dotnet_user, which isn't part of the java organization
 	```
 
 	The output should be similar to the following:
-<!-- update with output of the Java app being pushed-->
+> TODO: update with output of the Java app being pushed
 	```
 	The push refers to a repository [<dtr hostname>/java/java-web]
 	feecabd76a78: Pushed
@@ -357,9 +358,9 @@ Services are application building blocks (although in many cases an application 
 
 12. Click `Create` near the bottom right of the screen.
 
-<!-- TODO update with directions on running app-->
+> TODO:  update with directions on running app
 After a few seconds you should see a green dot next to your service name. Once you see the green dot, click on the service to open the right sidebar to inspect the service and click on the link under `published endpoints` in the configuration section. That will open the web app in a new tab.
-<!-- TODO add screenshot of running app -->
+> TODO:  add screenshot of running app 
 
 ### Extra Credit: Ingress Load Balancing
 
@@ -369,12 +370,12 @@ After a few seconds you should see a green dot next to your service name. Once y
 
 3. From the dropdown on the right-hand side select `Inspect Resources` and then `Containers` Notice which host the container is running on. Is it running on the manager or the worker node?
 
-<!-- TODO created new image showing this with java-web-->
+> TODO:  created new image showing this with java-web
 	![](./images/linux_tweet_app_container.png)
 
 	If it's the worker node, how did your web browser find it when we pointed at the UCP Manager node?
 
-<!-- confirm this flow works -->
+> TODO: confirm this flow works 
 4. Point your browser at `http://<DTR hostname>:8088`. Did the site come up?
 
 	In the end it doesn't matter if we try and access the service via the manager or the worker, Docker EE will route the request correctly.
@@ -384,37 +385,43 @@ After a few seconds you should see a green dot next to your service name. Once y
 	This is an example of the built in ingress load balancer in Docker EE. Regardless of where a Linux-based service is actually running, you can access it from any Linux node in the cluster. So, if it's running on the manager in our cluster, you can still get to it by accessing the worker node. Docker EE can accept the request coming into any of the Linux nodes in the cluster, and route it to a host that's actually running a container for that service.
 
 5. Be sure to clear the filter in the UCP UI by clicking the `X` in the upper right corner. If you don't do this, you won't see any of the other services you deploy later in the lab
-<!-- TODO update this image -->
+> TODO:  update this image 
 	![](./images/clear_filter.png)
 
-<!-- TODO: create task to modernize web app with v2 -->
+> TODO: create task to modernize web app with v2 
 
 ## <a name="task3"></a>Task 3: Deploy a Windows Web App
 
-Now we'll deploy the Windows version of the tweet app.
+Now that we've moved the app and updated it, we're going to add in a user sign-in API. For fun, and to show off the cross-platform capabilities of Docker EE, we are going to do it in a Windows container.
 
-### <a name="task3.1"></a> Task 3.1: Create the dockerfile
-<!--- TODO: write 3.1 based on app created -->
+### <a name="task3.1"></a> Task 3.1: Clone the repository
+
+Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. Then clone the repository again onto this host:
+
+	```
+	$ git clone https://github.com/dockersamples/hybrid-app.git
+	```
 
 ### <a name="task3.2"></a> Task 3.2: Build and Push Your Image to Docker Trusted Registry
-<!--- TODO: rewrite 3.1 based on app created -->
-![](./images/windows75.png)
 
-1. CD into the `c:\windowstweetapp` directory (this is where your Image2Docker files have been placed).
+1. CD into the `c:\hybrid-app\netfx-api` directory. 
 
-	`PS C:\> cd c:\windowstweetapp\`
+	> Note you'll see a `dotnet-api` directory as well. Don't use that direction. That's a .NET Core api that runs on Linux. We'll use that later in the Kubernetes section.
+
+	`PS C:\> cd c:\hybrid-app\netfx-api\`
 
 
 2. Use `docker build` to build your Windows tweet web app Docker image.
 
-	`$ docker build -t <dtr hostname>/<your user name>/windows_tweet_app .`
+	`$ docker build -t <dtr hostname>/dotnet/dotnet_api .`
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
 
 	Your output should be similar to what is shown below
 
+> TODO:  update with output from Windows 
 	```
-	PS C:\windowstweetapp> docker build -t <dtr hostname>/<your user name>/windows_tweet_app .
+	PS C:\hybrid-app\netfx-api> docker build -t <dtr hostname>/dotnet/dotnet_api .
 
 	Sending build context to Docker daemon  415.7kB
 	Step 1/8 : FROM microsoft/iis:windowsservercore-10.0.14393.1715
@@ -424,7 +431,7 @@ Now we'll deploy the Windows version of the tweet app.
 
 	Removing intermediate container ab4dfee81c7e
 	Successfully built d74eead7f408
-	Successfully tagged <dtr hostname>/<your user name>/windows_tweet_app:latest
+	Successfully tagged <dtr hostname>/dotnet/dotnet_api:latest
 	```
 	> **Note**: It will take a few minutes for your image to build.
 
@@ -432,16 +439,16 @@ Now we'll deploy the Windows version of the tweet app.
 
 	```
 	PS C:\> docker login <dtr hostname>
-	Username: <your username>
-	Password: <your password>
+	Username: dotnet_user
+	Password: user1234
 	Login Succeeded
 	```
 
 5. Push your new image up to Docker Trusted Registry.
 
 	```
-	PS C:\Users\docker> docker push <dtr hostname>/<your username>/windows_tweet_app
-	The push refers to a repository [<dtr hostname>/<your username>/windows_tweet_app]
+	PS C:\Users\docker> docker push <dtr hostname>/dotnet/dotnet_api
+	The push refers to a repository [<dtr hostname>/dotnet/dotnet_api]
 	5d08bc106d91: Pushed
 	74b0331584ac: Pushed
 	e95704c2f7ac: Pushed
@@ -459,17 +466,18 @@ Now we'll deploy the Windows version of the tweet app.
 
 ### <a name="task3.3"></a> Task 3.3: Deploy the Windows Web App
 
-Now that we have our Windows Tweet App up on the DTR server, let's deploy it. It's going to be almost identical to how did the Linux version with a couple of one small exceptionn: Docker EE on Windows Server 2016 does not currently support ingress load balancing, so we'll expose the ports in `host` mode using `dnsrr`
+> TODO:  check if this warning is still applicable 
+Now that we have our Windows .NET API up on the DTR server, let's deploy it. It's going to be almost identical to how did the Linux version with a couple of one small exception: Docker EE on Windows Server 2016 does not currently support ingress load balancing, so we'll expose the ports in `host` mode using `dnsrr`
 
 1. Switch back to UCP in your web browser
 
-2. In the left hand menu click `Services`
+2. In the left hand menu click `Swarm` and then `Services`
 
 3. In the upper right corner click `Create Service`
 
-4. Enter `windows_tweet_app` for the name.
+4. Enter `dotnet_api` for the name.
 
-4. Under `Image` enter the path to your image which should be `<dtr hostname>/<your username>/windows_tweet_app`
+4. Under `Image` enter the path to your image which should be `<dtr hostname>/dotnet/dotnet_api`
 
 8. From the left hand menu click `Network`
 
@@ -487,16 +495,20 @@ Now that we have our Windows Tweet App up on the DTR server, let's deploy it. It
 
 12. Click `Create` near the bottom right of the screen.
 
-After a few seconds you should see a green dot next to your service name. Once you see the green dot you can point your web browser to `http://<windows host>:8082` to see your running website.
+After a few seconds you should see a green dot next to your service name.
+
+> TODO:  what's the next step with the app working? 
 
 ## <a name="task4"></a> Task 4: Deploying a Multi-OS Application
 
-<!--- TODO: write task 4 based on app created. Same app, single compose file -->
+> TODO: write task 4 based on app created. Same app, single compose file 
 
 ## <a name="task5"></a> Task 5: Application Lifecycle Management
 
 Now that we've deployed our application, let's take a look at some common tasks that admins need to do to keep their apps running and up-to-date. We'll start by upgrading the web front end, next we'll scale that service to meet demand, and then finally we'll see how to deal with the failure of a node in our UCP cluster.
 
+> TODO: Is 5.1 still relevant or should app be upgraded in Task 2? If still relevant, update to new app.
+> TODO: Update the 5.2-> to use new app
 ### <a name="task5.1"></a> Task 5.1: Upgrading the Web Front-end
 
 In this section we're going to first simulate a failed upgrade attempt, and see how to deal with that. The way we upgrade a running service is to update the image that service is based on. In this case the image we're going to upgrade to is broken. So when it's deployed UCP will pause the upgrade process, from there we can roll the application back to it's previous state.
