@@ -220,13 +220,13 @@ Let's start with the Linux version.
 2. Use git to clone the workshop repository.
 
 	```
-	$ git clone https://github.com/dockersamples/hybrid-workshop.git
+	$ git clone https://github.com/dockersamples/hybrid-app.git
 	```
 
 	You should see something like this as the output:
 
 	```
-	Cloning into 'hybrid-workshop'...
+	Cloning into 'hybrid-app'...
 	remote: Counting objects: 13, done.
 	remote: Compressing objects: 100% (10/10), done.
 	remote: Total 13 (delta 1), reused 10 (delta 1), pack-reused 0
@@ -240,22 +240,22 @@ Let's start with the Linux version.
 
 ![](./images/linux75.png)
 
-1. Change into the `linux_tweet_app` directory.
+1. Change into the `java-app` directory.
 
-	`$ cd ./hybrid-workshop/linux_tweet_app/`
+	`$ cd ./hybrid-app/java-app/`
 
 2. Use `docker build` to build your Linux tweet web app Docker image.
 
-	`$ docker build -t <dtr hostname>/<your user name>/linux_tweet_app .`
+	`$ docker build -t <dtr hostname>/java/java-web .`
 
 	> **Note**: Be sure to substitute your DTR Hostname and your User Name - both these are listed at the top of your PWD page.
 
-	The `-t` tags the image with a name. In our case, the name indicates which DTR server and under which user's respository the image will live.
+	The `-t` tags the image with a name. In our case, the name indicates which DTR server and under which organization's respository the image will live.
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
 
 	Your output should be similar to what is shown below
-
+<!-- TODO add output from java app build-->
 		Sending build context to Docker daemon  4.096kB
 		Step 1/4 : FROM nginx:latest
 		latest: Pulling from library/nginx
@@ -281,7 +281,7 @@ Let's start with the Linux version.
 
 3. Log into your DTR server from the command line
 
-first use unpriveleged user
+first use the dotnet_user, which isn't part of the java organization
 	```
 	$ docker login <dtr hostname>
 	Username: <your username>
@@ -291,23 +291,23 @@ first use unpriveleged user
 	Use `docker push` to upload your image up to Docker Trusted Registry.
 
 	```
-	$ docker push <dtr hostname>/<your user name>/linux_tweet_app
+	$ docker push <dtr hostname>/java/java-web
 	```
 	<!--- TODO: add output of failure to push-->
 
 
 	The access control that you established in the [Task 1.3](#task1.3) prevented you from pushing to this repository.	
 
-4. Now try using your priveleged user name, use `docker push` to upload your image up to Docker Trusted Registry.
+4. Now try logging in using `java-user`, and then use `docker push` to upload your image up to Docker Trusted Registry.
 
 	```
-	$ docker push <dtr hostname>/<your user name>/linux_tweet_app
+	$ docker push <dtr hostname>/java/java-web
 	```
 
 	The output should be similar to the following:
-
+<!-- update with output of the Java app being pushed-->
 	```
-	The push refers to a repository [<dtr hostname>/<your user name>/linux_tweet_app]
+	The push refers to a repository [<dtr hostname>/java/java-web]
 	feecabd76a78: Pushed
 	3c749ee6d1f5: Pushed
 	af5bd3938f60: Pushed
@@ -317,7 +317,7 @@ first use unpriveleged user
 	```
 	Success! Because you are using a user name that belongs to the right group, you can push your image to DTR.
 
-4. In your web browser head back to your DTR server and click `View Details` next to your `linux_tweet_app` repo to see the details of the repo.
+4. In your web browser head back to your DTR server and click `View Details` next to your `java-web` repo to see the details of the repo.
 
 	> **Note**: If you've closed the tab with your DTR server, just click the `DTR` button from the PWD page.
 
@@ -333,19 +333,21 @@ Services are application building blocks (although in many cases an application 
 
 	> **Note**: If you've closed your UCP tab, you can simply click `UCP` from the PWD page to relaunch the UCP web interface
 
-2. In the left hand menu click `Services` <!--- TODO: update to Swarm -->
+2. In the left hand menu click `Swarm` and then `Services`
+	![](./images/swarm-services.png)
 
 3. In the upper right corner click `Create Service`
+	![](./images/create-service.png)
 
-4. Enter `linux_tweet_app` for the name.
+4. Enter `java-web` for the name.
 
-4. Under `Image` enter the path to your image which should be `<dtr hostname>/<your user name>/linux_tweet_app`
+4. Under `Image` enter the path to your image which should be `<dtr hostname>/java/java-web`
 
 8. From the left hand menu click `Network`
 
 9. Click `Publish Port+`
 
-	We need to open a port for our web server. Since port 80 is already used by UCP on one node, and DTR on the other, we'll need to pick an alternate port. We'll go with 8088.
+	We need to open a port for our web server. Since port 80 is already used by UCP on one node, and DTR on the other, we'll need to pick an alternate port. We'll go with x.
 
 10. Fill out the port fields as shown below
 
@@ -355,24 +357,24 @@ Services are application building blocks (although in many cases an application 
 
 12. Click `Create` near the bottom right of the screen.
 
-After a few seconds you should see a green dot next to your service name. Once you see the green dot you can point your web browser to `http://<UCP hostname>:8088` to see your running website  (it may take a minute or so after the dot turns green for the service to be fully available).
-
-> **Note**: You want to go to `http://` not `https://`
-
-You may also click on the service to open the right sidebar to inspect the service and click on the link under `published endpoints` in the configuration section.
+<!-- TODO update with directions on running app-->
+After a few seconds you should see a green dot next to your service name. Once you see the green dot, click on the service to open the right sidebar to inspect the service and click on the link under `published endpoints` in the configuration section. That will open the web app in a new tab.
+<!-- TODO add screenshot of running app -->
 
 ### Extra Credit: Ingress Load Balancing
 
-1. In UCP click on `Services` in the left hand menu.
+1. In UCP click on `Swarm` and then `Services` in the left hand menu.
 
-2. From the List of services click on `linux_tweet_app`
+2. From the List of services click on `java-web`
 
 3. From the dropdown on the right-hand side select `Inspect Resources` and then `Containers` Notice which host the container is running on. Is it running on the manager or the worker node?
 
+<!-- TODO created new image showing this with java-web-->
 	![](./images/linux_tweet_app_container.png)
 
 	If it's the worker node, how did your web browser find it when we pointed at the UCP Manager node?
 
+<!-- confirm this flow works -->
 4. Point your browser at `http://<DTR hostname>:8088`. Did the site come up?
 
 	In the end it doesn't matter if we try and access the service via the manager or the worker, Docker EE will route the request correctly.
@@ -382,8 +384,10 @@ You may also click on the service to open the right sidebar to inspect the servi
 	This is an example of the built in ingress load balancer in Docker EE. Regardless of where a Linux-based service is actually running, you can access it from any Linux node in the cluster. So, if it's running on the manager in our cluster, you can still get to it by accessing the worker node. Docker EE can accept the request coming into any of the Linux nodes in the cluster, and route it to a host that's actually running a container for that service.
 
 5. Be sure to clear the filter in the UCP UI by clicking the `X` in the upper right corner. If you don't do this, you won't see any of the other services you deploy later in the lab
-
+<!-- TODO update this image -->
 	![](./images/clear_filter.png)
+
+<!-- TODO: create task to modernize web app with v2 -->
 
 ## <a name="task3"></a>Task 3: Deploy a Windows Web App
 
