@@ -21,7 +21,7 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 1.2: Install a Windows worker node](#task1.2)
 >   * [Task 1.3: Create Two Repositories](#task1.3)
 >   * [Task 1.3.1: Restrict access to a repository](#task1.3.1)
-> * [Task 2: Deploy a Linux Web App](#task2)
+> * [Task 2: Deploy a Java Web App](#task2)
 >   * [Task 2.1: Clone the Demo Repo](#task2.1)
 >   * [Task 2.2: Build and Push the Linux Web App Image](#task2.2)
 >   * [Task 2.3: Deploy the Web App using UCP](#task2.3)
@@ -206,7 +206,7 @@ You'll now see both repositories listed.
 
 Congratulations, you have created two new repositories in two new organizations, each with one user.
 
-## <a name="task2"></a>Task 2: Deploy a Linux Web App
+## <a name="task2"></a>Task 2: Deploy a Java Web App
 > TODO: updates with link to Java sample app instead of tweet app 
 Now that we've completely configured our cluster, let's deploy a couple of web apps. These are simple web pages that allow you to send a tweet. One is built on Linux using NGINX and the other is build on Windows Server 2016 using IIS.  
 
@@ -228,10 +228,11 @@ Let's start with the Linux version.
 
 	```
 	Cloning into 'hybrid-app'...
-	remote: Counting objects: 13, done.
-	remote: Compressing objects: 100% (10/10), done.
-	remote: Total 13 (delta 1), reused 10 (delta 1), pack-reused 0
-	Unpacking objects: 100% (13/13), done.
+	remote: Counting objects: 389, done.
+	remote: Compressing objects: 100% (17/17), done.
+	remote: Total 389 (delta 4), reused 16 (delta 1), pack-reused 363
+	Receiving objects: 100% (389/389), 13.74 MiB | 3.16 MiB/s, done.
+	Resolving deltas: 100% (124/124), done.
 	Checking connectivity... done.
 	```
 
@@ -255,30 +256,7 @@ Let's start with the Linux version.
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
 
-	Your output should be similar to what is shown below
-> TODO:  add output from java app build
-		Sending build context to Docker daemon  4.096kB
-		Step 1/4 : FROM nginx:latest
-		latest: Pulling from library/nginx
-		ff3d52d8f55f: Pull complete
-		b05436c68d6a: Pull complete
-		961dd3f5d836: Pull complete
-		Digest: sha256:12d30ce421ad530494d588f87b2328ddc3cae666e77ea1ae5ac3a6661e52cde6
-		Status: Downloaded newer image for nginx:latest
-		---> 3448f27c273f
-		Step 2/4 : COPY index.html /usr/share/nginx/html
-		---> 72d22997a765
-		Removing intermediate container e262b9220942
-		Step 3/4 : EXPOSE 80 443
-		---> Running in 54e4ff1b39a6
-		---> 2b5bd87894cd
-		Removing intermediate container 54e4ff1b39a6
-		Step 4/4 : CMD nginx -g daemon off;
-		---> Running in 54020cdec942
-		---> ed5f550fc339
-		Removing intermediate container 54020cdec942
-		Successfully built ed5f550fc339
-		Successfully tagged  <dtr hostname>/<your user name>/linux_tweet_app:latest
+	There will be quite a bit of output. The Dockerfile describes a two-stage build. In the first stage, a Maven base image is used to build the Java app. But to run the app you don't need Maven or any of the JDK stuff that comes with it. So the second stage takes the output of the first stage and puts in a Tomcat image.
 
 3. Log into your DTR server from the command line
 
@@ -348,7 +326,7 @@ Services are application building blocks (although in many cases an application 
 
 9. Click `Publish Port+`
 
-	We need to open a port for our web server. Since port 80 is already used by UCP on one node, and DTR on the other, we'll need to pick an alternate port. We'll go with x.
+	We need to open a port for our web server. Since port 80 is already used by UCP on one node, and DTR on the other, we'll need to pick an alternate port. We'll go with 8080.
 
 10. Fill out the port fields as shown below
 
