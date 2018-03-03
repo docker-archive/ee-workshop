@@ -92,17 +92,18 @@ Throughout the lab you will be asked to provide either hostnames or login creden
 ## <a name="intro1"></a>Introduction
 > TODO: add exposition on introduction to Docker Platform and its benefits 
 ### <a name="intro2"></a>Overview of Orchestration
-> TODO: Add introduction to orchestration, basic principles of Swarm and Kubernetes 
+While it is easy to run an application in isolation on a single machine, orchestration allows you to coordinate multiple machines to manage an application, with features like replication, encryption, loadbalancing, service discovery and more. If you've read anything about Docker, you have probably heard of Kubernetes and Docker swarm mode. Docker EE allows you to use either Docker swarm mode or Kubernetes for orchestration. 
+
+Both Docker swarm mode and Kubernetes are declarative: you declare your cluster's desired state, and applications you want to run and where, networks, and resources they can use. Docker EE simplifies this by taking common concepts and moving them to the a shared resource.
+
 #### <a name="intro2.1"></a>Overview of Docker Swarm mode
 A swarm is a group of machines that are running Docker and joined into a cluster. After that has happened, you continue to run the Docker commands you’re used to, but now they are executed on a cluster by a swarm manager. The machines in a swarm can be physical or virtual. After joining a swarm, they are referred to as nodes.
 
-Swarm managers can use several strategies to run containers, such as “emptiest node” – which fills the least utilized machines with containers. Or “global”, which ensures that each machine gets exactly one instance of the specified container. You instruct the swarm manager to use these strategies in the Compose file, just like the one you have already been using.
-
-Swarm managers are the only machines in a swarm that can execute your commands, or authorize other machines to join the swarm as workers. Workers are just there to provide capacity and do not have the authority to tell any other machine what it can and cannot do.
-
-Up until now, you have been using Docker in a single-host mode on your local machine. But Docker also can be switched into swarm mode, and that’s what enables the use of swarms. Enabling swarm mode instantly makes the current machine a swarm manager. From then on, Docker runs the commands you execute on the swarm you’re managing, rather than just on the current machine.
+Swarm mode uses managers and workers to run your applications. Managers run the swarm cluster, making sure nodes can communicate with each other, allocate applications to different nodes, and handle a variety of other tasks in the cluster. Workers are there to provide extra capacity to your applications. In this workshop, you have one manager and three workers.
 
 #### <a name="intro2.2"></a>Overview of Kubernetes
+
+Kubernetes is available in Docker EE 2.0 (currently in beta) and included in this workshop. Kubernetes basic concepts are Pods, Services, Volumes, and Namespaces. 
 
 ## <a name="task1"></a>Task 1: Configure the Docker EE Cluster
 
