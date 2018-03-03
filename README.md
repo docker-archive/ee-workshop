@@ -276,7 +276,7 @@ Let's start with the Linux version.
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
 
-	There will be quite a bit of output. The Dockerfile describes a two-stage build. In the first stage, a Maven base image is used to build the Java app. But to run the app you don't need Maven or any of the JDK stuff that comes with it. So the second stage takes the output of the first stage and puts in a Tomcat image.
+	There will be quite a bit of output. The Dockerfile describes a two-stage build. In the first stage, a Maven base image is used to build the Java app. But to run the app you don't need Maven or any of the JDK stuff that comes with it. So the second stage takes the output of the first stage and puts it in a much smaller Tomcat image.
 
 3. Log into your DTR server from the command line
 
@@ -314,13 +314,14 @@ first use the dotnet_user, which isn't part of the java organization
 	eb78099fbf7f: Pushed
 	latest: digest: sha256:9a376fd268d24007dd35bedc709b688f373f4e07af8b44dba5f1f009a7d70067 size: 1363
 	```
-	Success! Because you are using a user name that belongs to the right group, you can push your image to DTR.
+	Success! Because you are using a user name that belongs to the right team in the right organization, you can push your image to DTR.
 
 4. In your web browser head back to your DTR server and click `View Details` next to your `java-web` repo to see the details of the repo.
 
 	> **Note**: If you've closed the tab with your DTR server, just click the `DTR` button from the PWD page.
 
 5. Click on `Images` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
+![](./images/pushed_image.png)
 
 ### <a name="task2.3"></a> Task 2.3: Deploy the Web App using UCP
 
