@@ -107,7 +107,7 @@ Kubernetes is available in Docker EE 2.0 (currently in beta) and included in thi
 
 ## <a name="task1"></a>Task 1: Configure the Docker EE Cluster
 
-The Play with Docker (PWD) environment is almost completely set up, but before we can begin the labs, we need to do two more steps. First we'll add a Windows node to the cluster, and then we'll create two repositories on the DTR server.
+The Play with Docker (PWD) environment is almost completely set up, but before we can begin the labs, we need to do two more steps. First we'll add a Windows node to the cluster. We've left the node unjoined so you can see how easy it is to do. Then we'll create two repositories in Docker Trusted Registry.
 (The Linux worker nodes are already added to the cluster)
 
 ### <a name="task 1.1"></a>Task 1.1: Accessing PWD
@@ -120,7 +120,7 @@ The Play with Docker (PWD) environment is almost completely set up, but before w
 
 	It may take a few minutes to provision out your PWD environment. After this step completes, you'll be ready to move on to task 1.2: Install a Windows worker node
 
-### <a name="task1.2"></a>Task 1.2: Install a Windows worker node
+### <a name="task1.2"></a>Task 1.2: Join a Windows worker node
 
 Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker node. This is done using Docker Swarm.
 
@@ -129,6 +129,7 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 	> **Note**: Because this is a lab-based install of Docker EE we are using the default self-signed certs. Because of this your browser may display a security warning. It is safe to click through this warning.
 	>
 	> In a production environment you would use certs from a trusted certificate authority and would not see this screen.
+	>
 	> ![](./images/ssl_error.png)
 
 2. When prompted enter your username and password (these can be found below the console window in the main PWD screen). The UCP web interface should load up in your web browser.
@@ -198,18 +199,28 @@ Then do the same for a `dotnet_user`.
 Then do the same with dotnet and you'll have two organizations.
 ![](./images/two_organizations.png)
 
-6. Select the java organization and the members will show up. Press Add user and start typing in java. Select the `java_user` when it comes up.
-![](./images/add_java_user_to_organization.png)
-
-7. Now you get to add a repository! Still on the java organization, select repositories and then Add repository
+6. Now you get to add a repository! Still on the java organization, select repositories and then Add repository
 ![](./images/add_repository_java.png)
 
-8. Name the repository `java_web`. 
+7. Name the repository `java_web`. 
 
 	![](./images/create_repository.png)
 > Note the repository is listed as "Public" but that means it is publicly viewable by users of DTR. It is not available to the general public.
 
-9. Repeat 5-8 above to create a `dotnet` organization with the `dotnet_user` and a repository called `dotnet_api`.
+8. Now it's time to create a team so you can restrict access to who administers the images. Select the `java` organization and the members will show up. Press Add user and start typing in java. Select the `java_user` when it comes up.
+![](./images/add_java_user_to_organization.png)
+
+9. Next select the `java` organization and press the `Team` button to create a `web` team.
+![](./images/team.png)
+
+10. Add the `java_user` user to the `web` team and click save.
+![](./images/team_add_user.png)
+![](./images/team_with_user.png)
+
+11. Next select the `web` team and select the `Repositories` tab. Select `Add Existing repository` and choose the `java_web`repository. You'll see the `java` account is already selected. Then select `Read/Write` permissions so the `web` team has permissions to push images to this repository. Finally click `save`.
+![](./images/add_java_web_to_team.png)
+
+12. Repeat 4-11 above to create a `dotnet` organization with the `dotnet_user` and a repository called `dotnet_api`.
 You'll now see both repositories listed.
 	![](./images/two_repositories.png)
 
