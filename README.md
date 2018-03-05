@@ -27,8 +27,9 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 2.3: Deploy the Web App using UCP](#task2.3)
 > * [Task 3: Deploy a Windows .NET App](#task3)
 >   * [Task 3.1: Clone the repository](#task3.1)
->   * [Task 3.2: Build and Push Your Image to Docker Trusted Registry](#task3.2)
->   * [Task 3.3: Deploy the Windows .NET App](#task3.3)
+>   * [Task 3.2: Build and Push Your Java Images to Docker Trusted Registry](#task3.2)
+>   * [Task 3.3: Deploy the Java web app with Universal Control Plane](#task3.3)
+>   * [Task 3.4: Deploy the Windows .NET App](#task3.4)
 > * [Task 4: Deploy a Multi-OS Application](#task4)
 >   * [Task 4.1: Examine the Docker Compose File](#task4.1)
 >   * [Task 4.2: Deploy the Application Stack](#task4.2)
@@ -228,7 +229,7 @@ You'll now see both repositories listed.
 
 Congratulations, you have created two new repositories in two new organizations, each with one user.
 
-## <a name="task2"></a>Task 2: Deploy a Java Web App
+## <a name="task2"></a>Task 2: Deploy a Java Web App with Universal Control Plane
 > TODO: updates with link to Java sample app instead of tweet app 
 Now that we've completely configured our cluster, let's deploy a couple of web apps. These are simple web pages that allow you to send a tweet. One is built on Linux using NGINX and the other is build on Windows Server 2016 using IIS.  
 
@@ -325,7 +326,7 @@ first use the dotnet_user, which isn't part of the java organization
 6. Click on `Images` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
 ![](./images/pushed_image.png)
 
-7. Repeat 1,2 and 4 but build a `java/database` in the `database/` directory and push it to DTR.
+7. Repeat 1,2 and 4 but build a `java/database` in the `database/` directory and push it to DTR. This is a simple MySQL database with a basic username/password and an initial table configuration.
 
 ### <a name="task2.3"></a> Task 2.3: Deploy the Web App using UCP
 
@@ -405,7 +406,7 @@ Because this is a Windows container, we have to build it on a Windows host. Swit
 	$ git clone https://github.com/dockersamples/hybrid-app.git
 	```
 
-### <a name="task3.2"></a> Task 3.2: Build and Push Your Image to Docker Trusted Registry
+### <a name="task3.2"></a> Task 3.2: Build and Push Java Images to Docker Trusted Registry
 
 1. CD into the `c:\hybrid-app\netfx-api` directory. 
 
@@ -466,6 +467,9 @@ Because this is a Windows container, we have to build it on a Windows host. Swit
 	latest: digest: sha256:e28b556b138e3d407d75122611710d5f53f3df2d2ad4a134dcf7782eb381fa3f size: 2825
 	```
 6. You may check your repositories in the DTR web interface to see the newly pushed image.
+
+### <a name="task3.3"></a> Task 3.3: Deploy the Java web app
+
 
 ### <a name="task3.3"></a> Task 3.3: Deploy the Windows Web App
 
