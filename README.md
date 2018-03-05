@@ -4,7 +4,7 @@ Docker EE 17.06 is the first Containers-as-a-Service platform to offer productio
 
 In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. We'll deploy both a Linux and Windows web app, as well as a multi-service application that includes both Windows and Linux components. We will then look at scaling up your web app, as well how Docker EE handles system interruptions and upgrades.
 
-> **Difficulty**: Intermediate (assumes basic familiarity with Docker) If you're looking for a basic introduction to Docker,
+> **Difficulty**: Intermediate (assumes basic familiarity with Docker) If you're looking for a basic introduction to Docker, check out [https://training.play-with-docker.com](https://training.play-with-docker.com)
 
 > **Time**: Approximately 75 minutes
 
@@ -220,6 +220,8 @@ Then do the same with dotnet and you'll have two organizations.
 11. Next select the `web` team and select the `Repositories` tab. Select `Add Existing repository` and choose the `java_web`repository. You'll see the `java` account is already selected. Then select `Read/Write` permissions so the `web` team has permissions to push images to this repository. Finally click `save`.
 ![](./images/add_java_web_to_team.png)
 
+12. Now add a new repository owned by the web team and call it `database`.
+
 12. Repeat 4-11 above to create a `dotnet` organization with the `dotnet_user` and a repository called `dotnet_api`.
 You'll now see both repositories listed.
 	![](./images/two_repositories.png)
@@ -258,7 +260,7 @@ Let's start with the Linux version.
 
 	You now have the necessary demo code on your worker host.
 
-### <a name="task2.2"></a> Task 2.2: Build and Push the Linux Web App Image
+### <a name="task2.2"></a> Task 2.2: Build and Push the Linux Web App Images
 
 ![](./images/linux75.png)
 
@@ -316,12 +318,14 @@ first use the dotnet_user, which isn't part of the java organization
 	```
 	Success! Because you are using a user name that belongs to the right team in the right organization, you can push your image to DTR.
 
-4. In your web browser head back to your DTR server and click `View Details` next to your `java-web` repo to see the details of the repo.
+5. In your web browser head back to your DTR server and click `View Details` next to your `java-web` repo to see the details of the repo.
 
 	> **Note**: If you've closed the tab with your DTR server, just click the `DTR` button from the PWD page.
 
-5. Click on `Images` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
+6. Click on `Images` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
 ![](./images/pushed_image.png)
+
+7. Repeat 1,2 and 4 but build a `java/database` in the `database/` directory and push it to DTR.
 
 ### <a name="task2.3"></a> Task 2.3: Deploy the Web App using UCP
 
