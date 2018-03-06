@@ -330,9 +330,64 @@ first use the dotnet_user, which isn't part of the java organization
 
 ### <a name="task2.3"></a> Task 2.3: Deploy the Web App using UCP
 
-Now let's run our application by creating a new service.
+The next step is to run the app in Swarm. As a reminder, the application has two components, the web front-end and the database. In order to connect to the database, the application needs a password. If you were just running this in development you could easily pass the password around as a text file or an environment variable. But in production you would never do that. So instead, we're going to create an encrypted secret. That way access can be strictly controlled.
 
-Services are application building blocks (although in many cases an application will only have one service, such as this example). Services are based on a single Docker image. When you create a new service you instantiate at least one container automatically, but you can scale the number up (or down) to meet the needs of your service.
+1. Go back to the first Play with Docker tab. Click on the UCP button. You'll have the same warnings regarding `https` that you have before. Click through those and log in. You'll see the Universal Control Panel dashboard.
+
+2.  There's a lot here about managing the cluster. You can take a moment to explore around. When you're ready, click on `Swarm` and select `Secrets`.
+![](./images/ucp_secret_menu.png)
+
+3. You'll see a `Create Secret` screen. Type `MYSQL_PASSWORD` in `Name` and `password` in `Content`. Then click `Create` in the lower left. Obviously you wouldn't use this password in a real production environment. You'll see the content box allows for quite a bit of content, you can actually create structred content here that will be encrypted with the secret.
+
+4. Next we're going to create two networks. First click on `Networks` under `Swarm` in the left panel, and select `Create Network` in the upper right. You'll see a `Create Network` screen. Name your first network `back-tier`. Leave everything else the default.
+![](./ucp_network.png)
+
+5. Repeat step 4 but with a new network `front-tier`.
+
+6. Now we're going to use the fast way to create your application: `Stacks`. In the left panel, click `Shared Resources`, `Stacks` and then `Create Stack` in the upper right corner.
+
+7. Name your stack `java-web` and select `Swarm Services` for your `Mode`. Below you'll see we've included a `.yml` file. Before you paste that in to the `Compose.yml` edit box, note that you'll need to make a quick change. Each of the images is defined as `<your-dtr-instance>/java/<something>`. You'll need to change the `<your-dtr-instance>` to the DTR Hostname found on the Play with Docker landing page for your session. It will look something like this:
+`ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com`
+You can do that right in the edit box in `UCP` but wanted to make sure you saw that first.
+![](./images/ucp_create_stack.png)
+
+Here's the `Compose` file. Once you've copy and pasted it in, and made the changes, click `Create` in the lower right corner.
+```
+version: "3.3"
+
+services:
+
+  database:
+    image: ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com/java/database
+    # set default mysql root password, change as needed
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_password
+    # Expose port 3306 to host. 
+    ports:
+      - "3306:3306" 
+    networks:
+      - back-tier
+
+  webserver:
+    image: ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com/java/java_web
+    ports:
+      - "8080:8080" 
+      - "8000:8000"
+    networks:
+      - front-tier
+      - back-tier
+
+networks:
+  back-tier:
+  front-tier:
+
+secrets:
+  mysql_password:
+    external: true
+```
+
+
+
 
 1. Switch back to your UCP server in your web browser
 
