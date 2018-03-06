@@ -1,8 +1,8 @@
 # Deploying Multi-OS applications with Docker EE
 
-Docker EE is the first Containers-as-a-Service platform to offer production-level support for the integrated management and security of both Linux and Windows Server Containers. It is also the first platform to support both Docker Swarm and Kubernetes orchestration.
+Docker EE 2.0 (beta) is the first Containers-as-a-Service platform to offer production-level support for the integrated management and security of both Linux and Windows Server Containers. It is also the first platform to support both Docker Swarm and Kubernetes orchestration.
 
-In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. We'll deploy both a Java web app on Linux, as well as a multi-service application that includes both Windows and Linux components using Docker Swarm. We will then deploy the app using Kubernetes. Finally we'll take a look at image scanning in Docker Trusted Registry, which gives you the most indepth way to scan an application for known security vulnerabilities.
+In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. We'll deploy both a Java web app on Linux and a multi-service application that includes both Windows and Linux components using Docker Swarm. Then we'll take a look at securing and scaling the application. Finally, we will then deploy the app using Kubernetes.
 
 > **Difficulty**: Intermediate (assumes basic familiarity with Docker) If you're looking for a basic introduction to Docker, check out [https://training.play-with-docker.com](https://training.play-with-docker.com)
 
@@ -34,8 +34,8 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 4.1: Examine the Docker Compose File](#task4.1)
 >   * [Task 4.2: Deploy the Application Stack](#task4.2)
 >   * [Task 4.3: Verify the Running Application](#task4.3)
-> * [Task 5: Application Lifecycle Management](#task5)
->   * [Task 5.1: Upgrading the Web Front-end](#task5.1)
+> * [Task 5: Security and Scale](#task5)
+>   * [Task 5.1: Scanning images for security vulnerabilities](#task5.1)
 >   * [Task 5.2: Scaling the Web Front-end](#task5.2)
 >   * [Task 5.3: Dealing with an Application Failure](#task5.3)
 > * [Task 6: Deploy to Kubernetes](#task6)
@@ -571,85 +571,12 @@ Now that we've deployed our application, let's take a look at some common tasks 
 
 > TODO: Is 5.1 still relevant or should app be upgraded in Task 2? If still relevant, update to new app.
 > TODO: Update the 5.2-> to use new app
-### <a name="task5.1"></a> Task 5.1: Upgrading the Web Front-end
-
-In this section we're going to first simulate a failed upgrade attempt, and see how to deal with that. The way we upgrade a running service is to update the image that service is based on. In this case the image we're going to upgrade to is broken. So when it's deployed UCP will pause the upgrade process, from there we can roll the application back to it's previous state.
-
-1. Move back into Universal Control Plane
-
-2. If your services are not currently displayed, click on `Services` from the left hand menu
-
-3. Click on the `atsea_appserver` service from the list
-
-4. On the left, under `Configure` select `Details`
-
-	![](./images/service_details.png)
-
-5. Under image, change the value to `mikegcoleman/atsea_appserver:2.0`
-
-6. Click `Update` in the bottom right corner
-
-7. Click on the `atsea_appserver` service from the list
-
-8. The service indicator will turn from green to red, and if you look at the details on the right you'll see the `Update Status` go from `Updating` to `Paused`
-
-	This is because the container that backs up the service failed to start up.
-
-	![](./images/update_status.png)
-
-9. From the right hand side click `Containers` under `Inspect Resource` and you will see the containers have all exited with an error.
-
-	Also notice under image that these containers are running the `2.0` version of our application
-
-10. Click `Services` from the left hand menu.
-
-11. Click the `atsea_appserver` service from the list.
-
-12. Under `Actions` on the right hand side click `Rollback`
-
-	This will tell UCP to restore the service to its previous state. In this case, running the 1.0 version of our webserver image
-
-	After a few seconds the indicator should go from red to green, when it does move on to the next step.
-
-13. Click the `atsea_appserver` service from the list.
-
-14. From the right hand side click `Containers` under `Inspect Resource` and you will see the container has started and is healthy.
-
-	Also notice under image that the container is running the `1.0` version of our application.
-
-15. In your web browser navigate to `<http://<ucp hostname>:8080>` and verify that your website is still running
-
-Now that we've dealt with a failed upgrade, let's look at rolling out a successful upgrade
-
-1. Move back to UCP in your web browser
-
-1. Move back into Universal Control Plane
-
-2. If your services are not currently displayed, click on `Services` from the left hand menu
-
-3. Click on the `atsea_appserver` service from the list
-
-4. On the left, under `Configure` select `Details`
-
-	![](./images/service_details.png)
-
-5. Under image, change the value to `mikegcoleman/atsea_appserver:3.0`
-
-6. Click `Update` in the bottom right corner
-
-7. Click on the `atsea_appserver` service from the list
-
-8. Notice the `Update Status` reads updating, and the indicator in the main area will go from green to red to green.
-
-9.  From the right hand side click `Containers` under `Inspect Resource` and you will see the container has started and is healthy.
-
-	Also notice under image that the container is running the `3.0` version of our application.
-
-10. In your web browser navigate to `<http://<ucp hostname>:8080>` to see the new version of the website (if you already have the site up and running, simply refresh your browser)
-
+### <a name="task5.1"></a> Task 5.1: Scanning for Vulnerabilities
+> TODO: Write this section
 
 ### <a name="task5.2"></a> Task 5.2: Scaling the Web Front-end
 
+> TODO: Rewrite section with new app
 The new site design appears to have dramatically increased the popularity of your website. In order to deal with increased demand, you're going to need to scale up the number of containers in the `atsea_appserver` service.
 
 1. Move to UCP in your web browser
@@ -681,6 +608,8 @@ The new site design appears to have dramatically increased the popularity of you
 Everything seems to be humming along nicely until one of your nodes in the cluster fails. In the next section we'll show how Docker EE deals with these sort of failuers.
 
 ### <a name="task5.3"></a> Task 5.3: Dealing with an Application Failure
+
+> TODO: Rewrite section with new app
 
 Docker EE will always try and reconcile your services to their desired state. For instance, in the case of our web frontend, we have specified we want four containers running. If for some reason the number ever drops below four, Docker EE will attempt to get the service back to four containers.
 
