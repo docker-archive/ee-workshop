@@ -1,8 +1,8 @@
 # Deploying Multi-OS applications with Docker EE
 
-Docker EE 17.06 is the first Containers-as-a-Service platform to offer production-level support for the integrated management and security of Linux and Windows Server Containers.
+Docker EE is the first Containers-as-a-Service platform to offer production-level support for the integrated management and security of both Linux and Windows Server Containers. It is also the first platform to support both Docker Swarm and Kubernetes orchestration.
 
-In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. We'll deploy both a Linux and Windows web app, as well as a multi-service application that includes both Windows and Linux components. We will then look at scaling up your web app, as well how Docker EE handles system interruptions and upgrades.
+In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. We'll deploy both a Java web app on Linux, as well as a multi-service application that includes both Windows and Linux components using Docker Swarm. We will then deploy the app using Kubernetes. Finally we'll take a look at image scanning in Docker Trusted Registry, which gives you the most indepth way to scan an application for known security vulnerabilities.
 
 > **Difficulty**: Intermediate (assumes basic familiarity with Docker) If you're looking for a basic introduction to Docker, check out [https://training.play-with-docker.com](https://training.play-with-docker.com)
 
