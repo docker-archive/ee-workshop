@@ -1,6 +1,6 @@
 # Deploying Multi-OS applications with Docker EE
 
-Docker EE 17.06 is the first Containers-as-a-Service platform to offer production-level support for the integrated management and security of Linux AND Windows Server Containers.
+Docker EE 17.06 is the first Containers-as-a-Service platform to offer production-level support for the integrated management and security of Linux and Windows Server Containers.
 
 In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. We'll deploy both a Linux and Windows web app, as well as a multi-service application that includes both Windows and Linux components. We will then look at scaling up your web app, as well how Docker EE handles system interruptions and upgrades.
 
