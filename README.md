@@ -25,7 +25,7 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 2.1: Clone the Demo Repo](#task2.1)
 >   * [Task 2.2: Build and Push the Linux Web App Image](#task2.2)
 >   * [Task 2.3: Deploy the Web App using UCP](#task2.3)
-> * [Task 3: Deploy a Windows .NET App](#task3)
+> * [Task 3: Deploy the next version with a Windows node](#task3)
 >   * [Task 3.1: Clone the repository](#task3.1)
 >   * [Task 3.2: Build and Push Your Java Images to Docker Trusted Registry](#task3.2)
 >   * [Task 3.3: Deploy the Java web app with Universal Control Plane](#task3.3)
@@ -175,7 +175,7 @@ You should be taken to the `Nodes` screen and will see 4 worker nodes listed at 
 
 Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
 
-### <a name="task1.3"></a>Task 1.3: Create Two DTR Repositories
+### <a name="task1.3"></a>Task 1.3: Create Three DTR Repositories
 > TODO: Update names of applications, number of repositories 
 Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create a couple of different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside. Often that would be enough.
 
@@ -358,7 +358,7 @@ version: "3.3"
 services:
 
   database:
-    image: ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com/java/database
+    image: <your-dtr-instance>/java/database
     # set default mysql root password, change as needed
     environment:
       MYSQL_ROOT_PASSWORD: mysql_password
@@ -369,7 +369,7 @@ services:
       - back-tier
 
   webserver:
-    image: ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com/java/java_web
+    image: <your-dtr-instance>/java/java_web
     ports:
       - "8080:8080" 
       - "8000:8000"
@@ -385,71 +385,13 @@ secrets:
   mysql_password:
     external: true
 ```
+Then click `Done` in the lower right.
 
+8. Click on `Stacks` again, and select the `java-web` stack. Click on `Inspect Resources` and then select `Services`. Select `java-web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.
 
+![](./images/java-web1.png)
 
-
-1. Switch back to your UCP server in your web browser
-
-	> **Note**: If you've closed your UCP tab, you can simply click `UCP` from the PWD page to relaunch the UCP web interface
-
-2. In the left hand menu click `Swarm` and then `Services`
-	![](./images/swarm-services.png)
-
-3. In the upper right corner click `Create Service`
-	![](./images/create-service.png)
-
-4. Enter `java-web` for the name.
-
-4. Under `Image` enter the path to your image which should be `<dtr hostname>/java/java-web`
-
-8. From the left hand menu click `Network`
-
-9. Click `Publish Port+`
-
-	We need to open a port for our web server. Since port 80 is already used by UCP on one node, and DTR on the other, we'll need to pick an alternate port. We'll go with 8080.
-
-10. Fill out the port fields as shown below
-
-	![](./images/linux_ports.png)
-
-11. Click `Confirm`
-
-12. Click `Create` near the bottom right of the screen.
-
-> TODO:  update with directions on running app
-After a few seconds you should see a green dot next to your service name. Once you see the green dot, click on the service to open the right sidebar to inspect the service and click on the link under `published endpoints` in the configuration section. That will open the web app in a new tab.
-> TODO:  add screenshot of running app 
-
-### Extra Credit: Ingress Load Balancing
-
-1. In UCP click on `Swarm` and then `Services` in the left hand menu.
-
-2. From the List of services click on `java-web`
-
-3. From the dropdown on the right-hand side select `Inspect Resources` and then `Containers` Notice which host the container is running on. Is it running on the manager or the worker node?
-
-> TODO:  created new image showing this with java-web
-	![](./images/linux_tweet_app_container.png)
-
-	If it's the worker node, how did your web browser find it when we pointed at the UCP Manager node?
-
-> TODO: confirm this flow works 
-4. Point your browser at `http://<DTR hostname>:8088`. Did the site come up?
-
-	In the end it doesn't matter if we try and access the service via the manager or the worker, Docker EE will route the request correctly.
-
-	> **Note**: DTR is running on the worker node, so pointing to the DTR server is the same as pointing at the worker node.
-
-	This is an example of the built in ingress load balancer in Docker EE. Regardless of where a Linux-based service is actually running, you can access it from any Linux node in the cluster. So, if it's running on the manager in our cluster, you can still get to it by accessing the worker node. Docker EE can accept the request coming into any of the Linux nodes in the cluster, and route it to a host that's actually running a container for that service.
-
-5. Be sure to clear the filter in the UCP UI by clicking the `X` in the upper right corner. If you don't do this, you won't see any of the other services you deploy later in the lab
-> TODO:  update this image 
-	![](./images/clear_filter.png)
-
-> TODO: create task to modernize web app with v2 
-
-## <a name="task3"></a>Task 3: Deploy a Windows Web App
+## <a name="task3"></a>Task 3: Deploy the next version with a Windows node
 
 Now that we've moved the app and updated it, we're going to add in a user sign-in API. For fun, and to show off the cross-platform capabilities of Docker EE, we are going to do it in a Windows container.
 
@@ -461,16 +403,16 @@ Because this is a Windows container, we have to build it on a Windows host. Swit
 	$ git clone https://github.com/dockersamples/hybrid-app.git
 	```
 
-### <a name="task3.2"></a> Task 3.2: Build and Push Java Images to Docker Trusted Registry
+### <a name="task3.2"></a> Task 3.2: Build and Push Windows Images to Docker Trusted Registry
 
 1. CD into the `c:\hybrid-app\netfx-api` directory. 
 
-	> Note you'll see a `dotnet-api` directory as well. Don't use that direction. That's a .NET Core api that runs on Linux. We'll use that later in the Kubernetes section.
+	> Note you'll see a `dotnet-api` directory as well. Don't use that directory. That's a .NET Core api that runs on Linux. We'll use that later in the Kubernetes section.
 
 	`PS C:\> cd c:\hybrid-app\netfx-api\`
 
 
-2. Use `docker build` to build your Windows tweet web app Docker image.
+2. Use `docker build` to build your Windows image.
 
 	`$ docker build -t <dtr hostname>/dotnet/dotnet_api .`
 
@@ -523,47 +465,19 @@ Because this is a Windows container, we have to build it on a Windows host. Swit
 	```
 6. You may check your repositories in the DTR web interface to see the newly pushed image.
 
+
 ### <a name="task3.3"></a> Task 3.3: Deploy the Java web app
 
+1. First we need to update the Java web app so it'll take advantage of the .NET API. Switch back to `worker1` and change directories to the `java-app-v2` directory. Repeat steps 1,2, and 4 from Task 2.2 but add a tag `:2` to your build and pushes:
 
-### <a name="task3.3"></a> Task 3.3: Deploy the Windows Web App
+	```
+	$ docker build -t <dtr hostname>/java/java-web:2 .
+	$ docker push <dtr hostname>/java/java-web:2
+	```
+This will push a different version of the app, version 2, to the same `java-web` repository.
 
-> TODO:  check if this warning is still applicable 
-Now that we have our Windows .NET API up on the DTR server, let's deploy it. It's going to be almost identical to how did the Linux version with a couple of one small exception: Docker EE on Windows Server 2016 does not currently support ingress load balancing, so we'll expose the ports in `host` mode using `dnsrr`
-
-1. Switch back to UCP in your web browser
-
-2. In the left hand menu click `Swarm` and then `Services`
-
-3. In the upper right corner click `Create Service`
-
-4. Enter `dotnet_api` for the name.
-
-4. Under `Image` enter the path to your image which should be `<dtr hostname>/dotnet/dotnet_api`
-
-8. From the left hand menu click `Network`
-
-8. Set the `ENDPOINT SPEC` to `DNS Round Robin`. This tells the service to load balance using DNS. The alternative is VIP, which uses IPVS.
-
-9. Click `Publish Port+`
-
-	We need to open a port for our web server. This app runs on port 80 which is used by DTR so let's use 8082.
-
-10. Fill out the port fields as shown below. **Be sure to set the `Publish Mode` to  `Host`**
-
-	![](./images/windows_ports.png)
-
-11. Click 'Confirm'
-
-12. Click `Create` near the bottom right of the screen.
-
-After a few seconds you should see a green dot next to your service name.
-
-> TODO:  what's the next step with the app working? 
-
-## <a name="task4"></a> Task 4: Deploying a Multi-OS Application
-
-> TODO: write task 4 based on app created. Same app, single compose file 
+2. Next repeat the steps 6-8 from Task 2.3, but use this `Compose` file instead:
+>TODO write this compose file
 
 ## <a name="task5"></a> Task 5: Application Lifecycle Management
 
