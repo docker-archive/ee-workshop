@@ -175,7 +175,7 @@ You should be taken to the `Nodes` screen and will see 4 worker nodes listed at 
 
 Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
 
-### <a name="task1.3"></a>Task 1.3: Create Two DTR Repositories
+### <a name="task1.3"></a>Task 1.3: Create Three DTR Repositories
 > TODO: Update names of applications, number of repositories 
 Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create a couple of different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside. Often that would be enough.
 
@@ -358,7 +358,7 @@ version: "3.3"
 services:
 
   database:
-    image: ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com/java/database
+    image: <your-dtr-instance>/java/database
     # set default mysql root password, change as needed
     environment:
       MYSQL_ROOT_PASSWORD: mysql_password
@@ -369,7 +369,7 @@ services:
       - back-tier
 
   webserver:
-    image: ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com/java/java_web
+    image: <your-dtr-instance>/java/java_web
     ports:
       - "8080:8080" 
       - "8000:8000"
@@ -385,41 +385,11 @@ secrets:
   mysql_password:
     external: true
 ```
+Then click `Done` in the lower right.
 
+8. Click on `Stacks` again, and select the `java-web` stack. Click on `Inspect Resources` and then select `Services`. Select `java-web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.
 
-
-
-1. Switch back to your UCP server in your web browser
-
-	> **Note**: If you've closed your UCP tab, you can simply click `UCP` from the PWD page to relaunch the UCP web interface
-
-2. In the left hand menu click `Swarm` and then `Services`
-	![](./images/swarm-services.png)
-
-3. In the upper right corner click `Create Service`
-	![](./images/create-service.png)
-
-4. Enter `java-web` for the name.
-
-4. Under `Image` enter the path to your image which should be `<dtr hostname>/java/java-web`
-
-8. From the left hand menu click `Network`
-
-9. Click `Publish Port+`
-
-	We need to open a port for our web server. Since port 80 is already used by UCP on one node, and DTR on the other, we'll need to pick an alternate port. We'll go with 8080.
-
-10. Fill out the port fields as shown below
-
-	![](./images/linux_ports.png)
-
-11. Click `Confirm`
-
-12. Click `Create` near the bottom right of the screen.
-
-> TODO:  update with directions on running app
-After a few seconds you should see a green dot next to your service name. Once you see the green dot, click on the service to open the right sidebar to inspect the service and click on the link under `published endpoints` in the configuration section. That will open the web app in a new tab.
-> TODO:  add screenshot of running app 
+![](./images/java-web1.png)
 
 ### Extra Credit: Ingress Load Balancing
 
