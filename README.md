@@ -15,7 +15,7 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >		* [Basics of Kubernetes](#intro2.2)
 
 > **Tasks**:
->
+> TODO: Renumber after workshop content complete
 > * [Task 1: Configure the Docker EE Cluster](#task1)
 >   * [Task 1.1: Accessing PWD](#task1.1)
 >   * [Task 1.2: Install a Windows worker node](#task1.2)
@@ -176,7 +176,7 @@ You should be taken to the `Nodes` screen and will see 4 worker nodes listed at 
 Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
 
 ### <a name="task1.3"></a>Task 1.3: Create Three DTR Repositories
-> TODO: Update names of applications, number of repositories 
+
 Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create a couple of different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside. Often that would be enough.
 
 However, before we create the repositories, we do want to restrict access to them. Since we have two distinct app components, a Java web app, and a .NET API, we want to restrict access to them to the team that develops them, as well as the administrators. To do that, we need to create two users and then two organizations.
@@ -307,7 +307,7 @@ first use the dotnet_user, which isn't part of the java organization
 	```
 
 	The output should be similar to the following:
-> TODO: update with output of the Java app being pushed
+
 	```
 	The push refers to a repository [<dtr hostname>/java/java-web]
 	feecabd76a78: Pushed
@@ -317,6 +317,7 @@ first use the dotnet_user, which isn't part of the java organization
 	eb78099fbf7f: Pushed
 	latest: digest: sha256:9a376fd268d24007dd35bedc709b688f373f4e07af8b44dba5f1f009a7d70067 size: 1363
 	```
+
 	Success! Because you are using a user name that belongs to the right team in the right organization, you can push your image to DTR.
 
 5. In your web browser head back to your DTR server and click `View Details` next to your `java-web` repo to see the details of the repo.
@@ -400,7 +401,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. Then clone the repository again onto this host:
 
 	```
-	$ git clone https://github.com/dockersamples/hybrid-app.git
+	PS C:\git clone https://github.com/dockersamples/hybrid-app.git
 	```
 
 ### <a name="task3.2"></a> Task 3.2: Build and Push Windows Images to Docker Trusted Registry
@@ -421,6 +422,7 @@ Because this is a Windows container, we have to build it on a Windows host. Swit
 	Your output should be similar to what is shown below
 
 > TODO:  update with output from Windows 
+
 	```
 	PS C:\hybrid-app\netfx-api> docker build -t <dtr hostname>/dotnet/dotnet_api .
 
@@ -479,6 +481,7 @@ This will push a different version of the app, version 2, to the same `java-web`
 2. Next repeat the steps 6-8 from Task 2.3, but use this `Compose` file instead:
 >TODO write this compose file
 
+> TODO evaluate if we need this section or if it makes it too long
 ## <a name="task5"></a> Task 5: Application Lifecycle Management
 
 Now that we've deployed our application, let's take a look at some common tasks that admins need to do to keep their apps running and up-to-date. We'll start by upgrading the web front end, next we'll scale that service to meet demand, and then finally we'll see how to deal with the failure of a node in our UCP cluster.
