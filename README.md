@@ -79,8 +79,8 @@ Throughout the lab you will be asked to provide either hostnames or login creden
 
 - When you encounter a phrase in between `<` and `>`  you are meant to substitute in a different value.
 
-	For instance if you see `<dtr domain>` you would actually type something like `ip172-18-0-7-b70lttfic4qg008cvm90.direct.microsoft.play-with-docker.com`
-	> TODO: update 
+	For instance if you see `<dtr domain>` you would actually type something like `ip172-18-0-7-b70lttfic4qg008cvm90.direct.ee-workshop.play-with-docker.com`
+
 
 - When you see the Linux penguin all the following instructions should be completed in your Linux console
 
@@ -91,7 +91,8 @@ Throughout the lab you will be asked to provide either hostnames or login creden
     ![](./images/windows75.png)
 
 ## <a name="intro1"></a>Introduction
-> TODO: add exposition on introduction to Docker Platform and its benefits 
+Docker EE provides an integrated, tested and certified platform for apps running on enterprise Linux or Windows operating systems and Cloud providers. Docker EE is tightly integrated to the the underlying infrastructure to provide a native, easy to install experience and an optimized Docker environment. Docker Certified Infrastructure, Containers and Plugins are exclusively available for Docker EE with cooperative support from Docker and the Certified Technology Partner.
+
 ### <a name="intro2"></a>Overview of Orchestration
 While it is easy to run an application in isolation on a single machine, orchestration allows you to coordinate multiple machines to manage an application, with features like replication, encryption, loadbalancing, service discovery and more. If you've read anything about Docker, you have probably heard of Kubernetes and Docker swarm mode. Docker EE allows you to use either Docker swarm mode or Kubernetes for orchestration. 
 
@@ -104,7 +105,7 @@ Swarm mode uses managers and workers to run your applications. Managers run the 
 
 #### <a name="intro2.2"></a>Overview of Kubernetes
 
-Kubernetes is available in Docker EE 2.0 (currently in beta) and included in this workshop. Kubernetes basic concepts are Pods, Services, Volumes, and Namespaces. 
+Kubernetes is available in Docker EE 2.0 (currently in beta) and included in this workshop. Kubernetes deployments tend to be more complex than Docker Swarm, and there are many component types. UCP simplifies a lot of that, relying on Docker Swarm to handle shared resources. We'll concentrate on Pods and Load Balancers in this workshop, but there's plenty more supported by UCP 2.0.
 
 ## <a name="task1"></a>Task 1: Configure the Docker EE Cluster
 
@@ -171,7 +172,7 @@ You should be taken to the `Nodes` screen and will see 4 worker nodes listed at 
 	Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
 
 	![](./images/node_listing.png)
-	> TODO: Update with new nodes page screenshot 
+	> \: Update with new nodes page screenshot 
 
 Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
 
@@ -230,7 +231,6 @@ You'll now see both repositories listed.
 Congratulations, you have created two new repositories in two new organizations, each with one user.
 
 ## <a name="task2"></a>Task 2: Deploy a Java Web App with Universal Control Plane
-> TODO: updates with link to Java sample app instead of tweet app 
 Now that we've completely configured our cluster, let's deploy a couple of web apps. These are simple web pages that allow you to send a tweet. One is built on Linux using NGINX and the other is build on Windows Server 2016 using IIS.  
 
 Let's start with the Linux version.
