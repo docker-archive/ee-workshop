@@ -269,9 +269,16 @@ Let's start with the Linux version.
 
 	`$ cd ./hybrid-app/java-app/`
 
+2. Set the DTR_HOST environment variable. This will be useful throughout the workshop.
+
+```
+$ export DTR_HOST=<dtr hostname>
+$ echo $DTR_HOST
+```
+
 2. Use `docker build` to build your Linux tweet web app Docker image.
 
-	`$ docker build -t <dtr hostname>/java/java_web .`
+	`$ docker build -t $DTR_HOST/java/java_web .`
 
 	> **Note**: Be sure to substitute your DTR Hostname and your User Name - both these are listed at the top of your PWD page.
 
@@ -285,7 +292,7 @@ Let's start with the Linux version.
 
 first use the dotnet_user, which isn't part of the java organization
 	```
-	$ docker login <dtr hostname>
+	$ docker login $DTR_HOST
 	Username: <your username>
 	Password: <your password>
 	Login Succeeded
@@ -293,7 +300,7 @@ first use the dotnet_user, which isn't part of the java organization
 	Use `docker push` to upload your image up to Docker Trusted Registry.
 
 	```
-	$ docker push <dtr hostname>/java/java_web
+	$ docker push $DTR_HOST/java/java_web
 	```
 	> TODO: add output of failure to push
 
@@ -303,7 +310,7 @@ first use the dotnet_user, which isn't part of the java organization
 4. Now try logging in using `java-user`, and then use `docker push` to upload your image up to Docker Trusted Registry.
 
 	```
-	$ docker push <dtr hostname>/java/java_web
+	$ docker push $DTR_HOST/java/java_web
 	```
 
 	The output should be similar to the following:
@@ -390,7 +397,7 @@ Then click `Done` in the lower right.
 
 8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java_web` to the end of the URL and you'll see you're app.
 
-![](./images/java-web1.png)
+![](./images/java_web1.png)
 
 ## <a name="task3"></a>Task 3: Deploy the next version with a Windows node
 
@@ -576,9 +583,62 @@ Docker EE lets you choose the orchestrator to use to deploy and manage your appl
 
 For now Kubernetes does not support Windows workloads in production, so we will start by porting the .NET part of our application to a Linux container using .NET Core.
 
+1. CD into the `hybrid-app\dotnet-api` directory. 
+
+	`$ cd hybrid-app/dotnet-api/`
+
+2. Use `docker build` to build your Linux image.
+
+	`$ docker build -t $DTR_HOST/dotnet/dotnet_api .`
+
+	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
+
+	Your output should be similar to what is shown below
 ```
-TODO
+Sending build context to Docker daemon   29.7kB
+Step 1/10 : FROM microsoft/aspnetcore-build:2.0.3-2.1.2 AS builder
+2.0.3-2.1.2: Pulling from microsoft/aspnetcore-build
+723254a2c089: Pull complete
+
+	<output snipped>
+
+Removing intermediate container 508751aacb5c
+Step 7/10 : FROM microsoft/aspnetcore:2.0.3-stretch
+2.0.3-stretch: Pulling from microsoft/aspnetcore
+
+Successfully built fcbc49ef89bf
+Successfully tagged ip172-18-0-8-baju0rgm5emg0096odmg.direct.ee-beta2.play-with-docker.com/dotnet/dotnet_api:latest
 ```
+	> **Note**: It will take a few minutes for your image to build.
+
+4. Log into Docker Trusted Registry
+
+	```
+	$ docker login $DTR_HOST
+	Username: dotnet_user
+	Password: user1234
+	Login Succeeded
+	```
+
+5. Push your new image up to Docker Trusted Registry.
+
+	```
+	$ docker push $DTR_HOST/dotnet/dotnet_api
+	The push refers to a repository [<dtr hostname>/dotnet/dotnet_api]
+	5d08bc106d91: Pushed
+	74b0331584ac: Pushed
+	e95704c2f7ac: Pushed
+	669bd07a2ae7: Pushed
+	d9e5b60d8a47: Pushed
+	8981bfcdaa9c: Pushed
+	25bdce4d7407: Pushed
+	df83d4285da0: Pushed
+	853ea7cd76fb: Pushed
+	55cc5c7b4783: Skipped foreign layer
+	f358be10862c: Skipped foreign layer
+	latest: digest: sha256:e28b556b138e3d407d75122611710d5f53f3df2d2ad4a134dcf7782eb381fa3f size: 2825
+	```
+6. You may check your repositories in the DTR web interface to see the newly pushed image.
 
 ### <a name="task6.2"></a>Task 6.2: Examine the Docker Compose File
 
@@ -590,19 +650,101 @@ In order to make life easier for developers and operations, Docker EE lets you d
 
 We'll use a Docker Compose file to instantiate our application, and it's the same file as before, except that we will switch the .NET Docker Windows image with the .NET Core Docker Linux image we just built.
 
-Let's look at the Docker Compose file:
+Let's look at the Docker Compose file in `app/docker-stack.yml`.
+
+Change the images for the dotnet-api and java-app services for the ones we just built. `<dtr hostname>/java/java_web:2` and `<dtr hostname>/dotnet/dotnet_api` `dockersamples`.
 
 ```
-TODO
+version: '3.3'
+
+services:
+  database:
+    deploy:
+      placement:
+        constraints:
+        - node.platform.os == linux
+    environment:
+      MYSQL_ROOT_PASSWORD: DockerCon!!!
+    image: dockersamples/hybrid-app-db
+    networks:
+      back-tier: null
+    ports:
+    - mode: ingress
+      published: 3306
+      target: 3306
+  dotnet-api:
+    deploy:
+      placement:
+        constraints:
+        - node.platform.os == linux
+    image: dockersamples/hybrid-app-api:dotnet
+    networks:
+      back-tier: null
+    ports:
+    - mode: ingress
+      published: 57989
+      target: 80
+  java-app:
+    deploy:
+      placement:
+        constraints:
+        - node.platform.os == linux
+    image: dockersamples/hybrid-app-web
+    networks:
+      back-tier: null
+      front-tier: null
+    ports:
+    - mode: ingress
+      published: 8000
+      target: 8000
+    - mode: ingress
+      published: 8080
+      target: 8080
+
+networks:
+  back-tier: {}
+  front-tier: {}
 ```
 
 ### <a name="task6.3"></a>Task 6.3: Deploy to Kubernetes using the Docker Compose file
 
-TODO
+Login to UCP, go to Shared resources, Stacks.
+
+![](./images/kube-stacks.png)
+
+Click create Stack. Fill name: hybrid-app, mode: Kubernetes Workloads, namespace: default.
+
+![](./images/kube-create-stack.png)
+
+You should see the stack being created.
+
+![](./images/kube-stack-created.png)
+
+Click on it to se the details.
+
+![](./images/kube-stack-details.png)
 
 ### <a name="task6.4"></a>Task 6.4: Verify the app
 
-TODO
+Go to Kubernetes / Pod. See the pods being deployed.
+
+![](./images/kube-pods.png)
+
+Go to Kubernetes / Controllers. See the deplyments and ReplicaSets.
+
+![](./images/kube-controllers.png)
+
+Go to Kubernetes / Load Balancers. See the Kubernetes services that have been created.
+
+![](./images/kube-lb.png)
+
+Click on `java-app-published` to the the details of the public load balancer created for the Java application.
+
+![](./images/kube-java-lb.png)
+
+There will be a link for the public url where the service on port 8080 is exposed. Click on that link, add `/java_web/` at the end of the url. You should be led to the running application.
+
+![](./images/kube-running-app.png)
 
 ## Conclusion
 
