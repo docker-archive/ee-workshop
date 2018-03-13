@@ -201,7 +201,7 @@ Then do the same for a `dotnet_user`.
 Then do the same with dotnet and you'll have two organizations.
 ![](./images/two_organizations.png)
 
-6. Now you get to add a repository! Still on the java organization, select repositories and then Add repository
+6. Now you get to add a repository! Click on the java organization, select repositories and then Add repository
 ![](./images/add_repository_java.png)
 
 7. Name the repository `java_web`. 
@@ -291,17 +291,21 @@ $ echo $DTR_HOST
 3. Log into your DTR server from the command line
 
 first use the dotnet_user, which isn't part of the java organization
+
 	```
 	$ docker login $DTR_HOST
 	Username: <your username>
 	Password: <your password>
 	Login Succeeded
 	```
+	
 	Use `docker push` to upload your image up to Docker Trusted Registry.
 
+	
 	```
 	$ docker push $DTR_HOST/java/java_web
 	```
+	
 	> TODO: add output of failure to push
 
 
