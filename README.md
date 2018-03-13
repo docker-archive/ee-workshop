@@ -47,7 +47,6 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 ## Understanding the Play With Docker Interface
 
 ![](./images/pwd_screen.png)
-> TODO: update images, has to wait for example workspace to finalize 
 
 This workshop is only available to people in a pre-arranged workshop. That may happen through a [Docker Meetup](https://events.docker.com/chapters/), a conference workshop that is being led by someone who has made these arrangements, or special arrangements between Docker and your company. The workshop leader will provide you with the URL to a workshop environment that includes [Docker Enterprise Edition](https://www.docker.com/enterprise-edition). The environment will be based on [Play with Docker](https://labs.play-with-docker.com/).
 
