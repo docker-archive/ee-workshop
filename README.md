@@ -271,7 +271,7 @@ Let's start with the Linux version.
 
 2. Use `docker build` to build your Linux tweet web app Docker image.
 
-	`$ docker build -t <dtr hostname>/java/java-web .`
+	`$ docker build -t <dtr hostname>/java/java_web .`
 
 	> **Note**: Be sure to substitute your DTR Hostname and your User Name - both these are listed at the top of your PWD page.
 
@@ -293,7 +293,7 @@ first use the dotnet_user, which isn't part of the java organization
 	Use `docker push` to upload your image up to Docker Trusted Registry.
 
 	```
-	$ docker push <dtr hostname>/java/java-web
+	$ docker push <dtr hostname>/java/java_web
 	```
 	> TODO: add output of failure to push
 
@@ -303,13 +303,13 @@ first use the dotnet_user, which isn't part of the java organization
 4. Now try logging in using `java-user`, and then use `docker push` to upload your image up to Docker Trusted Registry.
 
 	```
-	$ docker push <dtr hostname>/java/java-web
+	$ docker push <dtr hostname>/java/java_web
 	```
 
 	The output should be similar to the following:
 
 	```
-	The push refers to a repository [<dtr hostname>/java/java-web]
+	The push refers to a repository [<dtr hostname>/java/java_web]
 	feecabd76a78: Pushed
 	3c749ee6d1f5: Pushed
 	af5bd3938f60: Pushed
@@ -320,7 +320,7 @@ first use the dotnet_user, which isn't part of the java organization
 
 	Success! Because you are using a user name that belongs to the right team in the right organization, you can push your image to DTR.
 
-5. In your web browser head back to your DTR server and click `View Details` next to your `java-web` repo to see the details of the repo.
+5. In your web browser head back to your DTR server and click `View Details` next to your `java_web` repo to see the details of the repo.
 
 	> **Note**: If you've closed the tab with your DTR server, just click the `DTR` button from the PWD page.
 
@@ -347,7 +347,7 @@ The next step is to run the app in Swarm. As a reminder, the application has two
 
 6. Now we're going to use the fast way to create your application: `Stacks`. In the left panel, click `Shared Resources`, `Stacks` and then `Create Stack` in the upper right corner.
 
-7. Name your stack `java-web` and select `Swarm Services` for your `Mode`. Below you'll see we've included a `.yml` file. Before you paste that in to the `Compose.yml` edit box, note that you'll need to make a quick change. Each of the images is defined as `<your-dtr-instance>/java/<something>`. You'll need to change the `<your-dtr-instance>` to the DTR Hostname found on the Play with Docker landing page for your session. It will look something like this:
+7. Name your stack `java_web` and select `Swarm Services` for your `Mode`. Below you'll see we've included a `.yml` file. Before you paste that in to the `Compose.yml` edit box, note that you'll need to make a quick change. Each of the images is defined as `<your-dtr-instance>/java/<something>`. You'll need to change the `<your-dtr-instance>` to the DTR Hostname found on the Play with Docker landing page for your session. It will look something like this:
 `ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com`
 You can do that right in the edit box in `UCP` but wanted to make sure you saw that first.
 ![](./images/ucp_create_stack.png)
@@ -388,7 +388,7 @@ secrets:
 ```
 Then click `Done` in the lower right.
 
-8. Click on `Stacks` again, and select the `java-web` stack. Click on `Inspect Resources` and then select `Services`. Select `java-web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.
+8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java_web` to the end of the URL and you'll see you're app.
 
 ![](./images/java-web1.png)
 
@@ -473,10 +473,10 @@ Because this is a Windows container, we have to build it on a Windows host. Swit
 1. First we need to update the Java web app so it'll take advantage of the .NET API. Switch back to `worker1` and change directories to the `java-app-v2` directory. Repeat steps 1,2, and 4 from Task 2.2 but add a tag `:2` to your build and pushes:
 
 	```
-	$ docker build -t <dtr hostname>/java/java-web:2 .
-	$ docker push <dtr hostname>/java/java-web:2
+	$ docker build -t <dtr hostname>/java/java_web:2 .
+	$ docker push <dtr hostname>/java/java_web:2
 	```
-This will push a different version of the app, version 2, to the same `java-web` repository.
+This will push a different version of the app, version 2, to the same `java_web` repository.
 
 2. Next repeat the steps 6-8 from Task 2.3, but use this `Compose` file instead:
 >TODO write this compose file
