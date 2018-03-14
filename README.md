@@ -19,7 +19,7 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 > * [Task 1: Configure the Docker EE Cluster](#task1)
 >   * [Task 1.1: Accessing PWD](#task1.1)
 >   * [Task 1.2: Install a Windows worker node](#task1.2)
->   * [Task 1.3: Create Two Repositories](#task1.3)
+>   * [Task 1.3: Create Three Repositories](#task1.3)
 >   * [Task 1.3.1: Restrict access to a repository](#task1.3.1)
 > * [Task 2: Deploy a Java Web App](#task2)
 >   * [Task 2.1: Clone the Demo Repo](#task2.1)
@@ -30,14 +30,6 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 3.2: Build and Push Your Java Images to Docker Trusted Registry](#task3.2)
 >   * [Task 3.3: Deploy the Java web app with Universal Control Plane](#task3.3)
 >   * [Task 3.4: Deploy the Windows .NET App](#task3.4)
-> * [Task 4: Deploy a Multi-OS Application](#task4)
->   * [Task 4.1: Examine the Docker Compose File](#task4.1)
->   * [Task 4.2: Deploy the Application Stack](#task4.2)
->   * [Task 4.3: Verify the Running Application](#task4.3)
-> * [Task 5: Security and Scale](#task5)
->   * [Task 5.1: Scanning images for security vulnerabilities](#task5.1)
->   * [Task 5.2: Scaling the Web Front-end](#task5.2)
->   * [Task 5.3: Dealing with an Application Failure](#task5.3)
 > * [Task 6: Deploy to Kubernetes](#task6)
 >   * [Task 6.1: Build .NET Core app instead of .NET](#task6.1)
 >   * [Task 6.2: Examine the Docker Compose File](#task6.2)
@@ -489,92 +481,51 @@ Because this is a Windows container, we have to build it on a Windows host. Swit
 This will push a different version of the app, version 2, to the same `java_web` repository.
 
 2. Next repeat the steps 6-8 from Task 2.3, but use this `Compose` file instead:
->TODO write this compose file
 
-> TODO evaluate if we need this section or if it makes it too long
-## <a name="task5"></a> Task 5: Application Lifecycle Management
+```
+version: "3.3"
 
-Now that we've deployed our application, let's take a look at some common tasks that admins need to do to keep their apps running and up-to-date. We'll start by upgrading the web front end, next we'll scale that service to meet demand, and then finally we'll see how to deal with the failure of a node in our UCP cluster.
+services:
 
-> TODO: Is 5.1 still relevant or should app be upgraded in Task 2? If still relevant, update to new app.
-> TODO: Update the 5.2-> to use new app
-### <a name="task5.1"></a> Task 5.1: Scanning for Vulnerabilities
-> TODO: Write this section
+  database:
+    image: <your-dtr-instance>/java/database
+    # set default mysql root password, change as needed
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_password
+    # Expose port 3306 to host. 
+    ports:
+      - "3306:3306" 
+    networks:
+      - back-tier
 
-### <a name="task5.2"></a> Task 5.2: Scaling the Web Front-end
+  webserver:
+   image: <your-dtr-instance>/java/java_web:2
+   ports:
+     - "8080:8080" 
+     - "8000:8000"
+   networks:
+     - front-tier
+     - back-tier
+   environment:
+     BASEURI: http://dotnet-api/api/users
 
-> TODO: Rewrite section with new app
-The new site design appears to have dramatically increased the popularity of your website. In order to deal with increased demand, you're going to need to scale up the number of containers in the `atsea_appserver` service.
+  dotnet-api:
+    image: <your-dtr-instance>/dotnet/dotnet-api
+    ports:
+      - "57989:80"
+    networks:
+      - front-tier
+      - back-tier
 
-1. Move to UCP in your web browser
+networks:
+  back-tier:
+  front-tier:
 
-2. From the left hand menu click `Services`
+secrets:
+  mysql_password:
+    external: true
+```
 
-3. Click the `atsea_appserver` service
-
-4. From the `Configure` drop down on the right choose `Scheduling`
-
-5. Change `Scale` from `1` to `4`
-
-6. Click `Update`
-
-7. The indicator changes to yellow to indicate the service is still running, but undergoing an update. You also notice it reads `1/4` - this tells you that you have one healthy container out of the four you require. Regardless, your website is still available at this point.
-
-	After a minute or so you'll see the indicator turn green, and you will see the status go to `4/4`
-
-8. Click the `atsea_appserver` from the list
-
-9. From the right hand side click `Containers` under `Inspect Resource` and you will see the four containers have started and are healthy.
-
-	Also notice under `Node` that some containers are running on `worker1` and some are running on `manager1`
-
-10. Go to your website in your brower and refresh the page, you will notice in the upper right the IP and Host change. This output is the IP and container ID of the actual container that served up the web page.
-
-	> **Note**: If you are not running in an incognito window you may need to force your browser to ignore the cache in order to see the values change. Consult the help section of your browser to learn how to do this.
-
-Everything seems to be humming along nicely until one of your nodes in the cluster fails. In the next section we'll show how Docker EE deals with these sort of failuers.
-
-### <a name="task5.3"></a> Task 5.3: Dealing with an Application Failure
-
-> TODO: Rewrite section with new app
-
-Docker EE will always try and reconcile your services to their desired state. For instance, in the case of our web frontend, we have specified we want four containers running. If for some reason the number ever drops below four, Docker EE will attempt to get the service back to four containers.
-
-In this section we're going to simulate a node failure and see how Docker EE handles the situation. We're not actually going to crash a node. What we're going to do is put our worker node in `Drain` mode - which is essentially maintenance mode. We are telling Docker EE to shut all the containers that are running on that node down, and not schedule any additional work on to that node.
-
-1. Move to UCP in your web browser
-
-2. If the filter bar is active (the blue bar at the top of the screen) - click the `x` in the upper right corner to clear the filter.
-
-3. From the left menu click `Nodes`
-
-4. Click on `worker1`
-
-5. From the `Configure` dropdown on the right side select `Details`
-
-6. Under `Availability` click `Drain`
-
-7. Click `Save`
-
-	This will immediately put the `worker1` node into Drain mode, and stop all running containers on that node.
-
-8. Go to the AtSea website and refresh to verify it's still running.
-
-	Even though one node failed, the built in Docker EE load balancer will direct traffic to the containers running on our healthy `manager1` node
-
-9. Move back to UCP
-
-10. Click the `x` in the upper right corner to close the `Edit Node` screen
-
-	Notice that `worker1` still has a green indicator, this is because technically the node is still running and healthy. However, on the right hand side you'll see the `Availability` listed as `DRAIN`
-
-11. Click on `Services` from the left hand menu
-
-12. Click on the `atsea_appserver`
-
-13. From the `Inspect Resource` drop down on the right select `Containers`
-
-	Notice that the two containers that were running on `worker1` have been stopped, and they have been restarted on `manager1`
 
 ## <a name="task6"></a>Task 6: Deploy to Kubernetes
 
