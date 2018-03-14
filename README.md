@@ -537,17 +537,18 @@ Docker EE lets you choose the orchestrator to use to deploy and manage your appl
 
 For now Kubernetes does not support Windows workloads in production, so we will start by porting the .NET part of our application to a Linux container using .NET Core.
 
-1. CD into the `hybrid-app\dotnet-api` directory. 
+1. From the Play with Docker landing page, click on `worker1` and CD into the `hybrid-app/dotnet-api` directory. 
 
-	`$ cd hybrid-app/dotnet-api/`
+	`$ cd ~/hybrid-app/dotnet-api/`
 
 2. Use `docker build` to build your Linux image.
 
-	`$ docker build -t $DTR_HOST/dotnet/dotnet_api .`
+	`$ docker build -t $DTR_HOST/dotnet/dotnet_api:core .`
 
-	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
+	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built. Also, we used the `:core` tag so that the repository has two versions, the original with a Windows base image, and this one with a Linux .NET Core base image.
 
 	Your output should be similar to what is shown below
+
 ```
 Sending build context to Docker daemon   29.7kB
 Step 1/10 : FROM microsoft/aspnetcore-build:2.0.3-2.1.2 AS builder
@@ -577,7 +578,7 @@ Successfully tagged ip172-18-0-8-baju0rgm5emg0096odmg.direct.ee-beta2.play-with-
 5. Push your new image up to Docker Trusted Registry.
 
 	```
-	$ docker push $DTR_HOST/dotnet/dotnet_api
+	$ docker push $DTR_HOST/dotnet/dotnet_api:core
 	The push refers to a repository [<dtr hostname>/dotnet/dotnet_api]
 	5d08bc106d91: Pushed
 	74b0331584ac: Pushed
@@ -592,6 +593,7 @@ Successfully tagged ip172-18-0-8-baju0rgm5emg0096odmg.direct.ee-beta2.play-with-
 	f358be10862c: Skipped foreign layer
 	latest: digest: sha256:e28b556b138e3d407d75122611710d5f53f3df2d2ad4a134dcf7782eb381fa3f size: 2825
 	```
+
 6. You may check your repositories in the DTR web interface to see the newly pushed image.
 
 ### <a name="task6.2"></a>Task 6.2: Examine the Docker Compose File
@@ -606,7 +608,7 @@ We'll use a Docker Compose file to instantiate our application, and it's the sam
 
 Let's look at the Docker Compose file in `app/docker-stack.yml`.
 
-Change the images for the dotnet-api and java-app services for the ones we just built. `<dtr hostname>/java/java_web:2` and `<dtr hostname>/dotnet/dotnet_api` `dockersamples`.
+Change the images for the dotnet-api and java-app services for the ones we just built. And remember to change `<dtr hostname>` to the long DTR hostname listed on the landing page for your Play with Docker instance.
 
 ```
 version: '3.3'
@@ -617,9 +619,8 @@ services:
       placement:
         constraints:
         - node.platform.os == linux
-    environment:
-      MYSQL_ROOT_PASSWORD: DockerCon!!!
-    image: dockersamples/hybrid-app-db
+
+    image: <dtr hostname>/java/database
     networks:
       back-tier: null
     ports:
@@ -631,22 +632,24 @@ services:
       placement:
         constraints:
         - node.platform.os == linux
-    image: dockersamples/hybrid-app-api:dotnet
+    image: <dtr hostname>/dotnet/dotnet_api:core
     networks:
       back-tier: null
     ports:
     - mode: ingress
       published: 57989
       target: 80
-  java-app:
+  java-web:
     deploy:
       placement:
         constraints:
         - node.platform.os == linux
-    image: dockersamples/hybrid-app-web
+    image: <dtr hostname>/java/java_web:2
+
     networks:
-      back-tier: null
-      front-tier: null
+      back-tier:
+      front-tier:
+
     ports:
     - mode: ingress
       published: 8000
@@ -656,8 +659,12 @@ services:
       target: 8080
 
 networks:
-  back-tier: {}
-  front-tier: {}
+  back-tier:
+  front-tier:
+
+secrets:
+  mysql_password:
+    external: true
 ```
 
 ### <a name="task6.3"></a>Task 6.3: Deploy to Kubernetes using the Docker Compose file
@@ -674,7 +681,7 @@ You should see the stack being created.
 
 ![](./images/kube-stack-created.png)
 
-Click on it to se the details.
+Click on it to see the details.
 
 ![](./images/kube-stack-details.png)
 
@@ -684,7 +691,7 @@ Go to Kubernetes / Pod. See the pods being deployed.
 
 ![](./images/kube-pods.png)
 
-Go to Kubernetes / Controllers. See the deplyments and ReplicaSets.
+Go to Kubernetes / Controllers. See the deployments and ReplicaSets.
 
 ![](./images/kube-controllers.png)
 
