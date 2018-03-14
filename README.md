@@ -15,7 +15,7 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >		* [Basics of Kubernetes](#intro2.2)
 
 > **Tasks**:
-> TODO: Renumber after workshop content complete
+
 > * [Task 1: Configure the Docker EE Cluster](#task1)
 >   * [Task 1.1: Accessing PWD](#task1.1)
 >   * [Task 1.2: Install a Windows worker node](#task1.2)
@@ -30,11 +30,11 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 3.2: Build and Push Your Java Images to Docker Trusted Registry](#task3.2)
 >   * [Task 3.3: Deploy the Java web app with Universal Control Plane](#task3.3)
 >   * [Task 3.4: Deploy the Windows .NET App](#task3.4)
-> * [Task 6: Deploy to Kubernetes](#task6)
->   * [Task 6.1: Build .NET Core app instead of .NET](#task6.1)
->   * [Task 6.2: Examine the Docker Compose File](#task6.2)
->   * [Task 6.3: Deploy to Kubernetes using the Docker Compose file](#task6.3)
->   * [Task 6.4: Verify the app](#task6.4)
+> * [Task 4: Deploy to Kubernetes](#task4)
+>   * [Task 4.1: Build .NET Core app instead of .NET](#task4.1)
+>   * [Task 4.2: Examine the Docker Compose File](#task4.2)
+>   * [Task 4.3: Deploy to Kubernetes using the Docker Compose file](#task4.3)
+>   * [Task 4.4: Verify the app](#task4.4)
 
 ## Understanding the Play With Docker Interface
 
@@ -232,7 +232,17 @@ Let's start with the Linux version.
 
 1. From PWD click on the `worker1` link on the left to connnect your web console to the UCP Linux worker node.
 
-2. Use git to clone the workshop repository.
+2. Before we do anything, let's configure an environment variable for the DTR URL. You may remember that the session information from the Play with Docker landing page. Select and copy the the URL for the DTR host.
+
+	![](./images/session-information.png)
+
+3. Set an environment variable $DTR. For instance, if your DTR host name was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com`, you would type:
+
+```
+$ DTR='ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com'
+```
+
+4. Now use git to clone the workshop repository.
 
 	```
 	$ git clone https://github.com/dockersamples/hybrid-app.git
@@ -267,7 +277,7 @@ $ export DTR_HOST=<dtr hostname>
 $ echo $DTR_HOST
 ```
 
-2. Use `docker build` to build your Linux tweet web app Docker image.
+2. Use `docker build` to build your Docker image.
 
 	`$ docker build -t $DTR_HOST/java/java_web .`
 
@@ -390,7 +400,7 @@ secrets:
 ```
 Then click `Done` in the lower right.
 
-8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java_web` to the end of the URL and you'll see you're app.
+8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.
 
 ![](./images/java_web1.png)
 
@@ -400,11 +410,15 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
 ### <a name="task3.1"></a> Task 3.1: Clone the repository
 
-Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. Then clone the repository again onto this host:
+1. Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. Then clone the repository again onto this host:
 
 	```
 	PS C:\git clone https://github.com/dockersamples/hybrid-app.git
 	```
+2. Set an environment variable for the DTR host name. Much like you did for the Java app, this will make a few step easier. Copy the DTR host name again and create the environment variable. For instance, if your DTR host was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com` you would type:
+
+	```
+	PS C:\> $env:DTR="ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com"
 
 ### <a name="task3.2"></a> Task 3.2: Build and Push Windows Images to Docker Trusted Registry
 
@@ -417,16 +431,14 @@ Because this is a Windows container, we have to build it on a Windows host. Swit
 
 2. Use `docker build` to build your Windows image.
 
-	`$ docker build -t <dtr hostname>/dotnet/dotnet_api .`
+	`$ docker build -t $env:DTR/dotnet/dotnet_api .`
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
 
 	Your output should be similar to what is shown below
 
-> TODO:  update with output from Windows 
-
 	```
-	PS C:\hybrid-app\netfx-api> docker build -t <dtr hostname>/dotnet/dotnet_api .
+	PS C:\hybrid-app\netfx-api> docker build -t $env:DTR/dotnet/dotnet_api .
 
 	Sending build context to Docker daemon  415.7kB
 	Step 1/8 : FROM microsoft/iis:windowsservercore-10.0.14393.1715
@@ -443,7 +455,7 @@ Because this is a Windows container, we have to build it on a Windows host. Swit
 4. Log into Docker Trusted Registry
 
 	```
-	PS C:\> docker login <dtr hostname>
+	PS C:\> docker login $env:DTR
 	Username: dotnet_user
 	Password: user1234
 	Login Succeeded
@@ -452,7 +464,7 @@ Because this is a Windows container, we have to build it on a Windows host. Swit
 5. Push your new image up to Docker Trusted Registry.
 
 	```
-	PS C:\Users\docker> docker push <dtr hostname>/dotnet/dotnet_api
+	PS C:\Users\docker> docker push $env:DTR/dotnet/dotnet_api
 	The push refers to a repository [<dtr hostname>/dotnet/dotnet_api]
 	5d08bc106d91: Pushed
 	74b0331584ac: Pushed
@@ -475,8 +487,8 @@ Because this is a Windows container, we have to build it on a Windows host. Swit
 1. First we need to update the Java web app so it'll take advantage of the .NET API. Switch back to `worker1` and change directories to the `java-app-v2` directory. Repeat steps 1,2, and 4 from Task 2.2 but add a tag `:2` to your build and pushes:
 
 	```
-	$ docker build -t <dtr hostname>/java/java_web:2 .
-	$ docker push <dtr hostname>/java/java_web:2
+	$ docker build -t $env:DTR/java/java_web:2 .
+	$ docker push $env:DTR/java/java_web:2
 	```
 This will push a different version of the app, version 2, to the same `java_web` repository.
 
@@ -527,13 +539,13 @@ secrets:
 ```
 
 
-## <a name="task6"></a>Task 6: Deploy to Kubernetes
+## <a name="task4"></a>Task 4: Deploy to Kubernetes
 
 Now that we have built, deployed and scaled a multi OS application to Docker EE using Swarm mode for orchestration, let's learn how to use Docker EE with Kubernetes.
 
 Docker EE lets you choose the orchestrator to use to deploy and manage your application, between Swarm and Kubernetes. In the previous tasks we have used Swarm for orchestration. In this section we will deploy the application to Kubernetes and see how Docker EE exposes Kubernetes concepts.
 
-### <a name="task6.1"></a>Task 6.1: Build .NET Core app instead of .NET
+### <a name="task4.1"></a>Task 4.1: Build .NET Core app instead of .NET
 
 For now Kubernetes does not support Windows workloads in production, so we will start by porting the .NET part of our application to a Linux container using .NET Core.
 
@@ -596,7 +608,7 @@ Successfully tagged ip172-18-0-8-baju0rgm5emg0096odmg.direct.ee-beta2.play-with-
 
 6. You may check your repositories in the DTR web interface to see the newly pushed image.
 
-### <a name="task6.2"></a>Task 6.2: Examine the Docker Compose File
+### <a name="task4.2"></a>Task 4.2: Examine the Docker Compose File
 
 Docker EE lets you deploy native Kubernetes applications using Kubernetes deployment descriptors, by pasting the yaml files in the UI, or using the `kubectl` CLI tool.
 
@@ -667,7 +679,7 @@ secrets:
     external: true
 ```
 
-### <a name="task6.3"></a>Task 6.3: Deploy to Kubernetes using the Docker Compose file
+### <a name="task4.3"></a>Task 4.3: Deploy to Kubernetes using the Docker Compose file
 
 Login to UCP, go to Shared resources, Stacks.
 
@@ -685,7 +697,7 @@ Click on it to see the details.
 
 ![](./images/kube-stack-details.png)
 
-### <a name="task6.4"></a>Task 6.4: Verify the app
+### <a name="task4.4"></a>Task 4.4: Verify the app
 
 Go to Kubernetes / Pod. See the pods being deployed.
 
@@ -703,12 +715,12 @@ Click on `java-app-published` to the the details of the public load balancer cre
 
 ![](./images/kube-java-lb.png)
 
-There will be a link for the public url where the service on port 8080 is exposed. Click on that link, add `/java_web/` at the end of the url. You should be led to the running application.
+There will be a link for the public url where the service on port 8080 is exposed. Click on that link, add `/java-web/` at the end of the url. You should be led to the running application.
 
 ![](./images/kube-running-app.png)
 
 ## Conclusion
 
-In this lab we've looked how Docker EE can help you manage both Linux and Windows workloads whether they be traditional apps you've modernized or newer cloud-native apps, leveraging Swarm or Kubernetes for orchestration. We also looked at how to deal with upgrades, scaling, and system failures.
+In this lab we've looked how Docker EE can help you manage both Linux and Windows workloads whether they be traditional apps you've modernized or newer cloud-native apps, leveraging Swarm or Kubernetes for orchestration.
 
 You can find more information on Docker EE at [http://www.docker.com](http://www.docker.com/enterprise-edition) as well as continue exploring using our hosted trial at [https://dockertrial.com](https://dockertrial.com)
