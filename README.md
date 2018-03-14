@@ -390,7 +390,7 @@ secrets:
 ```
 Then click `Done` in the lower right.
 
-8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java_web` to the end of the URL and you'll see you're app.
+8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.
 
 ![](./images/java_web1.png)
 
@@ -703,12 +703,12 @@ Click on `java-app-published` to the the details of the public load balancer cre
 
 ![](./images/kube-java-lb.png)
 
-There will be a link for the public url where the service on port 8080 is exposed. Click on that link, add `/java_web/` at the end of the url. You should be led to the running application.
+There will be a link for the public url where the service on port 8080 is exposed. Click on that link, add `/java-web/` at the end of the url. You should be led to the running application.
 
 ![](./images/kube-running-app.png)
 
 ## Conclusion
 
-In this lab we've looked how Docker EE can help you manage both Linux and Windows workloads whether they be traditional apps you've modernized or newer cloud-native apps, leveraging Swarm or Kubernetes for orchestration. We also looked at how to deal with upgrades, scaling, and system failures.
+In this lab we've looked how Docker EE can help you manage both Linux and Windows workloads whether they be traditional apps you've modernized or newer cloud-native apps, leveraging Swarm or Kubernetes for orchestration.
 
 You can find more information on Docker EE at [http://www.docker.com](http://www.docker.com/enterprise-edition) as well as continue exploring using our hosted trial at [https://dockertrial.com](https://dockertrial.com)
