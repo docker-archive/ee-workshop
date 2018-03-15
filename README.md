@@ -738,30 +738,30 @@ Security is crucial for all organizations. And it is a complicated topic, too in
 
 1. If you turned on security in Task 1.3 step 14 you can skip this step. Otherwise, turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
 
-![](./images/scanning-activate.png)
- This will take awhile so you may want to take a break by reading up on [Docker Security](https://www.docker.com/docker-security).
+	![](./images/scanning-activate.png)
+	This will take awhile so you may want to take a break by reading up on [Docker Security](https://www.docker.com/docker-security).
 
 2. Once the scanning database has downloaded, you can scan individual images. Select a repository, such as `java/java_web`, and then select the `Images` tab. If it hasn't already scanned, select `Start scan`. If it hasn't scanned already, this can take 5-10 minutes or so.
-![](./images/java-scanned.png)
- You see that in fact there are alot of vulnerabilities! That's because we deliberately chose an old version of the `tomcat` base image. Also, most operating systems and many libraries contain some vulnerabilities. The details of these vulnerabilites and when they come into play are important. You can select `View details` to get more information. You can see which layers of your image introduced vulnerabilities.
+	![](./images/java-scanned.png)
+	You see that in fact there are alot of vulnerabilities! That's because we deliberately chose an old version of the `tomcat` base image. Also, most operating systems and many libraries contain some vulnerabilities. The details of these vulnerabilites and when they come into play are important. You can select `View details` to get more information. You can see which layers of your image introduced vulnerabilities.
 
- ![](./images/layers.png)
+ 	![](./images/layers.png)
 
- And by selecting `Components` you can see what the vulnerabilities are and what components introduced the vulnerabilies. You can also select the vulnerabilies and examine them in the [Common Vulnerabilies and Exploits database](https://cve.mitre.org/).
+	And by selecting `Components` you can see what the vulnerabilities are and what components introduced the vulnerabilies. You can also select the vulnerabilies and examine them in the [Common Vulnerabilies and Exploits database](https://cve.mitre.org/).
 
- ![](./images/cves.png)
+ 	![](./images/cves.png)
 
  3. One way you can reduce your vulnerabilities is to choose newer images. For instance, you can go back to the Dockerfile in the `~/hybrid-app/java-app` directory, and change the second base image to `tomcat:9.0.6-jre-9-slim`. Slim images in official images are generally based on lighter-weight operating systems like `Alpine Linux` or `Debian`, which have reduced attack space. You can change the Dockerfile using `vim` or `emacs`.
- ![](./images/tomcat9.png)
+	![](./images/tomcat9.png)
 	Then check the scanning again (this may again take 5-10 minutes).
 	![](./images/tomcat9-scanned.png)
 	You'll still see vulnerabilites, but far fewer.
 
 4. If you look at the components of the `tomcat:9.0.6-jre-9-slim` image, you will see that the critical and major vulnerabilities were brought in the `Spring` libraries. So maybe it's time to upgrade our app! 
 
-![](./images/tomcat9-components.png)
+	![](./images/tomcat9-components.png)
 
-Upgrading the app is out of scope for this workshop, but you can see how it would give you the information you need to mitigate vulnerabilities.
+	Upgrading the app is out of scope for this workshop, but you can see how it would give you the information you need to mitigate vulnerabilities.
 
 5. DTR also allows you to [Sign Images](https://docs.docker.com/datacenter/dtr/2.4/guides/user/manage-images/sign-images/) and [Create promotion policies](https://docs.docker.com/datacenter/dtr/2.4/guides/user/create-promotion-policies/) which prevent users from using images in production that don't meet whatever criteria you set, including blocking images with critical and/or major vulnerabilities.
 
