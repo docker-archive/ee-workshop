@@ -342,6 +342,7 @@ first use the dotnet_user, which isn't part of the java organization
 7. Repeat 1,2 and 4 but build a `java/database` in the `database/` directory and push it to DTR. This is a simple MySQL database with a basic username/password and an initial table configuration.
 
 ### <a name="task2.3"></a> Task 2.3: Deploy the Web App using UCP
+![](./images/linux75.png)
 
 The next step is to run the app in Swarm. As a reminder, the application has two components, the web front-end and the database. In order to connect to the database, the application needs a password. If you were just running this in development you could easily pass the password around as a text file or an environment variable. But in production you would never do that. So instead, we're going to create an encrypted secret. That way access can be strictly controlled.
 
@@ -409,6 +410,7 @@ Then click `Done` in the lower right.
 Now that we've moved the app and updated it, we're going to add in a user sign-in API. For fun, and to show off the cross-platform capabilities of Docker EE, we are going to do it in a Windows container.
 
 ### <a name="task3.1"></a> Task 3.1: Clone the repository
+![](./images/windows75.png)
 
 1. Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. Then clone the repository again onto this host:
 
@@ -421,6 +423,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 	PS C:\> $env:DTR="ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com"
 
 ### <a name="task3.2"></a> Task 3.2: Build and Push Windows Images to Docker Trusted Registry
+![](./images/windows75.png)
 
 1. CD into the `c:\hybrid-app\netfx-api` directory. 
 
@@ -483,6 +486,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
 
 ### <a name="task3.3"></a> Task 3.3: Deploy the Java web app
+![](./images/linux75.png)
 
 1. First we need to update the Java web app so it'll take advantage of the .NET API. Switch back to `worker1` and change directories to the `java-app-v2` directory. Repeat steps 1,2, and 4 from Task 2.2 but add a tag `:2` to your build and pushes:
 
@@ -546,6 +550,7 @@ Now that we have built, deployed and scaled a multi OS application to Docker EE 
 Docker EE lets you choose the orchestrator to use to deploy and manage your application, between Swarm and Kubernetes. In the previous tasks we have used Swarm for orchestration. In this section we will deploy the application to Kubernetes and see how Docker EE exposes Kubernetes concepts.
 
 ### <a name="task4.1"></a>Task 4.1: Build .NET Core app instead of .NET
+![](./images/linux75.png)
 
 For now Kubernetes does not support Windows workloads in production, so we will start by porting the .NET part of our application to a Linux container using .NET Core.
 
@@ -609,6 +614,7 @@ Successfully tagged ip172-18-0-8-baju0rgm5emg0096odmg.direct.ee-beta2.play-with-
 6. You may check your repositories in the DTR web interface to see the newly pushed image.
 
 ### <a name="task4.2"></a>Task 4.2: Examine the Docker Compose File
+![](./images/linux75.png)
 
 Docker EE lets you deploy native Kubernetes applications using Kubernetes deployment descriptors, by pasting the yaml files in the UI, or using the `kubectl` CLI tool.
 
@@ -680,6 +686,7 @@ secrets:
 ```
 
 ### <a name="task4.3"></a>Task 4.3: Deploy to Kubernetes using the Docker Compose file
+![](./images/linux75.png)
 
 Login to UCP, go to Shared resources, Stacks.
 
@@ -698,6 +705,7 @@ Click on it to see the details.
 ![](./images/kube-stack-details.png)
 
 ### <a name="task4.4"></a>Task 4.4: Verify the app
+![](./images/linux75.png)
 
 Go to Kubernetes / Pod. See the pods being deployed.
 
