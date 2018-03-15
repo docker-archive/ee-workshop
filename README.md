@@ -35,6 +35,7 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 4.2: Examine the Docker Compose File](#task4.2)
 >   * [Task 4.3: Deploy to Kubernetes using the Docker Compose file](#task4.3)
 >   * [Task 4.4: Verify the app](#task4.4)
+> * [Task 5: Security Scanning](#task5)
 
 ## Understanding the Play With Docker Interface
 
@@ -215,9 +216,13 @@ Then do the same with dotnet and you'll have two organizations.
 
 12. Now add a new repository owned by the web team and call it `database`.
 
-12. Repeat 4-11 above to create a `dotnet` organization with the `dotnet_user` and a repository called `dotnet_api`.
+13. Repeat 4-11 above to create a `dotnet` organization with the `dotnet_user` and a repository called `dotnet_api`.
 You'll now see both repositories listed.
 	![](./images/two_repositories.png)
+
+14. (optional) If you want to check out security scanning in Task 5, you should turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
+![](./images/scanning-activate.png)
+
 
 Congratulations, you have created two new repositories in two new organizations, each with one user.
 
@@ -726,6 +731,39 @@ Click on `java-app-published` to the the details of the public load balancer cre
 There will be a link for the public url where the service on port 8080 is exposed. Click on that link, add `/java-web/` at the end of the url. You should be led to the running application.
 
 ![](./images/kube-running-app.png)
+
+## <a name="task5"></a>Task 5: Security Scanning
+
+Security is crucial for all organizations. And it is a complicated topic, too indepth to go through in detail here. We're going to look at just one of the features that Docker EE has to help you build a secure software supply chain: Security Scanning.
+
+1. If you turned on security in Task 1.3 step 14 you can skip this step. Otherwise, turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
+
+![](./images/scanning-activate.png)
+ This will take awhile so you may want to take a break by reading up on [Docker Security](https://www.docker.com/docker-security).
+
+2. Once the scanning database has downloaded, you can scan individual images. Select a repository, such as `java/java_web`, and then select the `Images` tab. If it hasn't already scanned, select `Start scan`. If it hasn't scanned already, this can take 5-10 minutes or so.
+![](./images/java-scanned.png)
+ You see that in fact there are alot of vulnerabilities! That's because we deliberately chose an old version of the `tomcat` base image. Also, most operating systems and many libraries contain some vulnerabilities. The details of these vulnerabilites and when they come into play are important. You can select `View details` to get more information. You can see which layers of your image introduced vulnerabilities.
+
+ ![](./images/layers.png)
+
+ And by selecting `Components` you can see what the vulnerabilities are and what components introduced the vulnerabilies. You can also select the vulnerabilies and examine them in the [Common Vulnerabilies and Exploits database](https://cve.mitre.org/).
+
+ ![](./images/cves.png)
+
+ 3. One way you can reduce your vulnerabilities is to choose newer images. For instance, you can go back to the Dockerfile in the `~/hybrid-app/java-app` directory, and change the second base image to `tomcat:9.0.6-jre-9-slim`. Slim images in official images are generally based on lighter-weight operating systems like `Alpine Linux` or `Debian`, which have reduced attack space. You can change the Dockerfile using `vim` or `emacs`.
+ ![](./images/tomcat9.png)
+	Then check the scanning again (this may again take 5-10 minutes).
+	![](./images/tomcat9-scanned.png)
+	You'll still see vulnerabilites, but far fewer.
+
+4. If you look at the components of the `tomcat:9.0.6-jre-9-slim` image, you will see that the critical and major vulnerabilities were brought in the `Spring` libraries. So maybe it's time to upgrade our app! 
+
+![](./images/tomcat9-components.png)
+
+Upgrading the app is out of scope for this workshop, but you can see how it would give you the information you need to mitigate vulnerabilities.
+
+5. DTR also allows you to [Sign Images](https://docs.docker.com/datacenter/dtr/2.4/guides/user/manage-images/sign-images/) and [Create promotion policies](https://docs.docker.com/datacenter/dtr/2.4/guides/user/create-promotion-policies/) which prevent users from using images in production that don't meet whatever criteria you set, including blocking images with critical and/or major vulnerabilities.
 
 ## Conclusion
 
