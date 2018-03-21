@@ -231,15 +231,15 @@ However, before we create the repositories, we do want to restrict access to the
 
 13. Repeat 4-11 above to create a `dotnet` organization with the `dotnet_user` who belongs to the `web` team and a repository called `dotnet_api`.
 
-	You'll now see both repositories listed.
+14. From the main DTR page, click Repositories, you will now see all three repositories listed.
 	
-	![](./images/two_repositories.png)
+	![](./images/three_repositories.png)
 
-14. (optional) If you want to check out security scanning in Task 5, you should turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
+15. (optional) If you want to check out security scanning in Task 5, you should turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
 
 	![](./images/scanning-activate.png)
 
-Congratulations, you have created two new repositories in two new organizations, each with one team and a user each.
+Congratulations, you have created three new repositories in two new organizations, each with one team and a user each.
 
 ## <a name="task2"></a>Task 2: Deploy a Java Web App with Universal Control Plane
 Now that we've completely configured our cluster, let's deploy a couple of web apps. These are simple web pages that allow you to send a tweet. One is built on Linux using NGINX and the other is build on Windows Server 2016 using IIS.  
