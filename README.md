@@ -252,15 +252,16 @@ Let's start with the Linux version.
 
 1. From PWD click on the `worker1` link on the left to connnect your web console to the UCP Linux worker node.
 
-2. Before we do anything, let's configure an environment variable for the DTR URL. You may remember that the session information from the Play with Docker landing page. Select and copy the the URL for the DTR host.
+2. Before we do anything, let's configure an environment variable for the DTR URL/DRT hostname. You may remember that the session information from the Play with Docker landing page. Select and copy the the URL for the DTR hostname.
 
 	![](./images/session-information.png)
 
-3. Set an environment variable $DTR. For instance, if your DTR host name was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com`, you would type:
+3. Set the environment variable DTR_HOST. This will be useful throughout the workshop. For instance, if your DTR host name was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com`, you would type:
 
-```
-$ DTR='ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com'
-```
+	```
+	$ export DTR_HOST='ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com'
+	$ echo $DTR_HOST
+	```
 
 4. Now use git to clone the workshop repository.
 
@@ -289,13 +290,6 @@ $ DTR='ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com'
 1. Change into the `java-app` directory.
 
 	`$ cd ./hybrid-app/java-app/`
-
-2. Set the DTR_HOST environment variable. This will be useful throughout the workshop.
-
-```
-$ export DTR_HOST=<dtr hostname>
-$ echo $DTR_HOST
-```
 
 2. Use `docker build` to build your Docker image.
 
