@@ -145,7 +145,7 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 
 	> **Note**: You may notice that there is a UI component to select `Linux` or `Windows`on the `Add Node` screen. In a production environment where you are starting from scratch there are [a few prerequisite steps] to adding a Windows node. However, we've already done these steps in the PWD environment. So for this lab, just leave the selection on `Linux` and move on to step 2
 
-![](./images/windows75.png)
+	![](./images/windows75.png)
 
 5. Switch back to the PWD interface, and click the name of your Windows node. This will connect the web-based console to your Windows Server 2016 Docker EE host.
 
@@ -178,52 +178,68 @@ However, before we create the repositories, we do want to restrict access to the
 	> **Note**: As with UCP before, DTR is also using self-signed certs. It's safe to click through any browser warning you might encounter.
 
 2. From the main DTR page, click users and then the New User button.
-![](./images/user_screen.png)
+
+	![](./images/user_screen.png)
 
 3. Create a new user, `java_user` and give it a password you'll remember. I used `user1234`. Be sure to save the user.
-![](/images/create_java_user.png)
-Then do the same for a `dotnet_user`.
+
+	![](/images/create_java_user.png)
+
+	Then do the same for a `dotnet_user`.
 
 4. Select the Organization button.
-![](./images/organization_screen.png)
+
+	![](./images/organization_screen.png)
 
 5. Press New organization button, name it java, and click save.
-![](./images/java_organization_new.png)
-Then do the same with dotnet and you'll have two organizations.
-![](./images/two_organizations.png)
+
+	![](./images/java_organization_new.png)
+
+	Then do the same with dotnet and you'll have two organizations.
+
+	![](./images/two_organizations.png)
 
 6. Now you get to add a repository! Click on the java organization, select repositories and then Add repository
-![](./images/add_repository_java.png)
+
+	![](./images/add_repository_java.png)
 
 7. Name the repository `java_web`. 
 
 	![](./images/create_repository.png)
-> Note the repository is listed as "Public" but that means it is publicly viewable by users of DTR. It is not available to the general public.
+
+	> Note the repository is listed as "Public" but that means it is publicly viewable by users of DTR. It is not available to the general public.
 
 8. Now it's time to create a team so you can restrict access to who administers the images. Select the `java` organization and the members will show up. Press Add user and start typing in java. Select the `java_user` when it comes up.
-![](./images/add_java_user_to_organization.png)
+
+	![](./images/add_java_user_to_organization.png)
 
 9. Next select the `java` organization and press the `Team` button to create a `web` team.
-![](./images/team.png)
+
+	![](./images/team.png)
 
 10. Add the `java_user` user to the `web` team and click save.
-![](./images/team_add_user.png)
-![](./images/team_with_user.png)
+
+	![](./images/team_add_user.png)
+
+	![](./images/team_with_user.png)
 
 11. Next select the `web` team and select the `Repositories` tab. Select `Add Existing repository` and choose the `java_web`repository. You'll see the `java` account is already selected. Then select `Read/Write` permissions so the `web` team has permissions to push images to this repository. Finally click `save`.
-![](./images/add_java_web_to_team.png)
+
+	![](./images/add_java_web_to_team.png)
 
 12. Now add a new repository owned by the web team and call it `database`.
 
-13. Repeat 4-11 above to create a `dotnet` organization with the `dotnet_user` and a repository called `dotnet_api`.
-You'll now see both repositories listed.
+13. Repeat 4-11 above to create a `dotnet` organization with the `dotnet_user` who belongs to the `web` team and a repository called `dotnet_api`.
+
+	You'll now see both repositories listed.
+	
 	![](./images/two_repositories.png)
 
 14. (optional) If you want to check out security scanning in Task 5, you should turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
-![](./images/scanning-activate.png)
 
+	![](./images/scanning-activate.png)
 
-Congratulations, you have created two new repositories in two new organizations, each with one user.
+Congratulations, you have created two new repositories in two new organizations, each with one team and a user each.
 
 ## <a name="task2"></a>Task 2: Deploy a Java Web App with Universal Control Plane
 Now that we've completely configured our cluster, let's deploy a couple of web apps. These are simple web pages that allow you to send a tweet. One is built on Linux using NGINX and the other is build on Windows Server 2016 using IIS.  
