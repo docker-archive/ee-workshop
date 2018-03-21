@@ -356,7 +356,7 @@ The next step is to run the app in Swarm. As a reminder, the application has two
 2.  There's a lot here about managing the cluster. You can take a moment to explore around. When you're ready, click on `Swarm` and select `Secrets`.
 ![](./images/ucp_secret_menu.png)
 
-3. You'll see a `Create Secret` screen. Type `MYSQL_PASSWORD` in `Name` and `password` in `Content`. Then click `Create` in the lower left. Obviously you wouldn't use this password in a real production environment. You'll see the content box allows for quite a bit of content, you can actually create structred content here that will be encrypted with the secret.
+3. You'll see a `Create Secret` screen. Type `MYSQL_ROOT_PASSWORD` in `Name` and `password` in `Content`. Then click `Create` in the lower left. Obviously you wouldn't use this password in a real production environment. You'll see the content box allows for quite a bit of content, you can actually create structred content here that will be encrypted with the secret.
 
 4. Next we're going to create two networks. First click on `Networks` under `Swarm` in the left panel, and select `Create Network` in the upper right. You'll see a `Create Network` screen. Name your first network `back-tier`. Leave everything else the default.
 ![](./ucp_network.png)
