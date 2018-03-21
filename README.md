@@ -147,24 +147,23 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 
 ![](./images/windows75.png)
 
-6. Switch back to the PWD interface, and click the name of your Windows node. This will connect the web-based console to your Windows Server 2016 Docker EE host.
+5. Switch back to the PWD interface, and click the name of your Windows node. This will connect the web-based console to your Windows Server 2016 Docker EE host.
 
-7. Paste the text from Step 4 at the command prompt in the Windows console. (depending on your browser, this can be tricky: try the "paste" command from the edit menu instead of right clicking or using keyboard shortcuts)
+6. Paste the text from Step 4 at the command prompt in the Windows console. (depending on your browser, this can be tricky: try the "paste" command from the edit menu instead of right clicking or using keyboard shortcuts)
 
 	You should see the message `This node joined a swarm as a worker.` indicating you've successfully joined the node to the cluster.
 
-5. Switch back to the UCP server in your web browser and click the `x` in the upper right corner to close the `Add Node` window
+7. Switch back to the UCP server in your web browser and click the `x` in the upper right corner to close the `Add Node` window
 
-6. You will be taken back to the UCP Dashboard. In the left menu bar, click Shared Resources, and select Nodes.
+8. You will be taken back to the UCP Dashboard. In the left menu bar, click Shared Resources, and select Nodes.
 
-![](/images/select_nodes.png)
+	![](/images/select_nodes.png)
 
-You should be taken to the `Nodes` screen and will see 4 worker nodes listed at the bottom of your screen.
+	You should be taken to the `Nodes` screen and will see 4 worker nodes listed at the bottom of your screen.
 
 	Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
-
+	
 	![](./images/node_listing.png)
-	> \: Update with new nodes page screenshot 
 
 Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
 
