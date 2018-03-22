@@ -252,7 +252,7 @@ Let's start with the Linux version.
 
 1. From PWD click on the `worker1` link on the left to connnect your web console to the UCP Linux worker node.
 
-2. Before we do anything, let's configure an environment variable for the DTR URL/DRT hostname. You may remember that the session information from the Play with Docker landing page. Select and copy the the URL for the DTR hostname.
+2. Before we do anything, let's configure an environment variable for the DTR URL/DTR hostname. You may remember that the session information from the Play with Docker landing page. Select and copy the the URL for the DTR hostname.
 
 	![](./images/session-information.png)
 
@@ -307,9 +307,9 @@ Let's start with the Linux version.
 
 	There will be quite a bit of output. The Dockerfile describes a two-stage build. In the first stage, a Maven base image is used to build the Java app. But to run the app you don't need Maven or any of the JDK stuff that comes with it. So the second stage takes the output of the first stage and puts it in a much smaller Tomcat image.
 
-3. Log into your DTR server from the command line
-
-first use the dotnet_user, which isn't part of the java organization
+3. Log into your DTR server from the command line.
+ 
+	First use the dotnet_user, which isn't part of the java organization
 
 	```bash
 	$ docker login $DTR_HOST
@@ -383,11 +383,11 @@ The next step is to run the app in Swarm. As a reminder, the application has two
 
 7. Name your stack `java_web` and select `Swarm Services` for your `Mode`. Below you'll see we've included a `.yml` file. Before you paste that in to the `Compose.yml` edit box, note that you'll need to make a quick change. Each of the images is defined as `<your-dtr-instance>/java/<something>`. You'll need to change the `<your-dtr-instance>` to the DTR Hostname found on the Play with Docker landing page for your session. It will look something like this:
 `ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com`
-Here's the `Compose` file. Once you've copy and pasted it in, and made the changes, click `Create` in the lower right corner.
 You can do that right in the edit box in `UCP` but wanted to make sure you saw that first.
 
 	![](./images/ucp_create_stack.png)
 
+	Here's the `Compose` file. Once you've copy and pasted it in, and made the changes, click `Create` in the lower right corner.
 
 	```yaml
 	version: "3.3"
@@ -425,8 +425,7 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
 
 	Then click `Done` in the lower right.
 
-8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.
-
+8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.)
 
 	![](./images/java-web1.png)
 
