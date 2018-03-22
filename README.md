@@ -389,39 +389,39 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
 
 	Here's the `Compose` file. Once you've copy and pasted it in, and made the changes, click `Create` in the lower right corner.
 
-	```yaml
-	version: "3.3"
+    ```yaml
+    version: "3.3"
 
-	services:
+    services:
 
-	database:
-		image: <your-dtr-instance>/java/database
-		# set default mysql root password, change as needed
-		environment:
-		MYSQL_ROOT_PASSWORD: mysql_password
-		# Expose port 3306 to host. 
-		ports:
-		- "3306:3306" 
-		networks:
-		- back-tier
+      database:
+        image: <your-dtr-instance>/java/database
+        # set default mysql root password, change as needed
+        environment:
+          MYSQL_ROOT_PASSWORD: mysql_password
+        # Expose port 3306 to host. 
+        ports:
+          - "3306:3306" 
+        networks:
+          - back-tier
 
-	webserver:
-		image: <your-dtr-instance>/java/java_web
-		ports:
-		- "8080:8080" 
-		- "8000:8000"
-		networks:
-		- front-tier
-		- back-tier
+      webserver:
+        image: <your-dtr-instance>/java/java_web
+        ports:
+          - "8080:8080" 
+          - "8000:8000"
+        networks:
+          - front-tier
+          - back-tier
 
-	networks:
-	back-tier:
-	front-tier:
+    networks:
+      back-tier:
+      front-tier:
 
-	secrets:
-	mysql_password:
-		external: true
-	```
+    secrets:
+      mysql_password:
+        external: true
+    ```
 
 	Then click `Done` in the lower right.
 
