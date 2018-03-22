@@ -531,7 +531,7 @@ services:
      BASEURI: http://dotnet-api/api/users
 
   dotnet-api:
-    image: <your-dtr-instance>/dotnet/dotnet-api
+    image: <your-dtr-instance>/dotnet/dotnet_api
     ports:
       - "57989:80"
     networks:
