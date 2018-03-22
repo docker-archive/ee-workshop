@@ -161,7 +161,7 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 
 You should be taken to the `Nodes` screen and will see 4 worker nodes listed at the bottom of your screen.
 
-	Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
+Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
 
 ![](./images/node_listing.png)
 
