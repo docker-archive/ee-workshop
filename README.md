@@ -403,6 +403,8 @@ Then click `Done` in the lower right.
 
 8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.
 
+9. Delete the `java_web` stack. 
+
 ![](./images/java_web1.png)
 
 ## <a name="task3"></a>Task 3: Deploy the next version with a Windows node
@@ -542,6 +544,7 @@ secrets:
     external: true
 ```
 
+3. Once tested, delete the stack.
 
 ## <a name="task4"></a>Task 4: Deploy to Kubernetes
 
