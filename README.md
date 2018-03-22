@@ -163,8 +163,7 @@ You should be taken to the `Nodes` screen and will see 4 worker nodes listed at 
 
 	Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
 
-	![](./images/node_listing.png)
-	> \: Update with new nodes page screenshot 
+![](./images/node_listing.png)
 
 Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
 
