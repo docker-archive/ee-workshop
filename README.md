@@ -676,12 +676,15 @@ services:
         - node.platform.os == linux
 
     image: <dtr hostname>/java/database
+    environment:
+      MYSQL_ROOT_PASSWORD: DockerCon!!!
     networks:
       back-tier: null
     ports:
     - mode: ingress
       published: 3306
       target: 3306
+  
   dotnet-api:
     deploy:
       placement:
@@ -694,17 +697,16 @@ services:
     - mode: ingress
       published: 57989
       target: 80
+  
   java-web:
     deploy:
       placement:
         constraints:
         - node.platform.os == linux
     image: <dtr hostname>/java/java_web:2
-
     networks:
       back-tier:
       front-tier:
-
     ports:
     - mode: ingress
       published: 8000
@@ -716,10 +718,6 @@ services:
 networks:
   back-tier:
   front-tier:
-
-secrets:
-  mysql_password:
-    external: true
 ```
 
 ### <a name="task4.3"></a>Task 4.3: Deploy to Kubernetes using the Docker Compose file
