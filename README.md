@@ -438,9 +438,7 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
 
 	![](./images/java-web1.png)
 
-9. Delete the `java_web` stack. 
-
-	![](./images/java_web1.png)
+9. Delete the `java_web` stack.
 
 ## <a name="task3"></a>Task 3: Deploy the next version with a Windows node
 
