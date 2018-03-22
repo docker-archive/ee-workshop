@@ -144,25 +144,25 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 
 	> **Note**: You may notice that there is a UI component to select `Linux` or `Windows`on the `Add Node` screen. In a production environment where you are starting from scratch there are [a few prerequisite steps] to adding a Windows node. However, we've already done these steps in the PWD environment. So for this lab, just leave the selection on `Linux` and move on to step 2
 
-![](./images/windows75.png)
+	![](./images/windows75.png)
 
-6. Switch back to the PWD interface, and click the name of your Windows node. This will connect the web-based console to your Windows Server 2016 Docker EE host.
+5. Switch back to the PWD interface, and click the name of your Windows node. This will connect the web-based console to your Windows Server 2016 Docker EE host.
 
-7. Paste the text from Step 4 at the command prompt in the Windows console. (depending on your browser, this can be tricky: try the "paste" command from the edit menu instead of right clicking or using keyboard shortcuts)
+6. Paste the text from Step 4 at the command prompt in the Windows console. (depending on your browser, this can be tricky: try the "paste" command from the edit menu instead of right clicking or using keyboard shortcuts)
 
 	You should see the message `This node joined a swarm as a worker.` indicating you've successfully joined the node to the cluster.
 
-5. Switch back to the UCP server in your web browser and click the `x` in the upper right corner to close the `Add Node` window
+7. Switch back to the UCP server in your web browser and click the `x` in the upper right corner to close the `Add Node` window
 
-6. You will be taken back to the UCP Dashboard. In the left menu bar, click Shared Resources, and select Nodes.
+8. You will be taken back to the UCP Dashboard. In the left menu bar, click Shared Resources, and select Nodes.
 
-![](/images/select_nodes.png)
+	![](/images/select_nodes.png)
 
-You should be taken to the `Nodes` screen and will see 4 worker nodes listed at the bottom of your screen.
+	You should be taken to the `Nodes` screen and will see 4 worker nodes listed at the bottom of your screen.
 
-Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
-
-![](./images/node_listing.png)
+	Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
+	
+	![](./images/node_listing.png)
 
 Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a few repositories in Docker Trusted registry.
 
@@ -177,53 +177,70 @@ However, before we create the repositories, we do want to restrict access to the
 	> **Note**: As with UCP before, DTR is also using self-signed certs. It's safe to click through any browser warning you might encounter.
 
 2. From the main DTR page, click users and then the New User button.
-![](./images/user_screen.png)
+
+	![](./images/user_screen.png)
 
 3. Create a new user, `java_user` and give it a password you'll remember. I used `user1234`. Be sure to save the user.
-![](./images/create_java_user.png)
-Then do the same for a `dotnet_user`.
+
+	![](/images/create_java_user.png)
+
+	Then do the same for a `dotnet_user`.
 
 4. Select the Organization button.
-![](./images/organization_screen.png)
+
+	![](./images/organization_screen.png)
 
 5. Press New organization button, name it java, and click save.
-![](./images/java_organization_new.png)
-Then do the same with dotnet and you'll have two organizations.
-![](./images/two_organizations.png)
+
+	![](./images/java_organization_new.png)
+
+	Then do the same with dotnet and you'll have two organizations.
+
+	![](./images/two_organizations.png)
 
 6. Now you get to add a repository! Click on the java organization, select repositories and then Add repository
-![](./images/add_repository_java.png)
+
+	![](./images/add_repository_java.png)
 
 7. Name the repository `java_web`. 
 
 	![](./images/create_repository.png)
-> Note the repository is listed as "Public" but that means it is publicly viewable by users of DTR. It is not available to the general public.
+
+	> Note the repository is listed as "Public" but that means it is publicly viewable by users of DTR. It is not available to the general public.
 
 8. Now it's time to create a team so you can restrict access to who administers the images. Select the `java` organization and the members will show up. Press Add user and start typing in java. Select the `java_user` when it comes up.
-![](./images/add_java_user_to_organization.png)
+
+	![](./images/add_java_user_to_organization.png)
 
 9. Next select the `java` organization and press the `Team` button to create a `web` team.
-![](./images/team.png)
+
+	![](./images/team.png)
 
 10. Add the `java_user` user to the `web` team and click save.
-![](./images/team_add_user.png)
-![](./images/team_with_user.png)
+
+	![](./images/team_add_user.png)
+
+	![](./images/team_with_user.png)
 
 11. Next select the `web` team and select the `Repositories` tab. Select `Add Existing repository` and choose the `java_web`repository. You'll see the `java` account is already selected. Then select `Read/Write` permissions so the `web` team has permissions to push images to this repository. Finally click `save`.
-![](./images/add_java_web_to_team.png)
+
+	![](./images/add_java_web_to_team.png)
 
 12. Now add a new repository also owned by the web team and call it `database`. This can be done directly from the web team's `Repositories` tab by selecting the radio button for Add `New` Repository. Be sure to grant `Read/Write` permissions for this repository to the `web` team as well.
-![](./images/add_repository_database.png)
+
+	![](./images/add_repository_database.png)
 
 13. Repeat 4-11 above to create a `dotnet` organization with a repository called `dotnet_api`, the `dotnet_user`, and a team named `api` (with `dotnet_user` as a member). Grant `read/write` permissions for the `dotnet_api` repository to the `api` team.
-You'll now see all three repositories listed.
-![](./images/three_repositories.png)
 
-14. (optional) If you want to check out security scanning in Task 5, you should turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
-![](./images/scanning-activate.png)
+14. From the main DTR page, click Repositories, you will now see all three repositories listed.
+	
+	![](./images/three_repositories.png)
 
+15. (optional) If you want to check out security scanning in Task 5, you should turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
 
-Congratulations, you have created three new repositories across two new organizations, each with one team and one user.
+	![](./images/scanning-activate.png)
+
+Congratulations, you have created three new repositories in two new organizations, each with one team and a user each.
 
 ## <a name="task2"></a>Task 2: Deploy a Java Web App with Universal Control Plane
 Now that we've completely configured our cluster, let's deploy a couple of web apps. These are simple web pages that allow you to send a tweet. One is built on Linux using NGINX and the other is build on Windows Server 2016 using IIS.  
@@ -236,26 +253,26 @@ Let's start with the Linux version.
 
 1. From PWD click on the `worker1` link on the left to connnect your web console to the UCP Linux worker node.
 
-2. Before we do anything, let's configure an environment variable for the DTR URL. You may remember that the session information from the Play with Docker landing page. Select and copy the the URL for the DTR host.
+2. Before we do anything, let's configure an environment variable for the DTR URL/DTR hostname. You may remember that the session information from the Play with Docker landing page. Select and copy the the URL for the DTR hostname.
 
 	![](./images/session-information.png)
 
 3. Set an environment variable `DTR_HOST` using the DTR host name defined on your Play with Docker landing page:
 
-```
-$ export DTR_HOST=<dtr hostname>
-$ echo $DTR_HOST
-```
+	```bash
+	$ export DTR_HOST=<dtr hostname>
+	$ echo $DTR_HOST
+	```
 
 4. Now use git to clone the workshop repository.
 
-	```
+	```bash
 	$ git clone https://github.com/dockersamples/hybrid-app.git
 	```
 
 	You should see something like this as the output:
 
-	```
+	```bash
 	Cloning into 'hybrid-app'...
 	remote: Counting objects: 389, done.
 	remote: Compressing objects: 100% (17/17), done.
@@ -273,11 +290,15 @@ $ echo $DTR_HOST
 
 1. Change into the `java-app` directory.
 
-	`$ cd ./hybrid-app/java-app/`
+	```bash
+	$ cd ./hybrid-app/java-app/
+	```
 
 2. Use `docker build` to build your Docker image.
 
-	`$ docker build -t $DTR_HOST/java/java_web .`
+	```Bash
+	$ docker build -t $DTR_HOST/java/java_web .
+	```
 
 	> **Note**: Be sure to substitute your DTR Hostname and your User Name - both these are listed at the top of your PWD page.
 
@@ -287,57 +308,64 @@ $ echo $DTR_HOST
 
 	There will be quite a bit of output. The Dockerfile describes a two-stage build. In the first stage, a Maven base image is used to build the Java app. But to run the app you don't need Maven or any of the JDK stuff that comes with it. So the second stage takes the output of the first stage and puts it in a much smaller Tomcat image.
 
-3. Log into your DTR server from the command line
+3. Log into your DTR server from the command line.
+ 
+	First use the `dotnet_user`, which isn't part of the java organization
 
-First, use the `dotnet_user`, which isn't part of the java organization
-
-```
-$ docker login $DTR_HOST
-Username: <your username>
-Password: <your password>
-Login Succeeded
-```
+	```bash
+	$ docker login $DTR_HOST
+	Username: <your username>
+	Password: <your password>
+	Login Succeeded
+	```
 	
-Use `docker push` to upload your image up to Docker Trusted Registry.
+	Use `docker push` to upload your image up to Docker Trusted Registry.
+	
+	```bash
+	$ docker push $DTR_HOST/java/java_web
+	```
+	
+	> TODO: add output of failure to push
 
-```
-$ docker push $DTR_HOST/java/java_web
-The push refers to a repository [.<dtr hostname>/java/java_web]
-8cb6044fd4d7: Preparing
-07344436fe27: Preparing
-...
-e1df5dc88d2c: Waiting
-denied: requested access to the resource is denied
-```
+	```bash
+	$ docker push $DTR_HOST/java/java_web
+	The push refers to a repository [.<dtr hostname>/java/java_web]
+	8cb6044fd4d7: Preparing
+	07344436fe27: Preparing
+	...
+	e1df5dc88d2c: Waiting
+	denied: requested access to the resource is denied
+	```
 
-As you can see, the access control that you established in the [Task 1.3](#task1.3) prevented you from pushing to this repository.	
+	As you can see, the access control that you established in the [Task 1.3](#task1.3) prevented you from pushing to this repository.	
 
 4. Now try logging in using `java_user`, and then use `docker push` to upload your image up to Docker Trusted Registry.
 
-```
-$ docker push $DTR_HOST/java/java_web
-```
+	```bash
+	$ docker push $DTR_HOST/java/java_web
+	```
 
-The output should be similar to the following:
+	The output should be similar to the following:
 
-```
-The push refers to a repository [<dtr hostname>/java/java_web]
-feecabd76a78: Pushed
-3c749ee6d1f5: Pushed
-af5bd3938f60: Pushed
-29f11c413898: Pushed
-eb78099fbf7f: Pushed
-latest: digest: sha256:9a376fd268d24007dd35bedc709b688f373f4e07af8b44dba5f1f009a7d70067 size: 1363
-```
+	```bash
+	The push refers to a repository [<dtr hostname>/java/java_web]
+	feecabd76a78: Pushed
+	3c749ee6d1f5: Pushed
+	af5bd3938f60: Pushed
+	29f11c413898: Pushed
+	eb78099fbf7f: Pushed
+	latest: digest: sha256:9a376fd268d24007dd35bedc709b688f373f4e07af8b44dba5f1f009a7d70067 size: 1363
+	```
 
-Success! Because you are using a user name that belongs to the right team in the right organization, you can push your image to DTR.
+	Success! Because you are using a user name that belongs to the right team in the right organization, you can push your image to DTR.
 
 5. In your web browser head back to your DTR server and click `View Details` next to your `java_web` repo to see the details of the repo.
 
 	> **Note**: If you've closed the tab with your DTR server, just click the `DTR` button from the PWD page.
 
 6. Click on `Images` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
-![](./images/pushed_image.png)
+
+	![](./images/pushed_image.png)
 
 7. Repeat 1,2 and 4 but build a `java/database` image from within the `database/` directory of `hybrid-app` and push it to DTR. This is a simple MySQL database with a basic username/password and an initial table configuration.
 
@@ -349,12 +377,14 @@ The next step is to run the app in Swarm. As a reminder, the application has two
 1. Go back to the first Play with Docker tab. Click on the UCP button. You'll have the same warnings regarding `https` that you have before. Click through those and log in. You'll see the Universal Control Panel dashboard.
 
 2.  There's a lot here about managing the cluster. You can take a moment to explore around. When you're ready, click on `Swarm` and select `Secrets`.
-![](./images/ucp_secret_menu.png)
+
+	![](./images/ucp_secret_menu.png)
 
 3. You'll see a `Create Secret` screen. Type `MYSQL_ROOT_PASSWORD` in `Name` and `password` in `Content`. Then click `Create` in the lower left. Obviously you wouldn't use this password in a real production environment. You'll see the content box allows for quite a bit of content, you can actually create structred content here that will be encrypted with the secret.
 
 4. Next we're going to create two networks. First click on `Networks` under `Swarm` in the left panel, and select `Create Network` in the upper right. You'll see a `Create Network` screen. Name your first network `back-tier`. Leave everything else the default.
-![](./ucp_network.png)
+
+	![](./images/ucp_network.png)
 
 5. Repeat step 4 but with a new network `front-tier`.
 
@@ -363,65 +393,70 @@ The next step is to run the app in Swarm. As a reminder, the application has two
 7. Name your stack `java_web` and select `Swarm Services` for your `Mode`. Below you'll see we've included a `.yml` file. Before you paste that in to the `Compose.yml` edit box, note that you'll need to make a quick change. Each of the images is defined as `<your-dtr-instance>/java/<something>`. You'll need to change the `<your-dtr-instance>` to the DTR Hostname found on the Play with Docker landing page for your session. It will look something like this:
 `ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com`
 You can do that right in the edit box in `UCP` but wanted to make sure you saw that first.
-![](./images/ucp_create_stack.png)
 
-Here's the `Compose` file. Once you've copy and pasted it in, and made the changes, click `Create` in the lower right corner.
-```
-version: "3.3"
+	![](./images/ucp_create_stack.png)
 
-services:
+	Here's the `Compose` file. Once you've copy and pasted it in, and made the changes, click `Create` in the lower right corner.
 
-  database:
-    image: <your-dtr-instance>/java/database
-    # set default mysql root password, change as needed
-    environment:
-      MYSQL_ROOT_PASSWORD: mysql_password
-    # Expose port 3306 to host. 
-    ports:
-      - "3306:3306" 
+    ```yaml
+    version: "3.3"
+
+    services:
+
+      database:
+        image: <your-dtr-instance>/java/database
+        # set default mysql root password, change as needed
+        environment:
+          MYSQL_ROOT_PASSWORD: mysql_password
+        # Expose port 3306 to host. 
+        ports:
+          - "3306:3306" 
+        networks:
+          - back-tier
+
+      webserver:
+        image: <your-dtr-instance>/java/java_web
+        ports:
+          - "8080:8080" 
+          - "8000:8000"
+        networks:
+          - front-tier
+          - back-tier
+
     networks:
-      - back-tier
+      back-tier:
+      front-tier:
 
-  webserver:
-    image: <your-dtr-instance>/java/java_web
-    ports:
-      - "8080:8080" 
-      - "8000:8000"
-    networks:
-      - front-tier
-      - back-tier
+    secrets:
+      mysql_password:
+        external: true
+    ```
 
-networks:
-  back-tier:
-  front-tier:
-
-secrets:
-  mysql_password:
-    external: true
-```
-Then click `Done` in the lower right.
+	Then click `Done` in the lower right.
 
 8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.
 
-9. Delete the `java_web` stack. 
+	![](./images/java-web1.png)
 
-![](./images/java_web1.png)
+9. Delete the `java_web` stack.
 
 ## <a name="task3"></a>Task 3: Deploy the next version with a Windows node
 
 Now that we've moved the app and updated it, we're going to add in a user sign-in API. For fun, and to show off the cross-platform capabilities of Docker EE, we are going to do it in a Windows container.
 
-### <a name="task3.1"></a> Task 3.1: Clone the repository
+### <a name="task3.1"></a> Task 3.1: Clone the repository]
+
 ![](./images/windows75.png)
 
 1. Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. Then clone the repository again onto this host:
 
+	```powershell
+	PS C:\> git clone https://github.com/dockersamples/hybrid-app.git
 	```
-	PS C:\git clone https://github.com/dockersamples/hybrid-app.git
-	```
+
 2. Set an environment variable for the DTR host name. Much like you did for the Java app, this will make a few step easier. Copy the DTR host name again and create the environment variable. For instance, if your DTR host was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com` you would type:
 
-	```
+	```powershell
 	PS C:\> $env:DTR="ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com"
 
 ### <a name="task3.2"></a> Task 3.2: Build and Push Windows Images to Docker Trusted Registry
@@ -431,18 +466,22 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
 	> Note you'll see a `dotnet-api` directory as well. Don't use that directory. That's a .NET Core api that runs on Linux. We'll use that later in the Kubernetes section.
 
-	`PS C:\> cd c:\hybrid-app\netfx-api\`
+	```powershell
+	PS C:\> cd c:\hybrid-app\netfx-api\
+	```
 
 
 2. Use `docker build` to build your Windows image.
 
-	`$ docker build -t $env:DTR/dotnet/dotnet_api .`
+	```powershell
+	PS C:\hybrid-app\netfx-api> docker build -t $env:DTR/dotnet/dotnet_api .
+	```
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
 
 	Your output should be similar to what is shown below
 
-	```
+	```powershell
 	PS C:\hybrid-app\netfx-api> docker build -t $env:DTR/dotnet/dotnet_api .
 
 	Sending build context to Docker daemon  415.7kB
@@ -455,12 +494,13 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 	Successfully built d74eead7f408
 	Successfully tagged <dtr hostname>/dotnet/dotnet_api:latest
 	```
+
 	> **Note**: It will take a few minutes for your image to build.
 
 4. Log into Docker Trusted Registry
 
-	```
-	PS C:\> docker login $env:DTR
+	```powershell
+	PS C:\hybrid-app\netfx-api> docker login $env:DTR
 	Username: dotnet_user
 	Password: user1234
 	Login Succeeded
@@ -468,8 +508,8 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
 5. Push your new image up to Docker Trusted Registry.
 
-	```
-	PS C:\Users\docker> docker push $env:DTR/dotnet/dotnet_api
+	```powershell
+	PS C:\hybrid-app\netfx-api> docker push $env:DTR/dotnet/dotnet_api
 	The push refers to a repository [<dtr hostname>/dotnet/dotnet_api]
 	5d08bc106d91: Pushed
 	74b0331584ac: Pushed
@@ -484,65 +524,66 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 	f358be10862c: Skipped foreign layer
 	latest: digest: sha256:e28b556b138e3d407d75122611710d5f53f3df2d2ad4a134dcf7782eb381fa3f size: 2825
 	```
-6. You may check your repositories in the DTR web interface to see the newly pushed image.
 
+6. You may check your repositories in the DTR web interface to see the newly pushed image.
 
 ### <a name="task3.3"></a> Task 3.3: Deploy the Java web app
 ![](./images/linux75.png)
 
 1. First we need to update the Java web app so it'll take advantage of the .NET API. Switch back to `worker1` and change directories to the `java-app-v2` directory. Repeat steps 1,2, and 4 from Task 2.2 but add a tag `:2` to your build and pushes:
 
-	```
+	```bash
 	$ docker build -t $DTR_HOST/java/java_web:2 .
 	$ docker push $DTR_HOST/java/java_web:2
 	```
-This will push a different version of the app, version 2, to the same `java_web` repository.
+
+	This will push a different version of the app, version 2, to the same `java_web` repository.
 
 2. Next repeat the steps 6-8 from Task 2.3, but use this `Compose` file instead:
 
-```
-version: "3.3"
+	```yaml
+    version: "3.3"
 
-services:
+    services:
 
-  database:
-    image: <your-dtr-instance>/java/database
-    # set default mysql root password, change as needed
-    environment:
-      MYSQL_ROOT_PASSWORD: mysql_password
-    # Expose port 3306 to host. 
-    ports:
-      - "3306:3306" 
+      database:
+        image: <your-dtr-instance>/java/database
+        # set default mysql root password, change as needed
+        environment:
+          MYSQL_ROOT_PASSWORD: mysql_password
+        # Expose port 3306 to host. 
+        ports:
+          - "3306:3306" 
+        networks:
+          - back-tier
+
+      webserver:
+        image: <your-dtr-instance>/java/java_web:2
+        ports:
+          - "8080:8080" 
+          - "8000:8000"
+        networks:
+          - front-tier
+          - back-tier
+        environment:
+          BASEURI: http://dotnet-api/api/users
+
+      dotnet-api:
+        image: <your-dtr-instance>/dotnet/dotnet_api
+        ports:
+          - "57989:80"
+        networks:
+          - front-tier
+          - back-tier
+
     networks:
-      - back-tier
+      back-tier:
+      front-tier:
 
-  webserver:
-   image: <your-dtr-instance>/java/java_web:2
-   ports:
-     - "8080:8080" 
-     - "8000:8000"
-   networks:
-     - front-tier
-     - back-tier
-   environment:
-     BASEURI: http://dotnet-api/api/users
-
-  dotnet-api:
-    image: <your-dtr-instance>/dotnet/dotnet_api
-    ports:
-      - "57989:80"
-    networks:
-      - front-tier
-      - back-tier
-
-networks:
-  back-tier:
-  front-tier:
-
-secrets:
-  mysql_password:
-    external: true
-```
+    secrets:
+      mysql_password:
+        external: true
+	```
 
 3. Once tested, delete the stack.
 
@@ -559,36 +600,41 @@ For now Kubernetes does not support Windows workloads in production, so we will 
 
 1. From the Play with Docker landing page, click on `worker1` and CD into the `hybrid-app/dotnet-api` directory. 
 
-	`$ cd ~/hybrid-app/dotnet-api/`
+	```bash
+	$ cd ~/hybrid-app/dotnet-api/
+	```
 
 2. Use `docker build` to build your Linux image.
 
-	`$ docker build -t $DTR_HOST/dotnet/dotnet_api:core .`
+	```bash
+	$ docker build -t $DTR_HOST/dotnet/dotnet_api:core .
+	```
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built. Also, we used the `:core` tag so that the repository has two versions, the original with a Windows base image, and this one with a Linux .NET Core base image.
 
 	Your output should be similar to what is shown below
 
-```
-Sending build context to Docker daemon   29.7kB
-Step 1/10 : FROM microsoft/aspnetcore-build:2.0.3-2.1.2 AS builder
-2.0.3-2.1.2: Pulling from microsoft/aspnetcore-build
-723254a2c089: Pull complete
+	```bash
+	Sending build context to Docker daemon   29.7kB
+	Step 1/10 : FROM microsoft/aspnetcore-build:2.0.3-2.1.2 AS builder
+	2.0.3-2.1.2: Pulling from microsoft/aspnetcore-build
+	723254a2c089: Pull complete
 
-	<output snipped>
+		<output snipped>
 
-Removing intermediate container 508751aacb5c
-Step 7/10 : FROM microsoft/aspnetcore:2.0.3-stretch
-2.0.3-stretch: Pulling from microsoft/aspnetcore
+	Removing intermediate container 508751aacb5c
+	Step 7/10 : FROM microsoft/aspnetcore:2.0.3-stretch
+	2.0.3-stretch: Pulling from microsoft/aspnetcore
 
-Successfully built fcbc49ef89bf
-Successfully tagged ip172-18-0-8-baju0rgm5emg0096odmg.direct.ee-beta2.play-with-docker.com/dotnet/dotnet_api:latest
-```
+	Successfully built fcbc49ef89bf
+	Successfully tagged ip172-18-0-8-baju0rgm5emg0096odmg.direct.ee-beta2.play-with-docker.com/dotnet/dotnet_api:latest
+	```
+
 	> **Note**: It will take a few minutes for your image to build.
 
 4. Log into Docker Trusted Registry
 
-	```
+	```bash
 	$ docker login $DTR_HOST
 	Username: dotnet_user
 	Password: user1234
@@ -597,7 +643,7 @@ Successfully tagged ip172-18-0-8-baju0rgm5emg0096odmg.direct.ee-beta2.play-with-
 
 5. Push your new image up to Docker Trusted Registry.
 
-	```
+	```bash
 	$ docker push $DTR_HOST/dotnet/dotnet_api:core
 	The push refers to a repository [<dtr hostname>/dotnet/dotnet_api]
 	5d08bc106d91: Pushed
@@ -631,7 +677,7 @@ Let's look at the Docker Compose file in `app/docker-stack.yml`.
 
 Change the images for the dotnet-api and java-app services for the ones we just built. And remember to change `<dtr hostname>` to the long DTR hostname listed on the landing page for your Play with Docker instance.
 
-```
+```yaml
 version: '3.3'
 
 services:
@@ -650,6 +696,7 @@ services:
     - mode: ingress
       published: 3306
       target: 3306
+  
   dotnet-api:
     deploy:
       placement:
@@ -662,17 +709,16 @@ services:
     - mode: ingress
       published: 57989
       target: 80
+  
   java-web:
     deploy:
       placement:
         constraints:
         - node.platform.os == linux
     image: <dtr hostname>/java/java_web:2
-
     networks:
       back-tier:
       front-tier:
-
     ports:
     - mode: ingress
       published: 8000
@@ -735,10 +781,13 @@ Security is crucial for all organizations. And it is a complicated topic, too in
 1. If you turned on security in Task 1.3 step 14 you can skip this step. Otherwise, turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
 
 	![](./images/scanning-activate.png)
+
 	This will take awhile so you may want to take a break by reading up on [Docker Security](https://www.docker.com/docker-security).
 
 2. Once the scanning database has downloaded, you can scan individual images. Select a repository, such as `java/java_web`, and then select the `Images` tab. If it hasn't already scanned, select `Start scan`. If it hasn't scanned already, this can take 5-10 minutes or so.
+
 	![](./images/java-scanned.png)
+
 	You see that in fact there are alot of vulnerabilities! That's because we deliberately chose an old version of the `tomcat` base image. Also, most operating systems and many libraries contain some vulnerabilities. The details of these vulnerabilites and when they come into play are important. You can select `View details` to get more information. You can see which layers of your image introduced vulnerabilities.
 
  	![](./images/layers.png)
@@ -748,9 +797,13 @@ Security is crucial for all organizations. And it is a complicated topic, too in
  	![](./images/cves.png)
 
  3. One way you can reduce your vulnerabilities is to choose newer images. For instance, you can go back to the Dockerfile in the `~/hybrid-app/java-app` directory, and change the second base image to `tomcat:9.0.6-jre-9-slim`. Slim images in official images are generally based on lighter-weight operating systems like `Alpine Linux` or `Debian`, which have reduced attack space. You can change the Dockerfile using `vim` or `emacs`.
+
 	![](./images/tomcat9.png)
+
 	Then check the scanning again (this may again take 5-10 minutes).
+
 	![](./images/tomcat9-scanned.png)
+
 	You'll still see vulnerabilites, but far fewer.
 
 4. If you look at the components of the `tomcat:9.0.6-jre-9-slim` image, you will see that the critical and major vulnerabilities were brought in the `Spring` libraries. So maybe it's time to upgrade our app! 
