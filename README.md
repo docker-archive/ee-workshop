@@ -355,7 +355,8 @@ first use the dotnet_user, which isn't part of the java organization
 	> **Note**: If you've closed the tab with your DTR server, just click the `DTR` button from the PWD page.
 
 6. Click on `Images` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
-![](./images/pushed_image.png)
+
+	![](./images/pushed_image.png)
 
 7. Repeat 1,2 and 4 but build a `java/database` in the `database/` directory and push it to DTR. This is a simple MySQL database with a basic username/password and an initial table configuration.
 
@@ -367,12 +368,14 @@ The next step is to run the app in Swarm. As a reminder, the application has two
 1. Go back to the first Play with Docker tab. Click on the UCP button. You'll have the same warnings regarding `https` that you have before. Click through those and log in. You'll see the Universal Control Panel dashboard.
 
 2.  There's a lot here about managing the cluster. You can take a moment to explore around. When you're ready, click on `Swarm` and select `Secrets`.
-![](./images/ucp_secret_menu.png)
+
+	![](./images/ucp_secret_menu.png)
 
 3. You'll see a `Create Secret` screen. Type `MYSQL_PASSWORD` in `Name` and `password` in `Content`. Then click `Create` in the lower left. Obviously you wouldn't use this password in a real production environment. You'll see the content box allows for quite a bit of content, you can actually create structred content here that will be encrypted with the secret.
 
 4. Next we're going to create two networks. First click on `Networks` under `Swarm` in the left panel, and select `Create Network` in the upper right. You'll see a `Create Network` screen. Name your first network `back-tier`. Leave everything else the default.
-![](./ucp_network.png)
+
+	![](./images/ucp_network.png)
 
 5. Repeat step 4 but with a new network `front-tier`.
 
@@ -380,10 +383,10 @@ The next step is to run the app in Swarm. As a reminder, the application has two
 
 7. Name your stack `java_web` and select `Swarm Services` for your `Mode`. Below you'll see we've included a `.yml` file. Before you paste that in to the `Compose.yml` edit box, note that you'll need to make a quick change. Each of the images is defined as `<your-dtr-instance>/java/<something>`. You'll need to change the `<your-dtr-instance>` to the DTR Hostname found on the Play with Docker landing page for your session. It will look something like this:
 `ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com`
-You can do that right in the edit box in `UCP` but wanted to make sure you saw that first.
-![](./images/ucp_create_stack.png)
-
 Here's the `Compose` file. Once you've copy and pasted it in, and made the changes, click `Create` in the lower right corner.
+You can do that right in the edit box in `UCP` but wanted to make sure you saw that first.
+
+	![](./images/ucp_create_stack.png)
 
 
 	```yaml
@@ -422,18 +425,17 @@ Here's the `Compose` file. Once you've copy and pasted it in, and made the chang
 
 	Then click `Done` in the lower right.
 
-
-Then click `Done` in the lower right.
-
 8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.
 
-![](./images/java_web1.png)
+
+	![](./images/java-web1.png)
 
 ## <a name="task3"></a>Task 3: Deploy the next version with a Windows node
 
 Now that we've moved the app and updated it, we're going to add in a user sign-in API. For fun, and to show off the cross-platform capabilities of Docker EE, we are going to do it in a Windows container.
 
-### <a name="task3.1"></a> Task 3.1: Clone the repository
+### <a name="task3.1"></a> Task 3.1: Clone the repository]
+
 ![](./images/windows75.png)
 
 1. Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. Then clone the repository again onto this host:
@@ -482,12 +484,13 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 	Successfully built d74eead7f408
 	Successfully tagged <dtr hostname>/dotnet/dotnet_api:latest
 	```
+
 	> **Note**: It will take a few minutes for your image to build.
 
 4. Log into Docker Trusted Registry
 
-	```
-	PS C:\> docker login $env:DTR
+	```powershell
+	PS C:\hybrid-app\netfx-api> docker login $env:DTR
 	Username: dotnet_user
 	Password: user1234
 	Login Succeeded
@@ -511,8 +514,8 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 	f358be10862c: Skipped foreign layer
 	latest: digest: sha256:e28b556b138e3d407d75122611710d5f53f3df2d2ad4a134dcf7782eb381fa3f size: 2825
 	```
-6. You may check your repositories in the DTR web interface to see the newly pushed image.
 
+6. You may check your repositories in the DTR web interface to see the newly pushed image.
 
 ### <a name="task3.3"></a> Task 3.3: Deploy the Java web app
 ![](./images/linux75.png)
@@ -523,7 +526,8 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 	$ docker build -t $DTR_HOST/java/java_web:2 .
 	$ docker push $DTR_HOST/java/java_web:2
 	```
-This will push a different version of the app, version 2, to the same `java_web` repository.
+
+	This will push a different version of the app, version 2, to the same `java_web` repository.
 
 2. Next repeat the steps 6-8 from Task 2.3, but use this `Compose` file instead:
 
@@ -662,7 +666,7 @@ Let's look at the Docker Compose file in `app/docker-stack.yml`.
 
 Change the images for the dotnet-api and java-app services for the ones we just built. And remember to change `<dtr hostname>` to the long DTR hostname listed on the landing page for your Play with Docker instance.
 
-```
+```yaml
 version: '3.3'
 
 services:
@@ -768,10 +772,13 @@ Security is crucial for all organizations. And it is a complicated topic, too in
 1. If you turned on security in Task 1.3 step 14 you can skip this step. Otherwise, turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
 
 	![](./images/scanning-activate.png)
+
 	This will take awhile so you may want to take a break by reading up on [Docker Security](https://www.docker.com/docker-security).
 
 2. Once the scanning database has downloaded, you can scan individual images. Select a repository, such as `java/java_web`, and then select the `Images` tab. If it hasn't already scanned, select `Start scan`. If it hasn't scanned already, this can take 5-10 minutes or so.
+
 	![](./images/java-scanned.png)
+
 	You see that in fact there are alot of vulnerabilities! That's because we deliberately chose an old version of the `tomcat` base image. Also, most operating systems and many libraries contain some vulnerabilities. The details of these vulnerabilites and when they come into play are important. You can select `View details` to get more information. You can see which layers of your image introduced vulnerabilities.
 
  	![](./images/layers.png)
@@ -781,9 +788,13 @@ Security is crucial for all organizations. And it is a complicated topic, too in
  	![](./images/cves.png)
 
  3. One way you can reduce your vulnerabilities is to choose newer images. For instance, you can go back to the Dockerfile in the `~/hybrid-app/java-app` directory, and change the second base image to `tomcat:9.0.6-jre-9-slim`. Slim images in official images are generally based on lighter-weight operating systems like `Alpine Linux` or `Debian`, which have reduced attack space. You can change the Dockerfile using `vim` or `emacs`.
+
 	![](./images/tomcat9.png)
+
 	Then check the scanning again (this may again take 5-10 minutes).
+
 	![](./images/tomcat9-scanned.png)
+
 	You'll still see vulnerabilites, but far fewer.
 
 4. If you look at the components of the `tomcat:9.0.6-jre-9-slim` image, you will see that the critical and major vulnerabilities were brought in the `Spring` libraries. So maybe it's time to upgrade our app! 
