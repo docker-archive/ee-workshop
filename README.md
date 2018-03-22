@@ -639,6 +639,8 @@ services:
         - node.platform.os == linux
 
     image: <dtr hostname>/java/database
+    environment:
+      MYSQL_ROOT_PASSWORD: DockerCon!!!
     networks:
       back-tier: null
     ports:
@@ -679,10 +681,6 @@ services:
 networks:
   back-tier:
   front-tier:
-
-secrets:
-  mysql_password:
-    external: true
 ```
 
 ### <a name="task4.3"></a>Task 4.3: Deploy to Kubernetes using the Docker Compose file
