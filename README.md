@@ -20,7 +20,6 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 1.1: Accessing PWD](#task1.1)
 >   * [Task 1.2: Install a Windows worker node](#task1.2)
 >   * [Task 1.3: Create Three Repositories](#task1.3)
->   * [Task 1.3.1: Restrict access to a repository](#task1.3.1)
 > * [Task 2: Deploy a Java Web App](#task2)
 >   * [Task 2.1: Clone the Demo Repo](#task2.1)
 >   * [Task 2.2: Build and Push the Linux Web App Image](#task2.2)
@@ -161,18 +160,17 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 
 You should be taken to the `Nodes` screen and will see 4 worker nodes listed at the bottom of your screen.
 
-	Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
+Initially the new worker node will be shown with status `down`. After a minute or two, refresh your web browser to ensure that your Windows worker node has come up as `healthy`
 
-	![](./images/node_listing.png)
-	> \: Update with new nodes page screenshot 
+![](./images/node_listing.png)
 
-Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
+Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a few repositories in Docker Trusted registry.
 
 ### <a name="task1.3"></a>Task 1.3: Create Three DTR Repositories
 
-Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create a couple of different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside. Often that would be enough.
+Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create three different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside. Often that would be enough.
 
-However, before we create the repositories, we do want to restrict access to them. Since we have two distinct app components, a Java web app, and a .NET API, we want to restrict access to them to the team that develops them, as well as the administrators. To do that, we need to create two users and then two organizations.
+However, before we create the repositories, we do want to restrict access to them. Since we have two distinct app components, a Java web app (with a database), and a .NET API, we want to restrict access to them to the team that develops them, as well as the administrators. To do that, we need to create two users and then two organizations.
 
 1. In the PWD web interface click the `DTR` button on the left side of the screen.
 
@@ -182,7 +180,7 @@ However, before we create the repositories, we do want to restrict access to the
 ![](./images/user_screen.png)
 
 3. Create a new user, `java_user` and give it a password you'll remember. I used `user1234`. Be sure to save the user.
-![](/images/create_java_user.png)
+![](./images/create_java_user.png)
 Then do the same for a `dotnet_user`.
 
 4. Select the Organization button.
@@ -214,17 +212,18 @@ Then do the same with dotnet and you'll have two organizations.
 11. Next select the `web` team and select the `Repositories` tab. Select `Add Existing repository` and choose the `java_web`repository. You'll see the `java` account is already selected. Then select `Read/Write` permissions so the `web` team has permissions to push images to this repository. Finally click `save`.
 ![](./images/add_java_web_to_team.png)
 
-12. Now add a new repository owned by the web team and call it `database`.
+12. Now add a new repository also owned by the web team and call it `database`. This can be done directly from the web team's `Repositories` tab by selecting the radio button for Add `New` Repository. Be sure to grant `Read/Write` permissions for this repository to the `web` team as well.
+![](./images/add_repository_database.png)
 
-13. Repeat 4-11 above to create a `dotnet` organization with the `dotnet_user` and a repository called `dotnet_api`.
-You'll now see both repositories listed.
-	![](./images/two_repositories.png)
+13. Repeat 4-11 above to create a `dotnet` organization with a repository called `dotnet_api`, the `dotnet_user`, and a team named `api` (with `dotnet_user` as a member). Grant `read/write` permissions for the `dotnet_api` repository to the `api` team.
+You'll now see all three repositories listed.
+![](./images/three_repositories.png)
 
 14. (optional) If you want to check out security scanning in Task 5, you should turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
 ![](./images/scanning-activate.png)
 
 
-Congratulations, you have created two new repositories in two new organizations, each with one user.
+Congratulations, you have created three new repositories across two new organizations, each with one team and one user.
 
 ## <a name="task2"></a>Task 2: Deploy a Java Web App with Universal Control Plane
 Now that we've completely configured our cluster, let's deploy a couple of web apps. These are simple web pages that allow you to send a tweet. One is built on Linux using NGINX and the other is build on Windows Server 2016 using IIS.  
@@ -241,10 +240,11 @@ Let's start with the Linux version.
 
 	![](./images/session-information.png)
 
-3. Set an environment variable $DTR. For instance, if your DTR host name was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com`, you would type:
+3. Set an environment variable `DTR_HOST` using the DTR host name defined on your Play with Docker landing page:
 
 ```
-$ DTR='ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com'
+$ export DTR_HOST=<dtr hostname>
+$ echo $DTR_HOST
 ```
 
 4. Now use git to clone the workshop repository.
@@ -275,13 +275,6 @@ $ DTR='ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com'
 
 	`$ cd ./hybrid-app/java-app/`
 
-2. Set the DTR_HOST environment variable. This will be useful throughout the workshop.
-
-```
-$ export DTR_HOST=<dtr hostname>
-$ echo $DTR_HOST
-```
-
 2. Use `docker build` to build your Docker image.
 
 	`$ docker build -t $DTR_HOST/java/java_web .`
@@ -296,46 +289,48 @@ $ echo $DTR_HOST
 
 3. Log into your DTR server from the command line
 
-first use the dotnet_user, which isn't part of the java organization
+First, use the `dotnet_user`, which isn't part of the java organization
 
-	```
-	$ docker login $DTR_HOST
-	Username: <your username>
-	Password: <your password>
-	Login Succeeded
-	```
+```
+$ docker login $DTR_HOST
+Username: <your username>
+Password: <your password>
+Login Succeeded
+```
 	
-	Use `docker push` to upload your image up to Docker Trusted Registry.
+Use `docker push` to upload your image up to Docker Trusted Registry.
 
-	
-	```
-	$ docker push $DTR_HOST/java/java_web
-	```
-	
-	> TODO: add output of failure to push
+```
+$ docker push $DTR_HOST/java/java_web
+The push refers to a repository [.<dtr hostname>/java/java_web]
+8cb6044fd4d7: Preparing
+07344436fe27: Preparing
+...
+e1df5dc88d2c: Waiting
+denied: requested access to the resource is denied
+```
 
+As you can see, the access control that you established in the [Task 1.3](#task1.3) prevented you from pushing to this repository.	
 
-	The access control that you established in the [Task 1.3](#task1.3) prevented you from pushing to this repository.	
+4. Now try logging in using `java_user`, and then use `docker push` to upload your image up to Docker Trusted Registry.
 
-4. Now try logging in using `java-user`, and then use `docker push` to upload your image up to Docker Trusted Registry.
+```
+$ docker push $DTR_HOST/java/java_web
+```
 
-	```
-	$ docker push $DTR_HOST/java/java_web
-	```
+The output should be similar to the following:
 
-	The output should be similar to the following:
+```
+The push refers to a repository [<dtr hostname>/java/java_web]
+feecabd76a78: Pushed
+3c749ee6d1f5: Pushed
+af5bd3938f60: Pushed
+29f11c413898: Pushed
+eb78099fbf7f: Pushed
+latest: digest: sha256:9a376fd268d24007dd35bedc709b688f373f4e07af8b44dba5f1f009a7d70067 size: 1363
+```
 
-	```
-	The push refers to a repository [<dtr hostname>/java/java_web]
-	feecabd76a78: Pushed
-	3c749ee6d1f5: Pushed
-	af5bd3938f60: Pushed
-	29f11c413898: Pushed
-	eb78099fbf7f: Pushed
-	latest: digest: sha256:9a376fd268d24007dd35bedc709b688f373f4e07af8b44dba5f1f009a7d70067 size: 1363
-	```
-
-	Success! Because you are using a user name that belongs to the right team in the right organization, you can push your image to DTR.
+Success! Because you are using a user name that belongs to the right team in the right organization, you can push your image to DTR.
 
 5. In your web browser head back to your DTR server and click `View Details` next to your `java_web` repo to see the details of the repo.
 
@@ -344,7 +339,7 @@ first use the dotnet_user, which isn't part of the java organization
 6. Click on `Images` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
 ![](./images/pushed_image.png)
 
-7. Repeat 1,2 and 4 but build a `java/database` in the `database/` directory and push it to DTR. This is a simple MySQL database with a basic username/password and an initial table configuration.
+7. Repeat 1,2 and 4 but build a `java/database` image from within the `database/` directory of `hybrid-app` and push it to DTR. This is a simple MySQL database with a basic username/password and an initial table configuration.
 
 ### <a name="task2.3"></a> Task 2.3: Deploy the Web App using UCP
 ![](./images/linux75.png)
@@ -531,7 +526,7 @@ services:
      BASEURI: http://dotnet-api/api/users
 
   dotnet-api:
-    image: <your-dtr-instance>/dotnet/dotnet-api
+    image: <your-dtr-instance>/dotnet/dotnet_api
     ports:
       - "57989:80"
     networks:
