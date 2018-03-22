@@ -223,7 +223,7 @@ You'll now see all three repositories listed.
 ![](./images/scanning-activate.png)
 
 
-Congratulations, you have created two new repositories in two new organizations, each with one user.
+Congratulations, you have created three new repositories across two new organizations, each with one team and one user.
 
 ## <a name="task2"></a>Task 2: Deploy a Java Web App with Universal Control Plane
 Now that we've completely configured our cluster, let's deploy a couple of web apps. These are simple web pages that allow you to send a tweet. One is built on Linux using NGINX and the other is build on Windows Server 2016 using IIS.  
