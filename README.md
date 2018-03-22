@@ -531,47 +531,47 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 2. Next repeat the steps 6-8 from Task 2.3, but use this `Compose` file instead:
 
 	```yaml
-	version: "3.3"
+    version: "3.3"
 
-	services:
+    services:
 
-	database:
-		image: <your-dtr-instance>/java/database
-		# set default mysql root password, change as needed
-		environment:
-		MYSQL_ROOT_PASSWORD: mysql_password
-		# Expose port 3306 to host. 
-		ports:
-		- "3306:3306" 
-		networks:
-		- back-tier
+      database:
+        image: <your-dtr-instance>/java/database
+        # set default mysql root password, change as needed
+        environment:
+          MYSQL_ROOT_PASSWORD: mysql_password
+        # Expose port 3306 to host. 
+        ports:
+          - "3306:3306" 
+        networks:
+          - back-tier
 
-	webserver:
-	image: <your-dtr-instance>/java/java_web:2
-	ports:
-		- "8080:8080" 
-		- "8000:8000"
-	networks:
-		- front-tier
-		- back-tier
-	environment:
-		BASEURI: http://dotnet-api/api/users
+      webserver:
+        image: <your-dtr-instance>/java/java_web:2
+        ports:
+          - "8080:8080" 
+          - "8000:8000"
+        networks:
+          - front-tier
+          - back-tier
+        environment:
+          BASEURI: http://dotnet-api/api/users
 
-	dotnet-api:
-		image: <your-dtr-instance>/dotnet/dotnet-api
-		ports:
-		- "57989:80"
-		networks:
-		- front-tier
-		- back-tier
+      dotnet-api:
+        image: <your-dtr-instance>/dotnet/dotnet_api
+        ports:
+          - "57989:80"
+        networks:
+          - front-tier
+          - back-tier
 
-	networks:
-	back-tier:
-	front-tier:
+    networks:
+      back-tier:
+      front-tier:
 
-	secrets:
-	mysql_password:
-		external: true
+    secrets:
+      mysql_password:
+        external: true
 	```
 
 
