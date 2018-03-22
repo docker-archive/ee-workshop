@@ -20,7 +20,6 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 1.1: Accessing PWD](#task1.1)
 >   * [Task 1.2: Install a Windows worker node](#task1.2)
 >   * [Task 1.3: Create Three Repositories](#task1.3)
->   * [Task 1.3.1: Restrict access to a repository](#task1.3.1)
 > * [Task 2: Deploy a Java Web App](#task2)
 >   * [Task 2.1: Clone the Demo Repo](#task2.1)
 >   * [Task 2.2: Build and Push the Linux Web App Image](#task2.2)
@@ -165,13 +164,13 @@ Initially the new worker node will be shown with status `down`. After a minute o
 
 ![](./images/node_listing.png)
 
-Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
+Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a few repositories in Docker Trusted registry.
 
 ### <a name="task1.3"></a>Task 1.3: Create Three DTR Repositories
 
-Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create a couple of different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside. Often that would be enough.
+Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create three different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside. Often that would be enough.
 
-However, before we create the repositories, we do want to restrict access to them. Since we have two distinct app components, a Java web app, and a .NET API, we want to restrict access to them to the team that develops them, as well as the administrators. To do that, we need to create two users and then two organizations.
+However, before we create the repositories, we do want to restrict access to them. Since we have two distinct app components, a Java web app (with a database), and a .NET API, we want to restrict access to them to the team that develops them, as well as the administrators. To do that, we need to create two users and then two organizations.
 
 1. In the PWD web interface click the `DTR` button on the left side of the screen.
 
@@ -181,7 +180,7 @@ However, before we create the repositories, we do want to restrict access to the
 ![](./images/user_screen.png)
 
 3. Create a new user, `java_user` and give it a password you'll remember. I used `user1234`. Be sure to save the user.
-![](/images/create_java_user.png)
+![](./images/create_java_user.png)
 Then do the same for a `dotnet_user`.
 
 4. Select the Organization button.
@@ -213,11 +212,12 @@ Then do the same with dotnet and you'll have two organizations.
 11. Next select the `web` team and select the `Repositories` tab. Select `Add Existing repository` and choose the `java_web`repository. You'll see the `java` account is already selected. Then select `Read/Write` permissions so the `web` team has permissions to push images to this repository. Finally click `save`.
 ![](./images/add_java_web_to_team.png)
 
-12. Now add a new repository owned by the web team and call it `database`.
+12. Now add a new repository also owned by the web team and call it `database`. This can be done directly from the web team's `Repositories` tab by selecting the radio button for Add `New` Repository. Be sure to grant `Read/Write` permissions for this repository to the `web` team as well.
+![](./images/add_repository_database.png)
 
-13. Repeat 4-11 above to create a `dotnet` organization with the `dotnet_user` and a repository called `dotnet_api`.
-You'll now see both repositories listed.
-	![](./images/two_repositories.png)
+13. Repeat 4-11 above to create a `dotnet` organization with a repository called `dotnet_api`, the `dotnet_user`, and a team named `api` (with `dotnet_user` as a member). Grant `read/write` permissions for the `dotnet_api` repository to the `api` team.
+You'll now see all three repositories listed.
+![](./images/three_repositories.png)
 
 14. (optional) If you want to check out security scanning in Task 5, you should turn on scanning now so DTR downloads the database of security vulnerabilities. In the left-hand panel, select `System` and then the `Security` tab. Select `ENABLE SCANNING` and `Online`.
 ![](./images/scanning-activate.png)
