@@ -20,7 +20,6 @@ In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. 
 >   * [Task 1.1: Accessing PWD](#task1.1)
 >   * [Task 1.2: Install a Windows worker node](#task1.2)
 >   * [Task 1.3: Create Three Repositories](#task1.3)
->   * [Task 1.3.1: Restrict access to a repository](#task1.3.1)
 > * [Task 2: Deploy a Java Web App](#task2)
 >   * [Task 2.1: Clone the Demo Repo](#task2.1)
 >   * [Task 2.2: Build and Push the Linux Web App Image](#task2.2)
@@ -165,13 +164,13 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 	
 	![](./images/node_listing.png)
 
-Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a couple of repositories in Docker Trusted registry.
+Congratulations on adding a Windows node to your UCP cluster. Now you are ready to use the worker in either Swarm or Kubernetes. Next up we'll create a few repositories in Docker Trusted registry.
 
 ### <a name="task1.3"></a>Task 1.3: Create Three DTR Repositories
 
-Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create a couple of different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside. Often that would be enough.
+Docker Trusted Registry is a special server designed to store and manage your Docker images. In this lab we're going to create three different Docker images, and push them to DTR. But before we can do that, we need to setup repositories in which those images will reside. Often that would be enough.
 
-However, before we create the repositories, we do want to restrict access to them. Since we have two distinct app components, a Java web app, and a .NET API, we want to restrict access to them to the team that develops them, as well as the administrators. To do that, we need to create two users and then two organizations.
+However, before we create the repositories, we do want to restrict access to them. Since we have two distinct app components, a Java web app (with a database), and a .NET API, we want to restrict access to them to the team that develops them, as well as the administrators. To do that, we need to create two users and then two organizations.
 
 1. In the PWD web interface click the `DTR` button on the left side of the screen.
 
@@ -227,9 +226,11 @@ However, before we create the repositories, we do want to restrict access to the
 
 	![](./images/add_java_web_to_team.png)
 
-12. Now add a new repository owned by the web team and call it `database`.
+12. Now add a new repository also owned by the web team and call it `database`. This can be done directly from the web team's `Repositories` tab by selecting the radio button for Add `New` Repository. Be sure to grant `Read/Write` permissions for this repository to the `web` team as well.
 
-13. Repeat 4-11 above to create a `dotnet` organization with the `dotnet_user` who belongs to the `web` team and a repository called `dotnet_api`.
+	![](./images/add_repository_database.png)
+
+13. Repeat 4-11 above to create a `dotnet` organization with a repository called `dotnet_api`, the `dotnet_user`, and a team named `api` (with `dotnet_user` as a member). Grant `read/write` permissions for the `dotnet_api` repository to the `api` team.
 
 14. From the main DTR page, click Repositories, you will now see all three repositories listed.
 	
@@ -256,10 +257,10 @@ Let's start with the Linux version.
 
 	![](./images/session-information.png)
 
-3. Set the environment variable DTR_HOST. This will be useful throughout the workshop. For instance, if your DTR host name was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com`, you would type:
+3. Set an environment variable `DTR_HOST` using the DTR host name defined on your Play with Docker landing page:
 
 	```bash
-	$ export DTR_HOST='ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com'
+	$ export DTR_HOST=<dtr hostname>
 	$ echo $DTR_HOST
 	```
 
@@ -309,7 +310,7 @@ Let's start with the Linux version.
 
 3. Log into your DTR server from the command line.
  
-	First use the dotnet_user, which isn't part of the java organization
+	First use the `dotnet_user`, which isn't part of the java organization
 
 	```bash
 	$ docker login $DTR_HOST
@@ -319,7 +320,6 @@ Let's start with the Linux version.
 	```
 	
 	Use `docker push` to upload your image up to Docker Trusted Registry.
-
 	
 	```bash
 	$ docker push $DTR_HOST/java/java_web
@@ -327,10 +327,19 @@ Let's start with the Linux version.
 	
 	> TODO: add output of failure to push
 
+	```bash
+	$ docker push $DTR_HOST/java/java_web
+	The push refers to a repository [.<dtr hostname>/java/java_web]
+	8cb6044fd4d7: Preparing
+	07344436fe27: Preparing
+	...
+	e1df5dc88d2c: Waiting
+	denied: requested access to the resource is denied
+	```
 
-	The access control that you established in the [Task 1.3](#task1.3) prevented you from pushing to this repository.	
+	As you can see, the access control that you established in the [Task 1.3](#task1.3) prevented you from pushing to this repository.	
 
-4. Now try logging in using `java-user`, and then use `docker push` to upload your image up to Docker Trusted Registry.
+4. Now try logging in using `java_user`, and then use `docker push` to upload your image up to Docker Trusted Registry.
 
 	```bash
 	$ docker push $DTR_HOST/java/java_web
@@ -358,7 +367,7 @@ Let's start with the Linux version.
 
 	![](./images/pushed_image.png)
 
-7. Repeat 1,2 and 4 but build a `java/database` in the `database/` directory and push it to DTR. This is a simple MySQL database with a basic username/password and an initial table configuration.
+7. Repeat 1,2 and 4 but build a `java/database` image from within the `database/` directory of `hybrid-app` and push it to DTR. This is a simple MySQL database with a basic username/password and an initial table configuration.
 
 ### <a name="task2.3"></a> Task 2.3: Deploy the Web App using UCP
 ![](./images/linux75.png)
@@ -371,7 +380,7 @@ The next step is to run the app in Swarm. As a reminder, the application has two
 
 	![](./images/ucp_secret_menu.png)
 
-3. You'll see a `Create Secret` screen. Type `MYSQL_PASSWORD` in `Name` and `password` in `Content`. Then click `Create` in the lower left. Obviously you wouldn't use this password in a real production environment. You'll see the content box allows for quite a bit of content, you can actually create structred content here that will be encrypted with the secret.
+3. You'll see a `Create Secret` screen. Type `MYSQL_ROOT_PASSWORD` in `Name` and `password` in `Content`. Then click `Create` in the lower left. Obviously you wouldn't use this password in a real production environment. You'll see the content box allows for quite a bit of content, you can actually create structred content here that will be encrypted with the secret.
 
 4. Next we're going to create two networks. First click on `Networks` under `Swarm` in the left panel, and select `Create Network` in the upper right. You'll see a `Create Network` screen. Name your first network `back-tier`. Leave everything else the default.
 
@@ -428,6 +437,10 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
 8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.)
 
 	![](./images/java-web1.png)
+
+9. Delete the `java_web` stack. 
+
+	![](./images/java_web1.png)
 
 ## <a name="task3"></a>Task 3: Deploy the next version with a Windows node
 
@@ -574,6 +587,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
         external: true
 	```
 
+3. Once tested, delete the stack.
 
 ## <a name="task4"></a>Task 4: Deploy to Kubernetes
 
