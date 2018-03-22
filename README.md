@@ -240,10 +240,11 @@ Let's start with the Linux version.
 
 	![](./images/session-information.png)
 
-3. Set an environment variable $DTR. For instance, if your DTR host name was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com`, you would type:
+3. Set an environment variable `DTR_HOST` using the DTR host name defined on your Play with Docker landing page:
 
 ```
-$ DTR='ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com'
+$ export DTR_HOST=<dtr hostname>
+$ echo $DTR_HOST
 ```
 
 4. Now use git to clone the workshop repository.
@@ -274,13 +275,6 @@ $ DTR='ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com'
 
 	`$ cd ./hybrid-app/java-app/`
 
-2. Set the DTR_HOST environment variable. This will be useful throughout the workshop.
-
-```
-$ export DTR_HOST=<dtr hostname>
-$ echo $DTR_HOST
-```
-
 2. Use `docker build` to build your Docker image.
 
 	`$ docker build -t $DTR_HOST/java/java_web .`
@@ -295,46 +289,48 @@ $ echo $DTR_HOST
 
 3. Log into your DTR server from the command line
 
-first use the dotnet_user, which isn't part of the java organization
+First, use the `dotnet_user`, which isn't part of the java organization
 
-	```
-	$ docker login $DTR_HOST
-	Username: <your username>
-	Password: <your password>
-	Login Succeeded
-	```
+```
+$ docker login $DTR_HOST
+Username: <your username>
+Password: <your password>
+Login Succeeded
+```
 	
-	Use `docker push` to upload your image up to Docker Trusted Registry.
+Use `docker push` to upload your image up to Docker Trusted Registry.
 
-	
-	```
-	$ docker push $DTR_HOST/java/java_web
-	```
-	
-	> TODO: add output of failure to push
+```
+$ docker push $DTR_HOST/java/java_web
+The push refers to a repository [.<dtr hostname>/java/java_web]
+8cb6044fd4d7: Preparing
+07344436fe27: Preparing
+...
+e1df5dc88d2c: Waiting
+denied: requested access to the resource is denied
+```
 
+As you can see, the access control that you established in the [Task 1.3](#task1.3) prevented you from pushing to this repository.	
 
-	The access control that you established in the [Task 1.3](#task1.3) prevented you from pushing to this repository.	
+4. Now try logging in using `java_user`, and then use `docker push` to upload your image up to Docker Trusted Registry.
 
-4. Now try logging in using `java-user`, and then use `docker push` to upload your image up to Docker Trusted Registry.
+```
+$ docker push $DTR_HOST/java/java_web
+```
 
-	```
-	$ docker push $DTR_HOST/java/java_web
-	```
+The output should be similar to the following:
 
-	The output should be similar to the following:
+```
+The push refers to a repository [<dtr hostname>/java/java_web]
+feecabd76a78: Pushed
+3c749ee6d1f5: Pushed
+af5bd3938f60: Pushed
+29f11c413898: Pushed
+eb78099fbf7f: Pushed
+latest: digest: sha256:9a376fd268d24007dd35bedc709b688f373f4e07af8b44dba5f1f009a7d70067 size: 1363
+```
 
-	```
-	The push refers to a repository [<dtr hostname>/java/java_web]
-	feecabd76a78: Pushed
-	3c749ee6d1f5: Pushed
-	af5bd3938f60: Pushed
-	29f11c413898: Pushed
-	eb78099fbf7f: Pushed
-	latest: digest: sha256:9a376fd268d24007dd35bedc709b688f373f4e07af8b44dba5f1f009a7d70067 size: 1363
-	```
-
-	Success! Because you are using a user name that belongs to the right team in the right organization, you can push your image to DTR.
+Success! Because you are using a user name that belongs to the right team in the right organization, you can push your image to DTR.
 
 5. In your web browser head back to your DTR server and click `View Details` next to your `java_web` repo to see the details of the repo.
 
@@ -343,7 +339,7 @@ first use the dotnet_user, which isn't part of the java organization
 6. Click on `Images` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
 ![](./images/pushed_image.png)
 
-7. Repeat 1,2 and 4 but build a `java/database` in the `database/` directory and push it to DTR. This is a simple MySQL database with a basic username/password and an initial table configuration.
+7. Repeat 1,2 and 4 but build a `java/database` image from within the `database/` directory of `hybrid-app` and push it to DTR. This is a simple MySQL database with a basic username/password and an initial table configuration.
 
 ### <a name="task2.3"></a> Task 2.3: Deploy the Web App using UCP
 ![](./images/linux75.png)
