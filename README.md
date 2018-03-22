@@ -258,20 +258,20 @@ Let's start with the Linux version.
 
 3. Set the environment variable DTR_HOST. This will be useful throughout the workshop. For instance, if your DTR host name was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com`, you would type:
 
-	```
+	```bash
 	$ export DTR_HOST='ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com'
 	$ echo $DTR_HOST
 	```
 
 4. Now use git to clone the workshop repository.
 
-	```
+	```bash
 	$ git clone https://github.com/dockersamples/hybrid-app.git
 	```
 
 	You should see something like this as the output:
 
-	```
+	```bash
 	Cloning into 'hybrid-app'...
 	remote: Counting objects: 389, done.
 	remote: Compressing objects: 100% (17/17), done.
@@ -289,11 +289,15 @@ Let's start with the Linux version.
 
 1. Change into the `java-app` directory.
 
-	`$ cd ./hybrid-app/java-app/`
+	```bash
+	$ cd ./hybrid-app/java-app/
+	```
 
 2. Use `docker build` to build your Docker image.
 
-	`$ docker build -t $DTR_HOST/java/java_web .`
+	```Bash
+	$ docker build -t $DTR_HOST/java/java_web .
+	```
 
 	> **Note**: Be sure to substitute your DTR Hostname and your User Name - both these are listed at the top of your PWD page.
 
@@ -307,7 +311,7 @@ Let's start with the Linux version.
 
 first use the dotnet_user, which isn't part of the java organization
 
-	```
+	```bash
 	$ docker login $DTR_HOST
 	Username: <your username>
 	Password: <your password>
@@ -317,7 +321,7 @@ first use the dotnet_user, which isn't part of the java organization
 	Use `docker push` to upload your image up to Docker Trusted Registry.
 
 	
-	```
+	```bash
 	$ docker push $DTR_HOST/java/java_web
 	```
 	
@@ -328,13 +332,13 @@ first use the dotnet_user, which isn't part of the java organization
 
 4. Now try logging in using `java-user`, and then use `docker push` to upload your image up to Docker Trusted Registry.
 
-	```
+	```bash
 	$ docker push $DTR_HOST/java/java_web
 	```
 
 	The output should be similar to the following:
 
-	```
+	```bash
 	The push refers to a repository [<dtr hostname>/java/java_web]
 	feecabd76a78: Pushed
 	3c749ee6d1f5: Pushed
@@ -380,39 +384,45 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
 ![](./images/ucp_create_stack.png)
 
 Here's the `Compose` file. Once you've copy and pasted it in, and made the changes, click `Create` in the lower right corner.
-```
-version: "3.3"
 
-services:
 
-  database:
-    image: <your-dtr-instance>/java/database
-    # set default mysql root password, change as needed
-    environment:
-      MYSQL_ROOT_PASSWORD: mysql_password
-    # Expose port 3306 to host. 
-    ports:
-      - "3306:3306" 
-    networks:
-      - back-tier
+	```yaml
+	version: "3.3"
 
-  webserver:
-    image: <your-dtr-instance>/java/java_web
-    ports:
-      - "8080:8080" 
-      - "8000:8000"
-    networks:
-      - front-tier
-      - back-tier
+	services:
 
-networks:
-  back-tier:
-  front-tier:
+	database:
+		image: <your-dtr-instance>/java/database
+		# set default mysql root password, change as needed
+		environment:
+		MYSQL_ROOT_PASSWORD: mysql_password
+		# Expose port 3306 to host. 
+		ports:
+		- "3306:3306" 
+		networks:
+		- back-tier
 
-secrets:
-  mysql_password:
-    external: true
-```
+	webserver:
+		image: <your-dtr-instance>/java/java_web
+		ports:
+		- "8080:8080" 
+		- "8000:8000"
+		networks:
+		- front-tier
+		- back-tier
+
+	networks:
+	back-tier:
+	front-tier:
+
+	secrets:
+	mysql_password:
+		external: true
+	```
+
+	Then click `Done` in the lower right.
+
+
 Then click `Done` in the lower right.
 
 8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.
@@ -428,12 +438,13 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
 1. Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. Then clone the repository again onto this host:
 
-	```
+	```powershell
 	PS C:\git clone https://github.com/dockersamples/hybrid-app.git
 	```
+
 2. Set an environment variable for the DTR host name. Much like you did for the Java app, this will make a few step easier. Copy the DTR host name again and create the environment variable. For instance, if your DTR host was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com` you would type:
 
-	```
+	```powershell
 	PS C:\> $env:DTR="ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com"
 
 ### <a name="task3.2"></a> Task 3.2: Build and Push Windows Images to Docker Trusted Registry
@@ -443,18 +454,22 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
 	> Note you'll see a `dotnet-api` directory as well. Don't use that directory. That's a .NET Core api that runs on Linux. We'll use that later in the Kubernetes section.
 
-	`PS C:\> cd c:\hybrid-app\netfx-api\`
+	```powershell
+	PS C:\> cd c:\hybrid-app\netfx-api\
+	```
 
 
 2. Use `docker build` to build your Windows image.
 
-	`$ docker build -t $env:DTR/dotnet/dotnet_api .`
+	```powershell
+	PS C:\hybrid-app\netfx-api> docker build -t $env:DTR/dotnet/dotnet_api .
+	```
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
 
 	Your output should be similar to what is shown below
 
-	```
+	```powershell
 	PS C:\hybrid-app\netfx-api> docker build -t $env:DTR/dotnet/dotnet_api .
 
 	Sending build context to Docker daemon  415.7kB
@@ -480,8 +495,8 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
 5. Push your new image up to Docker Trusted Registry.
 
-	```
-	PS C:\Users\docker> docker push $env:DTR/dotnet/dotnet_api
+	```powershell
+	PS C:\hybrid-app\netfx-api> docker push $env:DTR/dotnet/dotnet_api
 	The push refers to a repository [<dtr hostname>/dotnet/dotnet_api]
 	5d08bc106d91: Pushed
 	74b0331584ac: Pushed
@@ -504,57 +519,57 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
 1. First we need to update the Java web app so it'll take advantage of the .NET API. Switch back to `worker1` and change directories to the `java-app-v2` directory. Repeat steps 1,2, and 4 from Task 2.2 but add a tag `:2` to your build and pushes:
 
-	```
-	$ docker build -t $env:DTR/java/java_web:2 .
-	$ docker push $env:DTR/java/java_web:2
+	```bash
+	$ docker build -t $DTR_HOST/java/java_web:2 .
+	$ docker push $DTR_HOST/java/java_web:2
 	```
 This will push a different version of the app, version 2, to the same `java_web` repository.
 
 2. Next repeat the steps 6-8 from Task 2.3, but use this `Compose` file instead:
 
-```
-version: "3.3"
+	```yaml
+	version: "3.3"
 
-services:
+	services:
 
-  database:
-    image: <your-dtr-instance>/java/database
-    # set default mysql root password, change as needed
-    environment:
-      MYSQL_ROOT_PASSWORD: mysql_password
-    # Expose port 3306 to host. 
-    ports:
-      - "3306:3306" 
-    networks:
-      - back-tier
+	database:
+		image: <your-dtr-instance>/java/database
+		# set default mysql root password, change as needed
+		environment:
+		MYSQL_ROOT_PASSWORD: mysql_password
+		# Expose port 3306 to host. 
+		ports:
+		- "3306:3306" 
+		networks:
+		- back-tier
 
-  webserver:
-   image: <your-dtr-instance>/java/java_web:2
-   ports:
-     - "8080:8080" 
-     - "8000:8000"
-   networks:
-     - front-tier
-     - back-tier
-   environment:
-     BASEURI: http://dotnet-api/api/users
+	webserver:
+	image: <your-dtr-instance>/java/java_web:2
+	ports:
+		- "8080:8080" 
+		- "8000:8000"
+	networks:
+		- front-tier
+		- back-tier
+	environment:
+		BASEURI: http://dotnet-api/api/users
 
-  dotnet-api:
-    image: <your-dtr-instance>/dotnet/dotnet-api
-    ports:
-      - "57989:80"
-    networks:
-      - front-tier
-      - back-tier
+	dotnet-api:
+		image: <your-dtr-instance>/dotnet/dotnet-api
+		ports:
+		- "57989:80"
+		networks:
+		- front-tier
+		- back-tier
 
-networks:
-  back-tier:
-  front-tier:
+	networks:
+	back-tier:
+	front-tier:
 
-secrets:
-  mysql_password:
-    external: true
-```
+	secrets:
+	mysql_password:
+		external: true
+	```
 
 
 ## <a name="task4"></a>Task 4: Deploy to Kubernetes
@@ -570,36 +585,41 @@ For now Kubernetes does not support Windows workloads in production, so we will 
 
 1. From the Play with Docker landing page, click on `worker1` and CD into the `hybrid-app/dotnet-api` directory. 
 
-	`$ cd ~/hybrid-app/dotnet-api/`
+	```bash
+	$ cd ~/hybrid-app/dotnet-api/
+	```
 
 2. Use `docker build` to build your Linux image.
 
-	`$ docker build -t $DTR_HOST/dotnet/dotnet_api:core .`
+	```bash
+	$ docker build -t $DTR_HOST/dotnet/dotnet_api:core .
+	```
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built. Also, we used the `:core` tag so that the repository has two versions, the original with a Windows base image, and this one with a Linux .NET Core base image.
 
 	Your output should be similar to what is shown below
 
-```
-Sending build context to Docker daemon   29.7kB
-Step 1/10 : FROM microsoft/aspnetcore-build:2.0.3-2.1.2 AS builder
-2.0.3-2.1.2: Pulling from microsoft/aspnetcore-build
-723254a2c089: Pull complete
+	```bash
+	Sending build context to Docker daemon   29.7kB
+	Step 1/10 : FROM microsoft/aspnetcore-build:2.0.3-2.1.2 AS builder
+	2.0.3-2.1.2: Pulling from microsoft/aspnetcore-build
+	723254a2c089: Pull complete
 
-	<output snipped>
+		<output snipped>
 
-Removing intermediate container 508751aacb5c
-Step 7/10 : FROM microsoft/aspnetcore:2.0.3-stretch
-2.0.3-stretch: Pulling from microsoft/aspnetcore
+	Removing intermediate container 508751aacb5c
+	Step 7/10 : FROM microsoft/aspnetcore:2.0.3-stretch
+	2.0.3-stretch: Pulling from microsoft/aspnetcore
 
-Successfully built fcbc49ef89bf
-Successfully tagged ip172-18-0-8-baju0rgm5emg0096odmg.direct.ee-beta2.play-with-docker.com/dotnet/dotnet_api:latest
-```
+	Successfully built fcbc49ef89bf
+	Successfully tagged ip172-18-0-8-baju0rgm5emg0096odmg.direct.ee-beta2.play-with-docker.com/dotnet/dotnet_api:latest
+	```
+
 	> **Note**: It will take a few minutes for your image to build.
 
 4. Log into Docker Trusted Registry
 
-	```
+	```bash
 	$ docker login $DTR_HOST
 	Username: dotnet_user
 	Password: user1234
@@ -608,7 +628,7 @@ Successfully tagged ip172-18-0-8-baju0rgm5emg0096odmg.direct.ee-beta2.play-with-
 
 5. Push your new image up to Docker Trusted Registry.
 
-	```
+	```bash
 	$ docker push $DTR_HOST/dotnet/dotnet_api:core
 	The push refers to a repository [<dtr hostname>/dotnet/dotnet_api]
 	5d08bc106d91: Pushed
