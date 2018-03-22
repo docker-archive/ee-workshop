@@ -440,7 +440,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 1. Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. Then clone the repository again onto this host:
 
 	```powershell
-	PS C:\git clone https://github.com/dockersamples/hybrid-app.git
+	PS C:\> git clone https://github.com/dockersamples/hybrid-app.git
 	```
 
 2. Set an environment variable for the DTR host name. Much like you did for the Java app, this will make a few step easier. Copy the DTR host name again and create the environment variable. For instance, if your DTR host was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com` you would type:
