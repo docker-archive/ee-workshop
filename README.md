@@ -367,7 +367,28 @@ Let's start with the Linux version.
 
 	![](./images/pushed_image.png)
 
-7. Repeat 1,2 and 4 but build a `java/database` image from within the `database/` directory of `hybrid-app` and push it to DTR. This is a simple MySQL database with a basic username/password and an initial table configuration.
+7. Next, build the MySQL database image. Change into the database directory.
+
+```bash
+	$ cd ../../database
+```
+
+8. Use `docker build` to build your Docker image.
+
+	```bash
+	$ docker build -t $DTR_HOST/java/database .
+	```
+
+9. Use `docker push` to upload your image up to Docker Trusted Registry.
+	```bash
+	$ docker push $DTR_HOST/java/database
+	```
+
+10. In your web browser head back to your DTR server and click `View Details` next to your `database` repo to see the details of the repo.
+
+11. Click on `Images` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
+
+
 
 ### <a name="task2.3"></a> Task 2.3: Deploy the Web App using UCP
 ![](./images/linux75.png)
