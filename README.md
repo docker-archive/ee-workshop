@@ -139,7 +139,7 @@ Let's start by adding our 3rd node to the cluster, a Windows Server 2016 worker 
 4. Select node type "Windows", check the box, that you followed the instructions and copy the text from the dark box shown on the `Add Node` screen. Don't select a custom listen or advertise address.
 
 	> **Note** There is an icon in the upper right corner of the box that you can click to copy the text to your clipboard
-	
+
 	> ![](./images/join_text.png)
 
 
@@ -300,8 +300,6 @@ Let's start with the Linux version.
 	```Bash
 	$ docker build -t $DTR_HOST/java/java_web .
 	```
-
-	> **Note**: Be sure to substitute your DTR Hostname and your User Name - both these are listed at the top of your PWD page.
 
 	The `-t` tags the image with a name. In our case, the name indicates which DTR server and under which organization's respository the image will live.
 
