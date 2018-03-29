@@ -787,11 +787,11 @@ Go to Kubernetes / Load Balancers. See the Kubernetes services that have been cr
 
 ![](./images/kube-lb.png)
 
-Click on `java-app-published` to the the details of the public load balancer created for the Java application.
+Click on `java-web-published` to the the details of the public load balancer created for the Java application.
 
 ![](./images/kube-java-lb.png)
 
-There will be a link for the public url where the service on port 8080 is exposed. Click on that link, add `/java_web/` at the end of the url. You should be led to the running application.
+There will be a link for the public url where the service on port 8080 is exposed. Click on that link, add `/java-web/` at the end of the url. You should be led to the running application.
 
 ![](./images/kube-running-app.png)
 
