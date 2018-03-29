@@ -442,10 +442,6 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
           - front-tier
           - back-tier
 
-    networks:
-      back-tier:
-      front-tier:
-
     secrets:
       mysql_password:
         external: true
