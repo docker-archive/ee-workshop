@@ -439,7 +439,6 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
         image: <your-dtr-instance>/java/java_web
         ports:
           - "8080:8080" 
-          - "8000:8000"
         networks:
           - front-tier
           - back-tier
@@ -582,7 +581,6 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
         image: <your-dtr-instance>/java/java_web:2
         ports:
           - "8080:8080" 
-          - "8000:8000"
         networks:
           - front-tier
           - back-tier
@@ -741,9 +739,6 @@ services:
       back-tier:
       front-tier:
     ports:
-    - mode: ingress
-      published: 8000
-      target: 8000
     - mode: ingress
       published: 8080
       target: 8080
