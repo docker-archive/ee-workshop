@@ -477,7 +477,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 2. Set an environment variable for the DTR host name. Much like you did for the Java app, this will make a few step easier. Copy the DTR host name again and create the environment variable. For instance, if your DTR host was `ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com` you would type:
 
 	```powershell
-	PS C:\> $env:DTR="ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com"
+	PS C:\> $env:DTR_HOST="ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com"
 
 ### <a name="task3.2"></a> Task 3.2: Build and Push Windows Images to Docker Trusted Registry
 ![](./images/windows75.png)
@@ -494,7 +494,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 2. Use `docker build` to build your Windows image.
 
 	```powershell
-	PS C:\hybrid-app\netfx-api> docker build -t $env:DTR/dotnet/dotnet_api .
+	PS C:\hybrid-app\netfx-api> docker build -t $env:DTR_HOST/dotnet/dotnet_api .
 	```
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
@@ -502,7 +502,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 	Your output should be similar to what is shown below
 
 	```powershell
-	PS C:\hybrid-app\netfx-api> docker build -t $env:DTR/dotnet/dotnet_api .
+	PS C:\hybrid-app\netfx-api> docker build -t $env:DTR_HOST/dotnet/dotnet_api .
 
 	Sending build context to Docker daemon  415.7kB
 	Step 1/8 : FROM microsoft/iis:windowsservercore-10.0.14393.1715
@@ -520,7 +520,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 4. Log into Docker Trusted Registry
 
 	```powershell
-	PS C:\hybrid-app\netfx-api> docker login $env:DTR
+	PS C:\hybrid-app\netfx-api> docker login $env:DTR_HOST
 	Username: dotnet_user
 	Password: user1234
 	Login Succeeded
@@ -529,7 +529,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 5. Push your new image up to Docker Trusted Registry.
 
 	```powershell
-	PS C:\hybrid-app\netfx-api> docker push $env:DTR/dotnet/dotnet_api
+	PS C:\hybrid-app\netfx-api> docker push $env:DTR_HOST/dotnet/dotnet_api
 	The push refers to a repository [<dtr hostname>/dotnet/dotnet_api]
 	5d08bc106d91: Pushed
 	74b0331584ac: Pushed
