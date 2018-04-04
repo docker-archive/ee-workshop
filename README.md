@@ -367,7 +367,7 @@ Let's start with the Linux version.
 7. Next, build the MySQL database image. Change into the database directory.
 
 ```bash
-	$ cd ../../database
+	$ cd ../database
 ```
 
 8. Use `docker build` to build your Docker image.
@@ -454,7 +454,7 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
 
 	Then click `Done` in the lower right.
 
-8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see you're app.
+8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see the app.
 
 	![](./images/java-web1.png)
 
@@ -597,7 +597,8 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
     networks:
       back-tier:
-      front-tier:
+	  front-tier:
+	    external: true
 
     secrets:
       mysql_password:
@@ -713,7 +714,7 @@ services:
       back-tier: null
     ports:
       published: 3306
-	  target: 3306
+      target: 3306
 
   dotnet-api:
     deploy:
