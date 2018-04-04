@@ -109,8 +109,6 @@ The Play with Docker (PWD) environment is almost completely set up, but before w
 
 2. Fill out the form, and click `submit`. You will then be redirected to the PWD environment.
 
-3. Click `Access`
-
 	It may take a few minutes to provision out your PWD environment. After this step completes, you'll be ready to move on to task 1.2: Install a Windows worker node
 
 ### <a name="task1.2"></a>Task 1.2: Join a Windows worker node
