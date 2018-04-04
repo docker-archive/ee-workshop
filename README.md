@@ -70,7 +70,7 @@ Throughout the lab you will be asked to provide either hostnames or login creden
 
 - When you encounter a phrase in between `<` and `>`  you are meant to substitute in a different value.
 
-	For instance if you see `<dtr domain>` you would actually type something like `ip172-18-0-7-b70lttfic4qg008cvm90.direct.ee-workshop.play-with-docker.com`
+	For instance if you see `<dtr hostname>` you would actually type something like `ip172-18-0-7-b70lttfic4qg008cvm90.direct.ee-workshop.play-with-docker.com`
 
 
 - When you see the Linux penguin all the following instructions should be completed in your Linux console
@@ -410,7 +410,7 @@ The next step is to run the app in Swarm. As a reminder, the application has two
 
 6. Now we're going to use the fast way to create your application: `Stacks`. In the left panel, click `Shared Resources`, `Stacks` and then `Create Stack` in the upper right corner.
 
-7. Name your stack `java_web` and select `Swarm Services` for your `Mode`. Below you'll see we've included a `.yml` file. Before you paste that in to the `Compose.yml` edit box, note that you'll need to make a quick change. Each of the images is defined as `<your-dtr-instance>/java/<something>`. You'll need to change the `<your-dtr-instance>` to the DTR Hostname found on the Play with Docker landing page for your session. It will look something like this:
+7. Name your stack `java_web` and select `Swarm Services` for your `Mode`. Below you'll see we've included a `.yml` file. Before you paste that in to the `Compose.yml` edit box, note that you'll need to make a quick change. Each of the images is defined as `<dtr hostname>/java/<something>`. You'll need to change the `<dtr hostname>` to the DTR Hostname found on the Play with Docker landing page for your session. It will look something like this:
 `ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com`
 You can do that right in the edit box in `UCP` but wanted to make sure you saw that first.
 
@@ -424,7 +424,7 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
     services:
 
       database:
-        image: <your-dtr-instance>/java/database
+        image: <dtr hostname>/java/database
         # set default mysql root password, change as needed
         environment:
           MYSQL_ROOT_PASSWORD: mysql_password
@@ -435,7 +435,7 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
           - back-tier
 
       webserver:
-        image: <your-dtr-instance>/java/java_web
+        image: <dtr hostname>/java/java_web
         ports:
           - "8080:8080" 
         networks:
@@ -567,7 +567,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
     services:
 
       database:
-        image: <your-dtr-instance>/java/database
+        image: <dtr hostname>/java/database
         # set default mysql root password, change as needed
         environment:
           MYSQL_ROOT_PASSWORD: mysql_password
@@ -578,7 +578,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
           - back-tier
 
       webserver:
-        image: <your-dtr-instance>/java/java_web:2
+        image: <dtr hostname>/java/java_web:2
         ports:
           - "8080:8080" 
         networks:
@@ -588,7 +588,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
           BASEURI: http://dotnet-api/api/users
 
       dotnet-api:
-        image: <your-dtr-instance>/dotnet/dotnet_api
+        image: <dtr hostname>/dotnet/dotnet_api
         ports:
           - "57989:80"
         networks:
@@ -831,6 +831,10 @@ Security is crucial for all organizations. And it is a complicated topic, too in
 	Upgrading the app is out of scope for this workshop, but you can see how it would give you the information you need to mitigate vulnerabilities.
 
 5. DTR also allows you to [Sign Images](https://docs.docker.com/datacenter/dtr/2.4/guides/user/manage-images/sign-images/) and [Create promotion policies](https://docs.docker.com/datacenter/dtr/2.4/guides/user/create-promotion-policies/) which prevent users from using images in production that don't meet whatever criteria you set, including blocking images with critical and/or major vulnerabilities.
+
+## Common Issues
+
+* Confirm that you are setting the environmental variable DTR_HOST to the DTR hostname.
 
 ## Conclusion
 
