@@ -712,10 +712,9 @@ services:
     networks:
       back-tier: null
     ports:
-    - mode: ingress
       published: 3306
-      target: 3306
-  
+	  target: 3306
+
   dotnet-api:
     deploy:
       placement:
@@ -725,10 +724,9 @@ services:
     networks:
       back-tier: null
     ports:
-    - mode: ingress
       published: 57989
       target: 80
-  
+
   java-web:
     deploy:
       placement:
@@ -739,13 +737,13 @@ services:
       back-tier:
       front-tier:
     ports:
-    - mode: ingress
       published: 8080
       target: 8080
 
 networks:
   back-tier:
   front-tier:
+    external: true
 
 secrets:
   mysql_password:
