@@ -2,7 +2,7 @@
 
 Docker EE 2.0 (beta) is the first Containers-as-a-Service platform to offer production-level support for the integrated management and security of both Linux and Windows Server Containers. It is also the first platform to support both Docker Swarm and Kubernetes orchestration.
 
-In this lab we'll use a Docker EE cluster comprised of Windows and Linux nodes. We'll deploy both a Java web app on Linux and a multi-service application that includes both Windows and Linux components using Docker Swarm. Then we'll take a look at securing and scaling the application. Finally, we will then deploy the app using Kubernetes.
+In this lab we'll use a Docker EE cluster. You will have an environment that is either Linux only, comprised of Windows and Linux nodes. We'll deploy both a Java web app on Linux and a multi-service application that includes both Windows and Linux components using Docker Swarm. Then we'll take a look at securing and scaling the application. Finally, we will then deploy the app using Kubernetes.
 
 > **Difficulty**: Intermediate (assumes basic familiarity with Docker) If you're looking for a basic introduction to Docker, check out [https://training.play-with-docker.com](https://training.play-with-docker.com)
 
@@ -46,14 +46,16 @@ If none of these apply to you, contact your local [Docker Meetup Chapter](https:
 
 There are three main components to the Play With Docker (PWD) interface. 
 
+> **Important Note: beta** Please note, as of now this is a beta Docker EE 2.0 environment. Docker EE 2.0 shows off the new Kubernetes functionality which is described below.
+
 ### 1. Console Access
-Play with Docker provides access to the 3 Docker EE hosts in your Cluster. These machines are:
+Play with Docker provides access to the 4 Docker EE hosts in your Cluster. These machines are:
 
 * A Linux-based Docker EE 18.01 Manager node
 * Three Linux-based Docker EE 18.01 Worker nodes
 * A Windows Server 2016-based Docker EE 17.06 Worker Node
 
-> **Important Note: beta** Please note, as of now this is a beta Docker EE 2.0 environment. Docker EE 2.0 shows off the new Kubernetes functionality which is described below.
+> In some cases, your workshop organizer will have requested a Linux only environment. In that case, just skip the Windows sections of the workshop.
 
 By clicking a name on the left, the console window will be connected to that node.
 
@@ -77,7 +79,7 @@ Throughout the lab you will be asked to provide either hostnames or login creden
 
 	![](./images/linux75.png)
 
-- When you see the Windows flag all the subsequent instructions should be completed in your Windows console
+- When you see the Windows flag all the subsequent instructions should be completed in your Windows console. You can skip these sections if you have a Linux only environment.
 
     ![](./images/windows75.png)
 
@@ -463,6 +465,8 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
 ## <a name="task3"></a>Task 3: Deploy the next version with a Windows node
 
 Now that we've moved the app and updated it, we're going to add in a user sign-in API. For fun, and to show off the cross-platform capabilities of Docker EE, we are going to do it in a Windows container.
+
+> If your workshop organizer requested a Windows only environment, you can skip to <a href="#task4">Task 4</a>.
 
 ### <a name="task3.1"></a> Task 3.1: Clone the repository]
 
