@@ -713,7 +713,7 @@ services:
     networks:
       back-tier: null
     ports:
-      published: 3306
+    - published: 3306
       target: 3306
 
   dotnet-api:
@@ -725,7 +725,7 @@ services:
     networks:
       back-tier: null
     ports:
-      published: 57989
+    - published: 57989
       target: 80
 
   java-web:
@@ -740,7 +740,7 @@ services:
       back-tier:
       front-tier:
     ports:
-      published: 8080
+    - published: 8080
       target: 8080
 
 networks:
