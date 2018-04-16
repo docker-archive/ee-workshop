@@ -733,8 +733,8 @@ services:
       placement:
         constraints:
         - node.platform.os == linux
-	image: <dtr hostname>/java/java_web:2
-	environment:
+    image: <dtr hostname>/java/java_web:2
+    environment:
       BASEURI: http://dotnet-api/api/users
     networks:
       back-tier:
