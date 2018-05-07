@@ -244,9 +244,7 @@ However, before we create the repositories, we do want to restrict access to the
 Congratulations, you have created three new repositories in two new organizations, each with one team and a user each.
 
 ## <a name="task2"></a>Task 2: Deploy a Java Web App with Universal Control Plane
-Now that we've completely configured our cluster, let's deploy a couple of web apps. These are simple web pages that allow you to send a tweet. One is built on Linux using NGINX and the other is build on Windows Server 2016 using IIS.  
-
-Let's start with the Linux version.
+Now that we've completely configured our cluster, let's deploy a web app. The Signup application is a basic Java CRUD (Create, Read, Update, Delete) application that uses Spring and Hibernate to transact queries against MySQL. It runs in Tomcat.
 
 ### <a name="task2.1"></a> Task 2.1: Clone the Demo Repo
 
