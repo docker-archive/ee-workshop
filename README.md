@@ -710,14 +710,13 @@ services:
       placement:
         constraints:
         - node.platform.os == linux
-
     image: <dtr hostname>/java/database
     environment:
       MYSQL_ROOT_PASSWORD: mysql_password
     networks:
-      back-tier: null
+      back-tier:
     ports:
-      published: 3306
+    - published: 3306
       target: 3306
 
   dotnet-api:
@@ -727,9 +726,9 @@ services:
         - node.platform.os == linux
     image: <dtr hostname>/dotnet/dotnet_api:core
     networks:
-      back-tier: null
+      back-tier:
     ports:
-      published: 57989
+    - published: 57989
       target: 80
 
   java-web:
@@ -738,11 +737,13 @@ services:
         constraints:
         - node.platform.os == linux
     image: <dtr hostname>/java/java_web:2
+    environment:
+      BASEURI: http://dotnet-api/api/users
     networks:
       back-tier:
       front-tier:
     ports:
-      published: 8080
+    - published: 8080
       target: 8080
 
 networks:
