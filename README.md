@@ -466,7 +466,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
 > If your workshop organizer requested a Windows only environment, you can skip to <a href="#task4">Task 4</a>.
 
-### <a name="task3.1"></a> Task 3.1: Clone the repository]
+### <a name="task3.1"></a> Task 3.1: Clone the repository
 
 ![](./images/windows75.png)
 
