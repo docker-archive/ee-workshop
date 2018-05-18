@@ -298,6 +298,7 @@ Now that we've completely configured our cluster, let's deploy a web app. The Si
 	```Bash
 	$ docker build -t $DTR_HOST/java/java_web .
 	```
+> Note the final "." in the above command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
 
 	The `-t` tags the image with a name. In our case, the name indicates which DTR server and under which organization's respository the image will live.
 
