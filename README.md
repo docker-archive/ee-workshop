@@ -376,6 +376,7 @@ Now that we've completely configured our cluster, let's deploy a web app. The Si
 	```bash
 	$ docker build -t $DTR_HOST/java/database .
 	```
+> Note the final "." in the above command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
 
 9. Use `docker push` to upload your image up to Docker Trusted Registry.
 	```bash
@@ -499,6 +500,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 	```powershell
 	PS C:\hybrid-app\netfx-api> docker build -t $env:DTR_HOST/dotnet/dotnet_api .
 	```
+> Note the final "." in the above command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
 
@@ -559,6 +561,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 	$ docker build -t $DTR_HOST/java/java_web:2 .
 	$ docker push $DTR_HOST/java/java_web:2
 	```
+> Note the final "." in the above `docker build` command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
 
 	This will push a different version of the app, version 2, to the same `java_web` repository.
 
@@ -632,6 +635,7 @@ For now Kubernetes does not support Windows workloads in production, so we will 
 	```bash
 	$ docker build -t $DTR_HOST/dotnet/dotnet_api:core .
 	```
+> Note the final "." in the above command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built. Also, we used the `:core` tag so that the repository has two versions, the original with a Windows base image, and this one with a Linux .NET Core base image.
 
