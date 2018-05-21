@@ -719,8 +719,8 @@ services:
     networks:
       back-tier:
     ports:
-    - published: 3306
-      target: 3306
+    - published: 32768
+      target: 32768
 
   dotnet-api:
     deploy:
@@ -731,7 +731,7 @@ services:
     networks:
       back-tier:
     ports:
-    - published: 57989
+    - published: 32769
       target: 80
 
   java-web:
@@ -746,7 +746,7 @@ services:
       back-tier:
       front-tier:
     ports:
-    - published: 8080
+    - published: 32770
       target: 8080
 
 networks:
@@ -797,7 +797,7 @@ Click on `java-web-published` to the the details of the public load balancer cre
 
 ![](./images/kube-java-lb.png)
 
-There will be a link for the public url where the service on port 8080 is exposed. Click on that link, add `/java-web/` at the end of the url. You should be led to the running application.
+There will be a link for the public url where the service on port 32770 is exposed. Note this is different than previous implementations because of Kubernetes NodePort range limitations. Click on that link, add `/java-web/` at the end of the url. You should be led to the running application.
 
 ![](./images/kube-running-app.png)
 
