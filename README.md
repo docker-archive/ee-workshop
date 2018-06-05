@@ -1,6 +1,6 @@
 # Deploying Multi-OS applications with Docker EE
 
-Docker EE 2.0 (beta) is the first Containers-as-a-Service platform to offer production-level support for the integrated management and security of both Linux and Windows Server Containers. It is also the first platform to support both Docker Swarm and Kubernetes orchestration.
+Docker EE 2.0 is the first Containers-as-a-Service platform to offer production-level support for the integrated management and security of both Linux and Windows Server Containers. It is also the first platform to support both Docker Swarm and Kubernetes orchestration.
 
 In this lab we'll use a Docker EE cluster. You will have an environment that is either Linux only, comprised of Windows and Linux nodes. We'll deploy both a Java web app on Linux and a multi-service application that includes both Windows and Linux components using Docker Swarm. Then we'll take a look at securing and scaling the application. Finally, we will then deploy the app using Kubernetes.
 
@@ -45,8 +45,6 @@ This workshop is only available to people in a pre-arranged workshop. That may h
 If none of these apply to you, contact your local [Docker Meetup Chapter](https://events.docker.com/chapters/) and ask if there are any scheduled workshops. In the meantime, you may be interested in the labs available through the [Play with Docker Classroom](training.play-with-docker.com).
 
 There are three main components to the Play With Docker (PWD) interface. 
-
-> **Important Note: beta** Please note, as of now this is a beta Docker EE 2.0 environment. Docker EE 2.0 shows off the new Kubernetes functionality which is described below.
 
 ### 1. Console Access
 Play with Docker provides access to the 4 Docker EE hosts in your Cluster. These machines are:
@@ -98,7 +96,7 @@ Swarm mode uses managers and workers to run your applications. Managers run the 
 
 #### <a name="intro2.2"></a>Overview of Kubernetes
 
-Kubernetes is available in Docker EE 2.0 (currently in beta) and included in this workshop. Kubernetes deployments tend to be more complex than Docker Swarm, and there are many component types. UCP simplifies a lot of that, relying on Docker Swarm to handle shared resources. We'll concentrate on Pods and Load Balancers in this workshop, but there's plenty more supported by UCP 2.0.
+Kubernetes is available in Docker EE 2.0 and included in this workshop. Kubernetes deployments tend to be more complex than Docker Swarm, and there are many component types. UCP simplifies a lot of that, relying on Docker Swarm to handle shared resources. We'll concentrate on Pods and Load Balancers in this workshop, but there's plenty more supported by UCP 2.0.
 
 ## <a name="task1"></a>Task 1: Configure the Docker EE Cluster
 
