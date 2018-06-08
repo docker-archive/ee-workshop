@@ -602,6 +602,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
     networks:
       back-tier:
+        external: true
 	  front-tier:
 	    external: true
 
@@ -750,6 +751,7 @@ services:
 
 networks:
   back-tier:
+    external: true
   front-tier:
     external: true
 
