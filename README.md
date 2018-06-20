@@ -444,6 +444,7 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
 
     networks:
       back-tier:
+        external: true 
       front-tier:
         external: true 
 
@@ -601,6 +602,7 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
     networks:
       back-tier:
+        external: true
 	  front-tier:
 	    external: true
 
@@ -749,6 +751,7 @@ services:
 
 networks:
   back-tier:
+    external: true
   front-tier:
     external: true
 
