@@ -298,11 +298,11 @@ Now that we've completely configured our cluster, let's deploy a web app. The Si
 	```
 > Note the final "." in the above command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
 
-	The `-t` tags the image with a name. In our case, the name indicates which DTR server and under which organization's respository the image will live.
+The `-t` tags the image with a name. In our case, the name indicates which DTR server and under which organization's respository the image will live.
 
-	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
+> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
 
-	There will be quite a bit of output. The Dockerfile describes a two-stage build. In the first stage, a Maven base image is used to build the Java app. But to run the app you don't need Maven or any of the JDK stuff that comes with it. So the second stage takes the output of the first stage and puts it in a much smaller Tomcat image.
+There will be quite a bit of output. The Dockerfile describes a two-stage build. In the first stage, a Maven base image is used to build the Java app. But to run the app you don't need Maven or any of the JDK stuff that comes with it. So the second stage takes the output of the first stage and puts it in a much smaller Tomcat image.
 
 3. Log into your DTR server from the command line.
  
@@ -321,8 +321,6 @@ Now that we've completely configured our cluster, let's deploy a web app. The Si
 	$ docker push $DTR_HOST/java/java_web
 	```
 	
-	> TODO: add output of failure to push
-
 	```bash
 	$ docker push $DTR_HOST/java/java_web
 	The push refers to a repository [.<dtr hostname>/java/java_web]
@@ -359,7 +357,7 @@ Now that we've completely configured our cluster, let's deploy a web app. The Si
 
 	> **Note**: If you've closed the tab with your DTR server, just click the `DTR` button from the PWD page.
 
-6. Click on `Images` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
+6. Click on `Tags` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
 
 	![](./images/pushed_image.png)
 
@@ -381,9 +379,7 @@ Now that we've completely configured our cluster, let's deploy a web app. The Si
 	$ docker push $DTR_HOST/java/database
 	```
 
-10. In your web browser head back to your DTR server and click `View Details` next to your `database` repo to see the details of the repo.
-
-11. Click on `Images` from the horizontal menu. Notice that your newly pushed image is now on your DTR.
+10. In your web browser head back to your DTR server and click `Tags` from the horizontal menu in your `database` repo to see the details of the repo. Notice that your newly pushed image is now on your DTR.
 
 
 
@@ -398,11 +394,11 @@ The next step is to run the app in Swarm. As a reminder, the application has two
 
 	![](./images/ucp_secret_menu.png)
 
-3. You'll see a `Create Secret` screen. Type `mysql_password` in `Name` and `Dockercon!!!` in `Content`. Then click `Create` in the lower left. Obviously you wouldn't use this password in a real production environment. You'll see the content box allows for quite a bit of content, you can actually create structured content here that will be encrypted with the secret.
+3. Click the `Create` button and you'll see a `Create Secret` screen. Type `mysql_password` in `Name` and `Dockercon!!!` in `Content`. Then click `Create` in the lower right. Obviously you wouldn't use this password in a real production environment. You'll see the content box allows for quite a bit of content, you can actually create structured content here that will be encrypted with the secret.
 
 	![](./images/secret_add_config.png)
 
-4. Next we're going to create two networks. First click on `Networks` under `Swarm` in the left panel, and select `Create Network` in the upper right. You'll see a `Create Network` screen. Name your first network `back-tier`. Leave everything else the default.
+4. Next we're going to create two networks. First click on `Networks` under `Swarm` in the left panel, and select `Create` in the upper right. You'll see a `Create Network` screen. Name your first network `back-tier`. Leave everything else the default and click `Create` in the lower right.
 
 	![](./images/ucp_network.png)
 
@@ -410,7 +406,7 @@ The next step is to run the app in Swarm. As a reminder, the application has two
 
 6. Now we're going to use the fast way to create your application: `Stacks`. In the left panel, click `Shared Resources`, `Stacks` and then `Create Stack` in the upper right corner.
 
-7. Name your stack `java_web` and select `Swarm Services` for your `Mode`. Below you'll see we've included a `.yml` file. Before you paste that in to the `Compose.yml` edit box, note that you'll need to make a quick change. Each of the images is defined as `<dtr hostname>/java/<something>`. You'll need to change the `<dtr hostname>` to the DTR Hostname found on the Play with Docker landing page for your session. It will look something like this:
+7. Name your stack `java_web` and select `Swarm Services` for your `Mode`. Then click `Next`. Below you'll see we've included a `.yml` file. Before you paste that in to the `Compose.yml` edit box, note that you'll need to make a quick change. Each of the images is defined as `<dtr hostname>/java/<something>`. You'll need to change the `<dtr hostname>` to the DTR Hostname found on the Play with Docker landing page for your session. It will look something like this:
 `ip172-18-0-21-baeqqie02b4g00c9skk0.direct.ee-beta2.play-with-docker.com`
 You can do that right in the edit box in `UCP` but wanted to make sure you saw that first.
 
@@ -455,7 +451,7 @@ You can do that right in the edit box in `UCP` but wanted to make sure you saw t
 
 	Then click `Done` in the lower right.
 
-8. Click on `Stacks` again, and select the `java_web` stack. Click on `Inspect Resources` and then select `Services`. Select `java_web_webserver`. In the right panel, you'll see `Published Endpoints`. Select the one with `:8080` at the end. You'll see a `Apache Tomcat/7.0.84` landing page. Add `/java-web` to the end of the URL and you'll see the app.
+8. You've deployed your app! Now go and see it. Open a new tab or browser window and enter the `UCP Hostname`. Then add the `:8080/java-web` to the end of the URL, you will see the app loaded.
 
 	![](./images/java-web1.png)
 
@@ -641,7 +637,7 @@ For now Kubernetes does not support Windows workloads in production, so we will 
 
 	Your output should be similar to what is shown below
 
-	```bash
+	```.bash
 	Sending build context to Docker daemon   29.7kB
 	Step 1/10 : FROM microsoft/aspnetcore-build:2.0.3-2.1.2 AS builder
 	2.0.3-2.1.2: Pulling from microsoft/aspnetcore-build
@@ -698,7 +694,7 @@ However many developers use `docker-compose` to build and test their application
 
 In order to make life easier for developers and operations, Docker EE lets you deploy an application defined with a Docker Compose file as a Kubernetes workloads. Internally Docker EE uses the official Kubernetes extension mechanism by defining a [Custom Resource Definition](https://kubernetes.io/docs/tasks/access-kubernetes-api/extend-api-custom-resource-definitions/) (CRD) defining a stack object. When you post a Docker Compose stack definition to Kubernetes in Docker EE, the CRD controller takes the stack definition and translates it to Kubernetes native resources like pods, controllers and services.
 
-We'll use a Docker Compose file to instantiate our application, and it's the same file as before, except that we will switch the .NET Docker Windows image with the .NET Core Docker Linux image we just built.
+We'll use a Docker Compose file to instantiate our application, and it's the same file as before, except that we will switch the .NET Docker Windows image with the .NET Core Docker Linux image we just built. One other change we have to make is to create a new secret `mysql-secret` with `DockerCon!!!` as the password. Follow the instructions above but use `-` instead of `_` because Kubernetes doesn't allow underscores.
 
 Let's look at the Docker Compose file in `app/docker-stack.yml`.
 
@@ -715,7 +711,7 @@ services:
         - node.platform.os == linux
     image: <dtr hostname>/java/database
     environment:
-      MYSQL_ROOT_PASSWORD: mysql_password
+      MYSQL_ROOT_PASSWORD: mysql-password
     networks:
       back-tier:
     ports:
@@ -756,7 +752,7 @@ networks:
     external: true
 
 secrets:
-  mysql_password:
+  mysql-password:
     external: true
 ```
 
@@ -798,7 +794,7 @@ Click on `java-web-published` to the the details of the public load balancer cre
 
 ![](./images/kube-java-lb.png)
 
-There will be a link for the public url where the service on port 32770 is exposed. Note this is different than previous implementations because of Kubernetes NodePort range limitations. Click on that link, add `/java-web/` at the end of the url. You should be led to the running application.
+The `Node Port` 32770 is exposed. Note this is different than previous implementations because of Kubernetes NodePort range limitations. Open a new browser tab, paste in the `UCP Hostname` from the Play with Docker landing page and add `:32770/java-web/` at the end of the url. You should be led to the running application.
 
 ![](./images/kube-running-app.png)
 
@@ -812,7 +808,7 @@ Security is crucial for all organizations. And it is a complicated topic, too in
 
 	This will take awhile so you may want to take a break by reading up on [Docker Security](https://www.docker.com/docker-security).
 
-2. Once the scanning database has downloaded, you can scan individual images. Select a repository, such as `java/java_web`, and then select the `Images` tab. If it hasn't already scanned, select `Start scan`. If it hasn't scanned already, this can take 5-10 minutes or so.
+2. Once the scanning database has downloaded, you can scan individual images. Select a repository, such as `java/java_web`, and then select the `Tags` tab. If it hasn't already scanned, select `Start scan`. If it hasn't scanned already, this can take 5-10 minutes or so.
 
 	![](./images/java-scanned.png)
 
@@ -824,21 +820,9 @@ Security is crucial for all organizations. And it is a complicated topic, too in
 
  	![](./images/cves.png)
 
- 3. One way you can reduce your vulnerabilities is to choose newer images. For instance, you can go back to the Dockerfile in the `~/hybrid-app/java-app` directory, and change the second base image to `tomcat:9.0.6-jre-9-slim`. Slim images in official images are generally based on lighter-weight operating systems like `Alpine Linux` or `Debian`, which have reduced attack space. You can change the Dockerfile using `vim` or `emacs`.
-
-	![](./images/tomcat9.png)
-
-	Then check the scanning again (this may again take 5-10 minutes).
-
-	![](./images/tomcat9-scanned.png)
-
-	You'll still see vulnerabilites, but far fewer.
-
-4. If you look at the components of the `tomcat:9.0.6-jre-9-slim` image, you will see that the critical and major vulnerabilities were brought in the `Spring` libraries. So maybe it's time to upgrade our app! 
-
-	![](./images/tomcat9-components.png)
-
-	Upgrading the app is out of scope for this workshop, but you can see how it would give you the information you need to mitigate vulnerabilities.
+ 3. One way you can reduce your vulnerabilities is to identify where the vulnerabilities are coming from. For instance, you can see that in `java_web:latest`, 1 Critical and 9 Major issues were introduced with the Spring Framework. Time to upgrade that framework! Of course, upgrading the app is out of scope for this workshop, but you can see how it would give you the information you need to mitigate vulnerabilities.
+ 
+ 4. You can also choose newer base images. For instance, you can go back to the Dockerfile in the `~/hybrid-app/java-app` directory, and change the second base image to `9.0.13-jre11-slim`. Slim images in official images are generally based on lighter-weight operating systems like `Alpine Linux` or `Debian`, which have reduced attack space. Then check the scanning again (this may again take 5-10 minutes). You'll still see vulnerabilites, but far fewer.
 
 5. DTR also allows you to [Sign Images](https://docs.docker.com/datacenter/dtr/2.4/guides/user/manage-images/sign-images/) and [Create promotion policies](https://docs.docker.com/datacenter/dtr/2.4/guides/user/create-promotion-policies/) which prevent users from using images in production that don't meet whatever criteria you set, including blocking images with critical and/or major vulnerabilities.
 
