@@ -467,7 +467,15 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
 ![](./images/windows75.png)
 
-1. Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. Then clone the repository again onto this host:
+1. Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. 
+
+First make sure Docker is running - it runs as a background Windows Service:
+
+```
+Start-Service docker
+```
+
+Then clone the repository again onto this host:
 
 	```powershell
 	PS C:\> git clone https://github.com/dockersamples/hybrid-app.git
