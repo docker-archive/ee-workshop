@@ -469,13 +469,13 @@ Now that we've moved the app and updated it, we're going to add in a user sign-i
 
 1. Because this is a Windows container, we have to build it on a Windows host. Switch back to the main Play with Docker page, select the name of the Windows worker. 
 
-First make sure Docker is running - it runs as a background Windows Service:
+	First make sure Docker is running - it runs as a background Windows Service:
 
-```
-Start-Service docker
-```
+	```
+	Start-Service docker
+	```
 
-Then clone the repository again onto this host:
+	Then clone the repository again onto this host:
 
 	```powershell
 	PS C:\> git clone https://github.com/dockersamples/hybrid-app.git
@@ -485,6 +485,7 @@ Then clone the repository again onto this host:
 
 	```powershell
 	PS C:\> $env:DTR_HOST="ip172-18-0-17-bajlvkom5emg00eaner0.direct.ee-beta2.play-with-docker.com"
+	```
 
 ### <a name="task3.2"></a> Task 3.2: Build and Push Windows Images to Docker Trusted Registry
 ![](./images/windows75.png)
@@ -503,7 +504,7 @@ Then clone the repository again onto this host:
 	```powershell
 	PS C:\hybrid-app\netfx-api> docker build -t $env:DTR_HOST/dotnet/dotnet_api .
 	```
-> Note the final "." in the above command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
+	> Note the final "." in the above command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built.
 
@@ -564,7 +565,7 @@ Then clone the repository again onto this host:
 	$ docker build -t $DTR_HOST/java/java_web:2 .
 	$ docker push $DTR_HOST/java/java_web:2
 	```
-> Note the final "." in the above `docker build` command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
+	> Note the final "." in the above `docker build` command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
 
 	This will push a different version of the app, version 2, to the same `java_web` repository.
 
@@ -639,7 +640,7 @@ For now Kubernetes does not support Windows workloads in production, so we will 
 	```bash
 	$ docker build -t $DTR_HOST/dotnet/dotnet_api:core .
 	```
-> Note the final "." in the above command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
+	> Note the final "." in the above command. The "." is the build context, specifically the current directory. One of the most common mistakes even experienced users make is leaving off the build context.
 
 	> **Note**: Feel free to examine the Dockerfile in this directory if you'd like to see how the image is being built. Also, we used the `:core` tag so that the repository has two versions, the original with a Windows base image, and this one with a Linux .NET Core base image.
 
