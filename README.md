@@ -624,6 +624,16 @@ Now that we have built, deployed and scaled a multi OS application to Docker EE 
 
 Docker EE lets you choose the orchestrator to use to deploy and manage your application, between Swarm and Kubernetes. In the previous tasks we have used Swarm for orchestration. In this section we will deploy the application to Kubernetes and see how Docker EE exposes Kubernetes concepts.
 
+Before moving forward we need to make sure that our cluster worker nodes can schedule kubernetes workloads. If go to the nodes section, you'll notice that the scheduler type of `worker2` and `worker3` is set to swarm. 
+![](./images/node_types.png)
+
+Click on the `worker2` node and change it's orchestration type to `mixed` using the gear icon on the top right corner. Repeat the same step for `worker3`.
+![](./images/node_mixed.png)
+
+
+Now your cluster is configured to run both kuberentes and swarm workloads
+
+
 ### <a name="task4.1"></a>Task 4.1: Build .NET Core app instead of .NET
 ![](./images/linux75.png)
 
